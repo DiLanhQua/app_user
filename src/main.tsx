@@ -12,8 +12,8 @@ import Blog from './pages/Blog/blog';
 import Chitiet from './pages/Home/detail';
 import Login from './pages/Home/login';
 import SanPham from './pages/SanPham/SapPham';
-import GioHang from './pages/GioHang/GioHang';
 import DonHang from './pages/DonHang/DonHang';
+import ThanhToan from './pages/ThanhToan/ThanhToan';
 
 
 
@@ -39,11 +39,11 @@ const router = createBrowserRouter([
         path:"/sanpham",
         element: <SanPham/>
       },{
-        path:"/giohang",
-        element: <GioHang/>
-      },{
         path:"/donhang",
         element: <DonHang/>
+      },{
+        path:"/thanhtoan",
+        element: <ThanhToan/>
       }
       
     ]

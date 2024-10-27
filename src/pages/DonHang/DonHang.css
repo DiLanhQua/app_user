@@ -1,0 +1,44 @@
+
+.condh{
+    max-width: 95%;
+    padding-top: 1%;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.table-img {
+    width: 100px; 
+    height: 100px; 
+    object-fit: cover; 
+}
+.order-details-section {
+    background-color: #fff; /* White background */
+    padding: 20px; /* Optional: Add padding for spacing */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  }
+  
+  .cancel-order-button {
+    background-color: #fff; /* White background for the button */
+    border: 1px solid #ddd; /* Optional: Add border to the button */
+    color: #fafcfd; /* Optional: Change text color */
+  }
+  
+  .pagination {
+    background-color: #fff; /* White background for pagination */
+    padding: 10px; /* Optional: Add padding for spacing */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  }
