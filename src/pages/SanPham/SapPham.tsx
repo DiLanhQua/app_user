@@ -89,7 +89,7 @@ const SanPham: React.FC = () => {
         </ul>
         <div className="checkout-btn mt-100">
           <a href="checkout.html" className="btn essence-btn">
-            thanh toán
+            Thanh toán
           </a>
         </div>
       </div>
