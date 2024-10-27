@@ -1,136 +1,195 @@
-import React from 'react'
-export const Header = () => {
+import React from "react";
 
-  
+export const Header = () => {
   return (
     <div>
-            <header className="header_area">
-      <div className="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
-        {/* Classy Menu */}
-        <nav className="classy-navbar" id="essenceNav">
-          {/* Logo */}
-          <a className="nav-brand" href="index.html">
-            <img src="../../../src/assets/img/core-img/logo.png" alt="" />
-          </a>
-          {/* Navbar Toggler */}
-          <div className="classy-navbar-toggler">
-            <span className="navbarToggler">
-              <span />
-              <span />
-              <span />
-            </span>
-          </div>
-          {/* Menu */}
-          <div className="classy-menu">
-            {/* close btn */}
-            <div className="classycloseIcon">
-              <div className="cross-wrap">
-                <span className="top" />
-                <span className="bottom" />
-              </div>
+      <header className="header_area">
+        <div className="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
+          {/* Classy Menu */}
+          <nav className="classy-navbar" id="essenceNav">
+            {/* Logo */}
+            <a className="nav-brand" href="index.html">
+              COZAStore
+            </a>
+            {/* Navbar Toggler */}
+            <div className="classy-navbar-toggler">
+              <span className="navbarToggler">
+                <span />
+                <span />
+                <span />
+              </span>
             </div>
-            {/* Nav Start */}
-            <div className="classynav">
-  <ul>
-    <li>
-      <a href="/sanpham">Sản Phẩm</a>
-      <div className="megamenu">
-        <ul className="single-mega cn-col-4">
-          <li className="title">Giày Sneaker</li>
-          <li><a href="shop.html">Giày Thể Thao</a></li>
-          <li><a href="shop.html">Giày Chạy Bộ</a></li>
-          <li><a href="shop.html">Giày Bóng Rổ</a></li>
-          <li><a href="shop.html">Giày Tennis</a></li>
-        </ul>
-        <ul className="single-mega cn-col-4">
-          <li className="title">Giày Boot</li>
-          <li><a href="shop.html">Boot Cổ Cao</a></li>
-          <li><a href="shop.html">Boot Cổ Ngắn</a></li>
-          <li><a href="shop.html">Boot Da</a></li>
-          <li><a href="shop.html">Boot Lội Nước</a></li>
-        </ul>
-        <ul className="single-mega cn-col-4">
-          <li className="title">Giày Tây</li>
-          <li><a href="shop.html">Giày Oxfords</a></li>
-          <li><a href="shop.html">Giày Derby</a></li>
-          <li><a href="shop.html">Giày Loafers</a></li>
-          <li><a href="shop.html">Giày Brogues</a></li>
-        </ul>
-        <ul className="single-mega cn-col-4">
-          <li className="title">Dép và Sandals</li>
-          <li><a href="shop.html">Dép Xỏ Ngón</a></li>
-          <li><a href="shop.html">Dép Quai Hậu</a></li>
-          <li><a href="shop.html">Sandals Bệt</a></li>
-          <li><a href="shop.html">Sandals Cao Gót</a></li>
-        </ul>
-        <div className="single-mega cn-col-4">
-          <img src="../../../src/assets/img/bg-img/bg-6.jpg" alt="Giày thời trang" />
-        </div>
-      </div>
-    </li>
-    <li>
-      <a>Pages</a>
-      <ul className="dropdown">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="/sanpham">Shop</a></li>
-        <li><a href="single-product-details.html">Product Details</a></li>
-        <li><a href="checkout.html">Checkout</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="single-blog.html">Single Blog</a></li>
-        <li><a href="regular-page.html">Regular Page</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </li>
-    <li><a href="blog.html">Blog</a></li>
-    <li><a href="/donhang">Contact</a></li>
-  </ul>
-</div>
-
-            {/* Nav End */}
-          </div>
-        </nav>
-        {/* Header Meta Data */}
-        <div className="header-meta d-flex clearfix justify-content-end">
-          {/* Search Area */}
-          <div className="search-area">
-            <form action="#" method="post">
-              <input
-                type="search"
-                name="search"
-                id="headerSearch"
-                placeholder="Type for search"
-              />
-              <button type="submit">
-                <i className="fa fa-search" aria-hidden="true" />
-              </button>
-            </form>
-          </div>
-          {/* Favourite Area */}
-          <div className="favourite-area">
-            <a href="#">
-              <img src="../../../src/assets/img/core-img/heart.svg" alt="" />
-            </a>
-          </div>
-          {/* User Login Info */}
-          <div className="user-login-info">
-            <a href="#">
-              <img src="../../../src/assets/img/core-img/user.svg" alt="" />
-            </a>
-          </div>
-          {/* Cart Area */}
-          <div className="cart-area">
-            <a href="#" id="essenceCartBtn">
-              <img src="../../../src/assets/img/core-img/bag.svg" alt="" /> <span>3</span>
-            </a>
-
-            
+            {/* Menu */}
+            <div className="classy-menu">
+              {/* close btn */}
+              <div className="classycloseIcon">
+                <div className="cross-wrap">
+                  <span className="top" />
+                  <span className="bottom" />
+                </div>
+              </div>
+              {/* Nav Start */}
+              <div className="classynav">
+                <ul>
+                  <li>
+                    <a href="#">Sản phẩm</a>
+                  </li>
+                  {/* <li>
+                    <a href="#">Pages</a>                    
+                  </li> */}
+                  <li>
+                    <a href="/blog">Blog</a>
+                  </li>
+                  <li>
+                    <a href="contact.html">Đơn hàng</a>
+                  </li>
+                </ul>
+              </div>
+              {/* Nav End */}
+            </div>
+          </nav>
+          {/* Header Meta Data */}
+          <div className="header-meta d-flex clearfix justify-content-end">
+            {/* Search Area */}
+            <div className="search-area">
+              <form action="#" method="post">
+                <input
+                  type="search"
+                  name="search"
+                  id="headerSearch"
+                  placeholder="   Tìm kiếm"
+                />
+                <button type="submit">
+                  <i className="fa fa-search" aria-hidden="true" />
+                </button>
+              </form>
+            </div>
+            {/* Favourite Area */}
+            <div className="favourite-area">
+              <a href="#">
+                <img src="../../../src/assets/img/core-img/heart.svg" alt="" />
+              </a>
+            </div>
+            {/* User Login Info */}
+            <div className="user-login-info">
+              <a href="#">
+                <img src="../../../src/assets/img/core-img/user.svg" alt="" />
+              </a>
+            </div>
+            {/* Cart Area */}
+            <div className="cart-area">
+              <a href="#" id="essenceCartBtn">
+                <img src="../../../src/assets/img/core-img/bag.svg" alt="" />{" "}
+                <span>3</span>
+              </a>
+            </div>
           </div>
         </div>
+      </header>
+      {/* ##### Header Area End ##### */}
+      {/* ##### Right Side Cart Area ##### */}
+      <div className="cart-bg-overlay" />
+      <div className="right-side-cart-area">
+        {/* Cart Button */}
+        <div className="cart-button">
+          <a href="#" id="rightSideCart">
+            <img src="img/core-img/bag.svg" alt="" /> <span>3</span>
+          </a>
+        </div>
+        <div className="cart-content d-flex">
+          {/* Cart List Area */}
+          <div className="cart-list">
+            {/* Single Cart Item */}
+            <div className="single-cart-item">
+              <a href="#" className="product-image">
+                <img
+                  src="img/product-img/product-1.jpg"
+                  className="cart-thumb"
+                  alt=""
+                />
+                {/* Cart Item Desc */}
+                <div className="cart-item-desc">
+                  <span className="product-remove">
+                    <i className="fa fa-close" aria-hidden="true" />
+                  </span>
+                  <span className="badge">Mango</span>
+                  <h6>Button Through Strap Mini Dress</h6>
+                  <p className="size">Size: S</p>
+                  <p className="color">Color: Red</p>
+                  <p className="price">$45.00</p>
+                </div>
+              </a>
+            </div>
+            {/* Single Cart Item */}
+            <div className="single-cart-item">
+              <a href="#" className="product-image">
+                <img
+                  src="img/product-img/product-2.jpg"
+                  className="cart-thumb"
+                  alt=""
+                />
+                {/* Cart Item Desc */}
+                <div className="cart-item-desc">
+                  <span className="product-remove">
+                    <i className="fa fa-close" aria-hidden="true" />
+                  </span>
+                  <span className="badge">Mango</span>
+                  <h6>Button Through Strap Mini Dress</h6>
+                  <p className="size">Size: S</p>
+                  <p className="color">Color: Red</p>
+                  <p className="price">$45.00</p>
+                </div>
+              </a>
+            </div>
+            {/* Single Cart Item */}
+            <div className="single-cart-item">
+              <a href="#" className="product-image">
+                <img
+                  src="img/product-img/product-3.jpg"
+                  className="cart-thumb"
+                  alt=""
+                />
+                {/* Cart Item Desc */}
+                <div className="cart-item-desc">
+                  <span className="product-remove">
+                    <i className="fa fa-close" aria-hidden="true" />
+                  </span>
+                  <span className="badge">Mango</span>
+                  <h6>Button Through Strap Mini Dress</h6>
+                  <p className="size">Size: S</p>
+                  <p className="color">Color: Red</p>
+                  <p className="price">$45.00</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          {/* Cart Summary */}
+          <div className="cart-amount-summary">
+            <h2>Summary</h2>
+            <ul className="summary-table">
+              <li>
+                <span>subtotal:</span> <span>$274.00</span>
+              </li>
+              <li>
+                <span>delivery:</span> <span>Free</span>
+              </li>
+              <li>
+                <span>discount:</span> <span>-15%</span>
+              </li>
+              <li>
+                <span>total:</span> <span>$232.00</span>
+              </li>
+            </ul>
+            <div className="checkout-btn mt-100">
+              <a href="checkout.html" className="btn essence-btn">
+                check out
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </header>
-    {/* ##### Header Area End ##### */}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
