@@ -9,6 +9,7 @@ import {
 import Layout from './pages/layuot/layout';
 import Index from './pages/Home/Index';
 import Blog from './pages/Blog/blog';
+import Chitiet from './pages/Home/detail';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
       },{
         path:"/blog",
         element: <Blog/>
+      },{
+        path:"/detail",
+        element: <Chitiet/>
       }
+      
     ]
   },
 ]);
