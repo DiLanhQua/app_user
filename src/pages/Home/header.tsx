@@ -1,6 +1,7 @@
 import React from 'react'
-
 export const Header = () => {
+
+  
   return (
     <div>
             <header className="header_area">
@@ -30,106 +31,61 @@ export const Header = () => {
             </div>
             {/* Nav Start */}
             <div className="classynav">
-              <ul>
-                <li>
-                  <a href="#">Shop</a>
-                  <div className="megamenu">
-                    <ul className="single-mega cn-col-4">
-                      <li className="title">Women's Collection</li>
-                      <li>
-                        <a href="shop.html">Dresses</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Blouses &amp; Shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">T-shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Rompers</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Bras &amp; Panties</a>
-                      </li>
-                    </ul>
-                    <ul className="single-mega cn-col-4">
-                      <li className="title">Men's Collection</li>
-                      <li>
-                        <a href="shop.html">T-Shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Polo</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Jackets</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Trench</a>
-                      </li>
-                    </ul>
-                    <ul className="single-mega cn-col-4">
-                      <li className="title">Kid's Collection</li>
-                      <li>
-                        <a href="shop.html">Dresses</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">T-shirts</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Jackets</a>
-                      </li>
-                      <li>
-                        <a href="shop.html">Trench</a>
-                      </li>
-                    </ul>
-                    <div className="single-mega cn-col-4">
-                      <img src="../../../src/assets/img/bg-img/bg-6.jpg" alt="" />
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <a href="#">Pages</a>
-                  <ul className="dropdown">
-                    <li>
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                      <a href="shop.html">Shop</a>
-                    </li>
-                    <li>
-                      <a href="single-product-details.html">Product Details</a>
-                    </li>
-                    <li>
-                      <a href="checkout.html">Checkout</a>
-                    </li>
-                    <li>
-                      <a href="blog.html">Blog</a>
-                    </li>
-                    <li>
-                      <a href="single-blog.html">Single Blog</a>
-                    </li>
-                    <li>
-                      <a href="regular-page.html">Regular Page</a>
-                    </li>
-                    <li>
-                      <a href="contact.html">Contact</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="blog.html">Blog</a>
-                </li>
-                <li>
-                  <a href="contact.html">Contact</a>
-                </li>
-              </ul>
-            </div>
+  <ul>
+    <li>
+      <a href="/sanpham">Sản Phẩm</a>
+      <div className="megamenu">
+        <ul className="single-mega cn-col-4">
+          <li className="title">Giày Sneaker</li>
+          <li><a href="shop.html">Giày Thể Thao</a></li>
+          <li><a href="shop.html">Giày Chạy Bộ</a></li>
+          <li><a href="shop.html">Giày Bóng Rổ</a></li>
+          <li><a href="shop.html">Giày Tennis</a></li>
+        </ul>
+        <ul className="single-mega cn-col-4">
+          <li className="title">Giày Boot</li>
+          <li><a href="shop.html">Boot Cổ Cao</a></li>
+          <li><a href="shop.html">Boot Cổ Ngắn</a></li>
+          <li><a href="shop.html">Boot Da</a></li>
+          <li><a href="shop.html">Boot Lội Nước</a></li>
+        </ul>
+        <ul className="single-mega cn-col-4">
+          <li className="title">Giày Tây</li>
+          <li><a href="shop.html">Giày Oxfords</a></li>
+          <li><a href="shop.html">Giày Derby</a></li>
+          <li><a href="shop.html">Giày Loafers</a></li>
+          <li><a href="shop.html">Giày Brogues</a></li>
+        </ul>
+        <ul className="single-mega cn-col-4">
+          <li className="title">Dép và Sandals</li>
+          <li><a href="shop.html">Dép Xỏ Ngón</a></li>
+          <li><a href="shop.html">Dép Quai Hậu</a></li>
+          <li><a href="shop.html">Sandals Bệt</a></li>
+          <li><a href="shop.html">Sandals Cao Gót</a></li>
+        </ul>
+        <div className="single-mega cn-col-4">
+          <img src="../../../src/assets/img/bg-img/bg-6.jpg" alt="Giày thời trang" />
+        </div>
+      </div>
+    </li>
+    <li>
+      <a>Pages</a>
+      <ul className="dropdown">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="/sanpham">Shop</a></li>
+        <li><a href="single-product-details.html">Product Details</a></li>
+        <li><a href="checkout.html">Checkout</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="single-blog.html">Single Blog</a></li>
+        <li><a href="regular-page.html">Regular Page</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="/donhang">Contact</a></li>
+  </ul>
+</div>
+
             {/* Nav End */}
           </div>
         </nav>
@@ -166,6 +122,8 @@ export const Header = () => {
             <a href="#" id="essenceCartBtn">
               <img src="../../../src/assets/img/core-img/bag.svg" alt="" /> <span>3</span>
             </a>
+
+            
           </div>
         </div>
       </div>

@@ -11,6 +11,10 @@ import Index from './pages/Home/Index';
 import Blog from './pages/Blog/blog';
 import Chitiet from './pages/Home/detail';
 import Login from './pages/Home/login';
+import SanPham from './pages/SanPham/SapPham';
+import GioHang from './pages/GioHang/GioHang';
+import DonHang from './pages/DonHang/DonHang';
+
 
 
 const router = createBrowserRouter([
@@ -31,6 +35,15 @@ const router = createBrowserRouter([
       },{
         path:"/login",
         element: <Login/>
+      },{
+        path:"/sanpham",
+        element: <SanPham/>
+      },{
+        path:"/giohang",
+        element: <GioHang/>
+      },{
+        path:"/donhang",
+        element: <DonHang/>
       }
       
     ]
