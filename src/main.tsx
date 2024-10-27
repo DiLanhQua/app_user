@@ -9,7 +9,9 @@ import {
 import Layout from './pages/layuot/layout';
 import Index from './pages/Home/Index';
 import Blog from './pages/Blog/blog';
-
+import SanPham from './pages/SanPham/SapPham';
+import GioHang from './pages/GioHang/GioHang';
+import DonHang from './pages/DonHang/DonHang';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +24,15 @@ const router = createBrowserRouter([
       },{
         path:"/blog",
         element: <Blog/>
+      },{
+        path:"/sanpham",
+        element: <SanPham/>
+      },{
+        path:"/giohang",
+        element: <GioHang/>
+      },{
+        path:"/donhang",
+        element: <DonHang/>
       }
     ]
   },
