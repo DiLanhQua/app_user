@@ -8,7 +8,7 @@ export const Header = () => {
           {/* Classy Menu */}
           <nav className="classy-navbar" id="essenceNav">
             {/* Logo */}
-            <a className="nav-brand" href="index.html">
+            <a className="nav-brand" href="/">
               COZAStore
             </a>
             {/* Navbar Toggler */}
@@ -32,7 +32,7 @@ export const Header = () => {
               <div className="classynav">
                 <ul>
                   <li>
-                    <a href="#">Sản phẩm</a>
+                    <a href="/sanpham">Sản phẩm</a>
                   </li>
                   {/* <li>
                     <a href="#">Pages</a>                    
@@ -41,7 +41,7 @@ export const Header = () => {
                     <a href="/blog">Blog</a>
                   </li>
                   <li>
-                    <a href="contact.html">Đơn hàng</a>
+                    <a href="/donhang">Đơn hàng</a>
                   </li>
                 </ul>
               </div>
