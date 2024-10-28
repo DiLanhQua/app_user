@@ -49,19 +49,16 @@ export const Header = () => {
             </div>
           </nav>
           {/* Header Meta Data */}
-          <div className="header-meta d-flex clearfix justify-content-end">
+          <div className="d-flex clearfix justify-content-end">
             {/* Search Area */}
             <div className="search-area">
               <form action="#" method="post">
-                <input
+                <input style={{marginRight: "35px"}}
                   type="search"
                   name="search"
                   id="headerSearch"
                   placeholder="   Tìm kiếm"
                 />
-                <button type="submit">
-                  <i className="fa fa-search" aria-hidden="true" />
-                </button>
               </form>
             </div>
             {/* Favourite Area */}
@@ -72,7 +69,7 @@ export const Header = () => {
             </div>
             {/* User Login Info */}
             <div className="user-login-info">
-              <a href="#">
+              <a href="/login">
                 <img src="../../../src/assets/img/core-img/user.svg" alt="" />
               </a>
             </div>

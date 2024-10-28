@@ -29,9 +29,9 @@ const Card_pro = () => {
         />
       </div>
       {/* Mô tả sản phẩm */}
-      <div className="product-description" style={{ height: "35%", paddingTop: "10px" }}>
+      <div  className="product-description" style={{ height: "35%", paddingTop: "10px" }}>
         <span>ADIDAS</span>
-        <a href="single-product-details.html">
+        <a href="/detail">
           <h6>GIÀY ADIDAS AB12</h6>
         </a>
         <p className="product-price">1200000 VND</p>

@@ -100,16 +100,15 @@ const chitiet = () => {
           </div>
           {/* Mô Tả Sản Phẩm */}
           <div className="single_product_desc clearfix">
-            <span>Mango</span>
+            <span>NIKE</span>
             <a href="cart.html">
-              <h2>Đầm Dài Lấp Lánh Một Vai</h2>
+              <h2>Giày Nike Court</h2>
             </a>
             <p className="product-price">
-              <span className="old-price">$65.00</span> $49.00
+            <span className="old-price">1.890.000₫</span> 1.500.000₫
             </p>
             <p className="product-desc">
-              Mauris viverra cursus ante laoreet eleifend. Donec vel fringilla ante.
-              Aenean finibus velit id urna vehicula, nec maximus est sollicitudin.
+            Giày Nike là một mẫu giày thể thao đa dụng có thiết kế cực đẹp và mức giá vô cùng tốt. Với nhiều cải tiến mới so với phiên bản thì đây chắc chắn sẽ trở thành mẫu giày thể thao quốc dân của Nike trong năm nay.
             </p>
             {/* Biểu Mẫu */}
             <form className="cart-form clearfix" method="post">

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./login.css";
 
 const Login = () => {
-  const [avatar, setAvatar] = useState<string | null>(null); // State to hold the selected image
+
 
   useEffect(() => {
     const toggleButton = document.querySelector('.img__btn');
@@ -20,13 +20,7 @@ const Login = () => {
     }
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; // Optional chaining to avoid null reference
-    if (file) {
-      const fileURL = URL.createObjectURL(file);
-      setAvatar(fileURL); // Set the avatar state to the file URL
-    }
-  };
+ 
 
   return (
     <>
@@ -44,7 +38,7 @@ const Login = () => {
             <input type="password" />
           </label>
           <p className="forgot-pass">Quên mật khẩu?</p>
-          <button type="button" className="submit">
+          <button type="button" className="submit-nhap">
             Đăng nhập
           </button>
         </div>
@@ -77,17 +71,7 @@ const Login = () => {
                   <span>Mật khẩu</span>
                   <input type="password" />
                 </label>
-                <div className="avatar-container">
-                  <label>
-                    <span>Avatar</span>
-                    <input type="file" onChange={handleFileChange} />
-                  </label>
-                  {avatar && (
-                    <div className="avatar-preview">
-                      <img src={avatar} alt="Avatar Preview" />
-                    </div>
-                  )}
-                </div>
+               
               </div>
               <div className="form-column">
                 <label>
@@ -102,17 +86,10 @@ const Login = () => {
                   <span>Địa chỉ</span>
                   <input type="text" />
                 </label>
-                <label>
-                  <span>Giới tính</span>
-                  <select>
-                    <option value="male">Nam</option>
-                    <option value="female">Nữ</option>
-                    <option value="other">Khác</option>
-                  </select>
-                </label>
+                
               </div>
             </div>
-            <button type="button" className="submit">
+            <button type="button" className="submit-nhap">
               Đăng ký
             </button>
           </div>

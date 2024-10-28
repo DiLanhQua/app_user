@@ -312,7 +312,7 @@ const SanPham: React.FC = () => {
                   </div>
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike Court Vision Low Nam - Xanh Dương</h6>
                     </a>
                     <p className="product-price">
@@ -350,7 +350,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike Air Max AP Nam - Trắng Navy</h6>
                     </a>
                     <p className="product-price">
@@ -392,7 +392,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Puma</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Puma Aviate Nam - Đen Trắng</h6>
                     </a>
                     <p className="product-price">
@@ -430,7 +430,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Lacoste</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Lacoste Nivolor 0721 Nam - Xanh Navy</h6>
                     </a>
                     <p className="product-price">
@@ -472,7 +472,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Lacoste</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Lacoste Angular Textile Nam - Trắng Nâu</h6>
                     </a>
                     <p className="product-price">
@@ -513,7 +513,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike Revolution 7 Nam - Đen Cam</h6>
                     </a>
                     <p className="product-price">
@@ -554,7 +554,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike Dunk Low Retro Nam - Trắng Camo</h6>
                     </a>
                     <p className="product-price">
@@ -595,7 +595,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike Vomero 17 Nam - Trắng Xám Đỏ</h6>
                     </a>
                     <p className="product-price">
@@ -636,7 +636,7 @@ const SanPham: React.FC = () => {
                   {/* Product Description */}
                   <div className="product-description">
                     <span>Nike</span>
-                    <a href="single-product-details.html">
+                    <a href="/detail">
                       <h6>Giày Nike DownShifter 13 Nữ - Tím</h6>
                     </a>
                     <p className="product-price">
