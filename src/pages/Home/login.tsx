@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./login.css";
 
 const Login = () => {
-
+  const [isForgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const toggleButton = document.querySelector('.img__btn');
@@ -20,7 +21,15 @@ const Login = () => {
     }
   }, []);
 
- 
+  const handleForgotPassword = () => {
+    setForgotPasswordOpen(true);
+  };
+
+  const handleSendResetLink = () => {
+    // Xử lý gửi liên kết đặt lại mật khẩu qua email
+    alert(`Đã gửi liên kết đặt lại mật khẩu tới ${email}`);
+    setForgotPasswordOpen(false);
+  };
 
   return (
     <>
@@ -37,7 +46,9 @@ const Login = () => {
             <span>Mật khẩu</span>
             <input type="password" />
           </label>
-          <p className="forgot-pass">Quên mật khẩu?</p>
+          <p className="forgot-pass" onClick={handleForgotPassword}>
+            Quên mật khẩu?
+          </p>
           <button type="button" className="submit-nhap">
             Đăng nhập
           </button>
@@ -71,7 +82,6 @@ const Login = () => {
                   <span>Mật khẩu</span>
                   <input type="password" />
                 </label>
-               
               </div>
               <div className="form-column">
                 <label>
@@ -86,7 +96,6 @@ const Login = () => {
                   <span>Địa chỉ</span>
                   <input type="text" />
                 </label>
-                
               </div>
             </div>
             <button type="button" className="submit-nhap">
@@ -95,6 +104,26 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal Quên mật khẩu */}
+      {isForgotPasswordOpen && (
+        <div className="modal">
+          <div className="modal-content">
+  <h2>Quên mật khẩu</h2>
+  <p>Nhập địa chỉ email của bạn để nhận liên kết đặt lại mật khẩu.</p>
+  <input
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    placeholder="Nhập email của bạn"
+  />
+  <div className="button-group">
+    <button onClick={handleSendResetLink}>Gửi liên kết</button>
+    <button onClick={() => setForgotPasswordOpen(false)}>Đóng</button>
+  </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
