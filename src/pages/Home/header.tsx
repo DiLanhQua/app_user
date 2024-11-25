@@ -98,7 +98,7 @@ export const Header = () => {
                 {user ? (
                   <p style={{ paddingTop: "19px" }}>{user}</p>
                 ) : (
-                  <img alt="" />
+                  <img src="../../../src/assets/img/core-img/user.svg" alt="" />
                 )}
               </a>
               {user && isDropdownOpen && (

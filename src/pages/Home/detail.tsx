@@ -100,16 +100,19 @@ const chitiet: React.FC = () => {
         {/* Hình Ảnh Sản Phẩm */}
         <div className="single_product_thumb clearfix">
           <div className="product_thumbnail_slides owl-carousel">
-            <img src="src/assets/img/product-img/Anh1.jpg" alt="Product" />
+            <img src="../../../src/assets/img/product-img/Anh1.jpg" alt="Product" />
           </div>
         </div>
         {/* Mô Tả Sản Phẩm */}
         <div className="single_product_desc clearfix">
-          <span>Category: {category?.CategoryName}</span>
-          <h2>{product.ProductName}</h2>
+          <span>{category?.CategoryName}</span>
+          <h3>{product.ProductName}</h3>
+          {product.details.map((detail)=>(
           <p className="product-price">
-            <span className="old-price">1.890.000₫</span> 1.500.000₫
-          </p>
+          {detail.Price} VND
+       </p>
+          ))}
+
           <p className="product-desc">{product.Description}</p>
           {/* Biểu Mẫu */}
           <form className="cart-form clearfix" method="post">
