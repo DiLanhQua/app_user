@@ -1,5 +1,29 @@
-import React from 'react';
-const Card_pro = () => {
+import React from "react";
+
+interface DetailProductDTO {
+  Id:number;
+  Size: string;
+  Price: number;
+  Quantity: number;
+  Gender: string;
+  Status: string;
+  ColorId: number;
+}
+
+interface ProductDetail {
+  Id:number;
+  ProductName: string;
+  Description: string;
+  CategoryId: number;
+  BrandId: number;
+  details: DetailProductDTO[];
+}
+
+interface CardProProps {
+  product: ProductDetail;
+}
+
+const Card_pro: React.FC<CardProProps> = ({ product }) => {
   return (
     <div
       className="single-product-wrapper"
@@ -12,7 +36,7 @@ const Card_pro = () => {
         borderRadius: "10px",
         overflow: "hidden",
         margin: "10px",
-        textAlign: "center"
+        textAlign: "center",
       }}
     >
       {/* Hình ảnh sản phẩm */}
@@ -29,15 +53,20 @@ const Card_pro = () => {
         />
       </div>
       {/* Mô tả sản phẩm */}
-      <div  className="product-description" style={{ height: "35%", paddingTop: "10px" }}>
-        <span>ADIDAS</span>
-        <a href="/detail">
-          <h6>GIÀY ADIDAS AB12</h6>
+      <div
+        className="product-description"
+        style={{ height: "35%", paddingTop: "10px" }}
+      >
+        <span>{product.Description}</span>
+        <a href={`/detail/${product.Id}`}>
+          <h6>{product.ProductName}</h6>
         </a>
-        <p className="product-price">1200000 VND</p>
+        <p className="product-price">
+          {product.details[0]?.Price?.toLocaleString("vi-VN")} VND
+        </p>
         <div className="hover-content">
           <div className="add-to-cart-btn">
-            <a href="#" className="btn essence-btn">Thêm giỏ hàng</a>
+            <button className="btn essence-btn">Thêm giỏ hàng</button>
           </div>
         </div>
       </div>
