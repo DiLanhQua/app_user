@@ -9,6 +9,7 @@
 body {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     background: #ffffff;
+    padding-top: 50px ;
 }
 
 input,
@@ -26,14 +27,15 @@ button {
 }
 
 .cont {
-    border-radius: 20px;
+    border-radius: 15px;
     overflow: hidden;
     position: relative;
     width: 900px;
     height: 550px;
+   
     margin: 0 auto 100px;
     background: #fff;
-    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3), 10px 10px 15px rgba(70, 70, 70, 0.15), inset -10px -10px 15px rgba(255, 255, 255, 0.3), inset 10px 10px 15px rgba(70, 70, 70, 0.15);
+    border: gray 0.2px solid;
 }
 
 .form {
@@ -45,6 +47,7 @@ button {
     transition: transform 1.2s ease-in-out;
     transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
     padding: 50px 30px 0;
+ 
 }
 
 .sub-cont {
@@ -111,7 +114,8 @@ button {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 22, 255, 0.6);
+    
 }
 
 .cont.s--signup .img:before {
@@ -167,7 +171,7 @@ button {
     height: 36px;
     margin: 0 auto;
     background: transparent;
-    color: #fff;
+    color: #fff; /*chữ chuyển form*/
     text-transform: uppercase;
     font-size: 15px;
     cursor: pointer;
@@ -208,6 +212,7 @@ button {
     transform: translateY(-72px);
 }
 
+
 .cont.s--signup .img__btn span.m--in {
     -webkit-transform: translateY(0);
     transform: translateY(0);
@@ -233,8 +238,10 @@ label {
 
 label span {
     font-size: 12px;
-    color: #cfcfcf;
+    color: #787878;
     text-transform: uppercase;
+    font-family: Roboto, sans-serif;
+  
 }
 
 input {
@@ -250,13 +257,14 @@ input {
 .forgot-pass {
     margin-top: 15px;
     text-align: center;
-    font-size: 12px;
-    color: #cfcfcf;
+    font-size: 13px;
+    color: #5f5b5b;
+    text-decoration: dotted;
 }
 .submit-nhap {
     margin-top: 40px;
     margin-bottom: 20px;
-    background: #d4af7a;
+    background: #646cff;
     text-transform: uppercase;
 }
 
@@ -388,3 +396,7 @@ input {
     color: black;
   }
   
+  /*kiểm lỗi*/
+  .error{
+    color: #ff8383;
+  }
