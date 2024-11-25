@@ -1,7 +1,64 @@
 import Card_pro from '../Card_pro.tsx'; 
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+interface DetailProductDTO {
+  Id:number;
+  Size: string;
+  Price: number;
+  Quantity: number;
+  Gender: string;
+  Status: string;
+  ColorId: number;
+}
 
+interface ProductDetail {
+  Id:number;
+  ProductName: string;
+  Description: string;
+  CategoryId: number;
+  BrandId: number;
+  details: DetailProductDTO[];
+}
 
 const Index = () => {
+  const [products, setProducts] = useState<ProductDetail[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("https://localhost:7048/api/Products/get-all-product-detail");
+      const products = response.data.data.map((product: any) => ({
+        ProductName: product.productName,
+        Description: product.description,
+        CategoryId: product.categoryId,
+        BrandId: product.brandId,
+        details: product.details.map((detail: any) => ({
+          Id: detail.id,
+          Size: detail.size || "N/A",
+          Price: detail.price || 0,
+          Quantity: detail.quantity || 0,
+          Gender: detail.gender || "Unspecified",
+          Status: detail.status || "Unknown",
+          ColorId: detail.colorId || 0,
+        })),
+      }));
+      setProducts(products);
+      console.log(products)
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading products...</div>;
+  }
   return (
   <div>
 
@@ -121,14 +178,13 @@ const Index = () => {
       </div>
       <div className="container">
   <div className="row">
-    <Card_pro /> {/* Gọi component Card_pro ở đây */}
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
+  {products.length > 0 ? (
+  products.slice(0, 8).map((product) => (
+    <Card_pro key={product.Id} product={product} />
+  ))
+) : (
+  <div>Không có sản phẩm nào để hiển thị.</div>
+)}
           </div>
       </div>
     </section>
@@ -145,14 +201,13 @@ const Index = () => {
       </div>
       <div className="container">
   <div className="row">
-    <Card_pro /> {/* Gọi component Card_pro ở đây */}
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
-              <Card_pro />
+  {products.length > 0 ? (
+  products.slice(0, 8).map((product) => (
+    <Card_pro key={product.Id} product={product} />
+  ))
+) : (
+  <div>Không có sản phẩm nào để hiển thị.</div>
+)}
           </div>
       </div>
     {/* ##### New Arrivals Area End ##### */}
