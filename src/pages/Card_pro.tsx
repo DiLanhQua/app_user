@@ -1,7 +1,7 @@
 import React from "react";
 
 interface DetailProductDTO {
-  Id:number;
+  Id: number;
   Size: string;
   Price: number;
   Quantity: number;
@@ -11,7 +11,7 @@ interface DetailProductDTO {
 }
 
 interface ProductDetail {
-  Id:number;
+  Id: number;
   ProductName: string;
   Description: string;
   CategoryId: number;
@@ -24,6 +24,7 @@ interface CardProProps {
 }
 
 const Card_pro: React.FC<CardProProps> = ({ product }) => {
+  const firstDetail = product.details[0];
   return (
     <div
       className="single-product-wrapper"
@@ -39,7 +40,6 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         textAlign: "center",
       }}
     >
-      {/* Hình ảnh sản phẩm */}
       <div className="product-img" style={{ height: "65%", overflow: "hidden" }}>
         <img
           src="../../../src/assets/img/product-img/sp1.jpg"
@@ -52,17 +52,16 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
           }}
         />
       </div>
-      {/* Mô tả sản phẩm */}
       <div
         className="product-description"
         style={{ height: "35%", paddingTop: "10px" }}
       >
         <span>{product.Description}</span>
         <a href={`/detail/${product.Id}`}>
-          <h6>{product.ProductName}</h6>
+          <h6 style={{ fontWeight: "bold" }}>{product.ProductName}</h6>
         </a>
-        <p className="product-price">
-          {product.details[0]?.Price?.toLocaleString("vi-VN")} VND
+        <p className="product-price" style={{ color: "#ff4500", fontWeight: "bold" }}>
+          {firstDetail?.Price?.toLocaleString("vi-VN")} VND
         </p>
         <div className="hover-content">
           <div className="add-to-cart-btn">

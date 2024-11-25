@@ -26,24 +26,32 @@ const Index = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/Products/get-all-product-detail");
-      const products = response.data.data.map((product: any) => ({
+      const [productResponse, detailResponse] = await Promise.all([
+        axios.get("https://localhost:7048/api/Products/get-all-product"), 
+        axios.get("https://localhost:7048/api/DetailProduct/get-all-detailproduct"), 
+      ]);
+      const productsData = productResponse.data.data; // Dữ liệu sản phẩm
+      const detailsData = detailResponse.data.data; 
+      const combinedProducts: ProductDetail[] = productsData.map((product: any) => ({
+        Id: product.id,
         ProductName: product.productName,
         Description: product.description,
         CategoryId: product.categoryId,
         BrandId: product.brandId,
-        details: product.details.map((detail: any) => ({
-          Id: detail.id,
-          Size: detail.size || "N/A",
-          Price: detail.price || 0,
-          Quantity: detail.quantity || 0,
-          Gender: detail.gender || "Unspecified",
-          Status: detail.status || "Unknown",
-          ColorId: detail.colorId || 0,
-        })),
+        details: detailsData
+          .filter((detail: any) => detail.productId === product.id) 
+          .map((detail: any) => ({
+            Id: detail.id,
+            Size: detail.size || "N/A",
+            Price: detail.price || 0,
+            Quantity: detail.quantity || 0,
+            Gender: detail.gender || "Unspecified",
+            Status: detail.status || "Unknown",
+            ColorId: detail.colorId || 0,
+          })),
       }));
-      setProducts(products);
-      console.log(products)
+      setProducts(combinedProducts); 
+      console.log(combinedProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {

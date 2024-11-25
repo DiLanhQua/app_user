@@ -1,153 +1,156 @@
-const chitiet = () => {
-    return (
-        <>
-        <div className="right-side-cart-area">
-          {/* Nút Giỏ Hàng */}
-          <div className="cart-button">
-            <a href="#" id="rightSideCart">
-            <img src="src/assets/img/product-img/giay-nike-air-force-1-nam-chinh-hang-tai-tphcm-AJ7747-100-king-shoes-sneaker-authentic-2.jpg"  />
-            </a>
-          </div>
-          <div className="cart-content d-flex">
-            {/* Khu Vực Danh Sách Giỏ Hàng */}
-            <div className="cart-list">
-              {/* Sản Phẩm Trong Giỏ */}
-              <div className="single-cart-item">
-                <a href="#" className="product-image">
-                <img src="src/assets/img/product-img/giay-nike-air-force-1-nam-chinh-hang-tai-tphcm-AJ7747-100-king-shoes-sneaker-authentic-2.jpg"  />
-                  <div className="cart-item-desc">
-                    <span className="product-remove">
-                      <i className="fa fa-close" aria-hidden="true" />
-                    </span>
-                    <span className="badge">Mango</span>
-                    <h6>Đầm Ngắn Xẻ Vai</h6>
-                    <p className="size">Kích Thước: S</p>
-                    <p className="color">Màu: Đỏ</p>
-                    <p className="price">$45.00</p>
-                  </div>
-                </a>
-              </div>
-              {/* Sản Phẩm Trong Giỏ */}
-              <div className="single-cart-item">
-                <a href="#" className="product-image">
-                <img src="src/assets/img/product-img/giay-nike-air-force-1-nam-chinh-hang-tai-tphcm-AJ7747-100-king-shoes-sneaker-authentic-2.jpg"  />
-                  {/* Mô Tả Sản Phẩm */}
-                  <div className="cart-item-desc">
-                    <span className="product-remove">
-                      <i className="fa fa-close" aria-hidden="true" />
-                    </span>
-                    <span className="badge">Mango</span>
-                    <h6>Đầm Ngắn Xẻ Vai</h6>
-                    <p className="size">Kích Thước: S</p>
-                    <p className="color">Màu: Đỏ</p>
-                    <p className="price">$45.00</p>
-                  </div>
-                </a>
-              </div>
-              {/* Sản Phẩm Trong Giỏ */}
-              <div className="single-cart-item">
-                <a href="#" className="product-image">
-                <img src="src/assets/img/product-img/Anh1.jpg"  />
-                  {/* Mô Tả Sản Phẩm */}
-                  <div className="cart-item-desc">
-                    <span className="product-remove">
-                      <i className="fa fa-close" aria-hidden="true" />
-                    </span>
-                    <span className="badge">Mango</span>
-                    <h6>Đầm Ngắn Xẻ Vai</h6>
-                    <p className="size">Kích Thước: S</p>
-                    <p className="color">Màu: Đỏ</p>
-                    <p className="price">$45.00</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-            {/* Tóm Tắt Giỏ Hàng */}
-            <div className="cart-amount-summary">
-              <h2>Tóm Tắt</h2>
-              <ul className="summary-table">
-                <li>
-                  <span>Tạm Tính:</span> <span>$274.00</span>
-                </li>
-                <li>
-                  <span>Phí Vận Chuyển:</span> <span>Miễn Phí</span>
-                </li>
-                <li>
-                  <span>Giảm Giá:</span> <span>-15%</span>
-                </li>
-                <li>
-                  <span>Tổng Cộng:</span> <span>$232.00</span>
-                </li>
-              </ul>
-              <div className="checkout-btn mt-100">
-                <a href="checkout.html" className="btn essence-btn">
-                  Thanh Toán
-                </a>
-              </div>
-            </div>
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+interface DetailProductDTO {
+  id: number;
+  Size: string;
+  Price: number;
+  Quantity: number;
+  Gender: string;
+  Status: string;
+  ColorId: number;
+}
+
+interface ProductDetail {
+  id: number;
+  ProductName: string;
+  Description: string;
+  CategoryId: number;
+  BrandId: number;
+  details: DetailProductDTO[];
+}
+
+interface CategoryDetail {
+  id: number;
+  Image: string;
+  CategoryName: string;
+}
+
+const chitiet: React.FC = () => {
+  const [products, setProducts] = useState<ProductDetail[]>([]);
+  const [category, setCategory] = useState<CategoryDetail | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { id } = useParams();
+
+  const fetchProductsAndCategory = async () => {
+    try {
+      const [productResponse, detailResponse] = await Promise.all([
+        axios.get(`https://localhost:7048/api/Products/get-product/${id}`),
+        axios.get(`https://localhost:7048/api/DetailProduct/get-detailproduct/${id}`),
+      ]);
+
+      // Extracting product data
+      const productData = productResponse.data;
+      const detailsData = detailResponse.data;
+
+      // Fetching category data
+      const categoryResponse = await axios.get(
+        `https://localhost:7048/api/Category/get-category-by-id/${productData.categoryId}`
+      );
+      const categoryData = categoryResponse.data;
+
+      // Constructing combined product object
+      const combinedProduct: ProductDetail = {
+        id: productData.id,
+        ProductName: productData.productName,
+        Description: productData.description,
+        CategoryId: productData.categoryId,
+        BrandId: productData.brandId,
+        details: detailsData
+          .filter((detail: any) => detail.productId === productData.id)
+          .map((detail: any) => ({
+            id: detail.id,
+            Size: detail.size || "N/A",
+            Price: detail.price || 0,
+            Quantity: detail.quantity || 0,
+            Gender: detail.gender || "Unspecified",
+            Status: detail.status || "Unknown",
+            ColorId: detail.colorId || 0,
+          })),
+      };
+
+      // Setting the state
+      setProducts([combinedProduct]);
+      setCategory({
+        id: categoryData.id,
+        Image: categoryData.image,
+        CategoryName: categoryData.categoryName,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductsAndCategory();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const product = products[0];
+
+  return (
+    <>
+      <section className="single_product_details_area d-flex align-items-center">
+        {/* Hình Ảnh Sản Phẩm */}
+        <div className="single_product_thumb clearfix">
+          <div className="product_thumbnail_slides owl-carousel">
+            <img src="src/assets/img/product-img/Anh1.jpg" alt="Product" />
           </div>
         </div>
-        {/* ##### Kết Thúc Khu Vực Giỏ Hàng Bên Phải ##### */}
-        {/* ##### Khu Vực Chi Tiết Sản Phẩm ##### */}
-        <section className="single_product_details_area d-flex align-items-center">
-          {/* Hình Ảnh Sản Phẩm */}
-          <div className="single_product_thumb clearfix">
-            <div className="product_thumbnail_slides owl-carousel">
-            <img src="src/assets/img/product-img/Anh1.jpg"  />
-
-              
-            </div>
-          </div>
-          {/* Mô Tả Sản Phẩm */}
-          <div className="single_product_desc clearfix">
-            <span>NIKE</span>
-            <a href="cart.html">
-              <h2>Giày Nike Court</h2>
-            </a>
-            <p className="product-price">
+        {/* Mô Tả Sản Phẩm */}
+        <div className="single_product_desc clearfix">
+          <span>Category: {category?.CategoryName}</span>
+          <h2>{product.ProductName}</h2>
+          <p className="product-price">
             <span className="old-price">1.890.000₫</span> 1.500.000₫
-            </p>
-            <p className="product-desc">
-            Giày Nike là một mẫu giày thể thao đa dụng có thiết kế cực đẹp và mức giá vô cùng tốt. Với nhiều cải tiến mới so với phiên bản thì đây chắc chắn sẽ trở thành mẫu giày thể thao quốc dân của Nike trong năm nay.
-            </p>
-            {/* Biểu Mẫu */}
-            <form className="cart-form clearfix" method="post">
-              {/* Hộp Chọn */}
-              <div className="select-box d-flex mt-50 mb-30">
-                <select name="select" id="productSize" className="mr-5">
-                  <option value="value">Kích Thước: XL</option>
-                  <option value="value">Kích Thước: X</option>
-                  <option value="value">Kích Thước: M</option>
-                  <option value="value">Kích Thước: S</option>
-                </select>
-                <select name="select" id="productColor">
-                  <option value="value">Màu: Đen</option>
-                  <option value="value">Màu: Trắng</option>
-                  <option value="value">Màu: Đỏ</option>
-                  <option value="value">Màu: Tím</option>
-                </select>
+          </p>
+          <p className="product-desc">{product.Description}</p>
+          {/* Biểu Mẫu */}
+          <form className="cart-form clearfix" method="post">
+            {/* Hộp Chọn */}
+            <div className="select-box d-flex mt-50 mb-30">
+              <select name="select" id="productSize" className="mr-5">
+                {product.details.map((detail) => (
+                  <option key={detail.id} value={detail.Size}>
+                    Kích Thước: {detail.Size}
+                  </option>
+                ))}
+              </select>
+              <select name="select" id="productColor">
+                {product.details.map((detail) => (
+                  <option key={detail.id} value={detail.ColorId}>
+                    Màu: {detail.ColorId}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Hộp Giỏ Hàng & Yêu Thích */}
+            <div className="cart-fav-box d-flex align-items-center">
+              {/* Giỏ Hàng */}
+              <button
+                type="submit"
+                name="addtocart"
+                value={5}
+                className="btn essence-btn"
+              >
+                Thêm vào giỏ
+              </button>
+              {/* Yêu Thích */}
+              <div className="product-favourite ml-4">
+                <a href="#" className="favme fa fa-heart" />
               </div>
-              {/* Hộp Giỏ Hàng & Yêu Thích */}
-              <div className="cart-fav-box d-flex align-items-center">
-                {/* Giỏ Hàng */}
-                <button
-                  type="submit"
-                  name="addtocart"
-                  value={5}
-                  className="btn essence-btn"
-                >
-                  Thêm vào giỏ
-                </button>
-                {/* Yêu Thích */}
-                <div className="product-favourite ml-4">
-                  <a href="#" className="favme fa fa-heart" />
-                </div>
-              </div>
-            </form>
-          </div>
-        </section>
-      </>
-  )
-}
+            </div>
+          </form>
+        </div>
+      </section>
+    </>
+  );
+};
 
 export default chitiet;
