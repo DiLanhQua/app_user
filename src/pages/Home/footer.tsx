@@ -129,17 +129,7 @@ export const Footer = () => {
           </div>
           <div className="row mt-5">
             <div className="col-md-12 text-center">
-              <p>
-                Bản quyền © Tất cả các quyền được bảo lưu | Được thực hiện với{" "}
-                <i className="fa fa-heart-o" aria-hidden="true" /> bởi{" "}
-                <a href="https://colorlib.com" target="_blank">
-                  Colorlib
-                </a>
-                , phân phối bởi{" "}
-                <a href="https://themewagon.com/" target="_blank">
-                  ThemeWagon
-                </a>
-              </p>
+             
             </div>
           </div>
         </div>

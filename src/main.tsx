@@ -11,9 +11,10 @@ import Index from './pages/Home/Index';
 import Blog from './pages/Blog/blog';
 import Chitiet from './pages/Home/detail';
 import Login from './pages/Home/login';
-import SanPham from './pages/SanPham/SapPham';
-import DonHang from './pages/DonHang/DonHang';
+import SanPham from './pages/Products/Products';
+import DonHang from './pages/Order/Order';
 import ThanhToan from './pages/ThanhToan/ThanhToan';
+import Cart from './pages/ShoppingCart/ShoppingCart'
 
 
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       },{
         path:"/thanhtoan",
         element: <ThanhToan/>
+      },
+      {
+        path:"/Cart",
+        element:<Cart/>
       }
       
     ]
