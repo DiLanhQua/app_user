@@ -5,6 +5,7 @@ import "./header.css";
 export const Header = () => {
   const [user, setUser] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); // Thêm state để quản lý dropdown
+  const [userId, setUserId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +13,7 @@ export const Header = () => {
     if (storedUser) {
       const userData = JSON.parse(storedUser);
       setUser(userData?.fullName || "");
+      setUserId(userData?.accountId || "");
     }
   }, []);
 
@@ -25,10 +27,18 @@ export const Header = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("user");
-
-    sessionStorage.removeItem("user");
     setIsDropdownOpen(false);
     navigate("/login");
+    window.location.reload();
+  };
+
+  const handleNavigateToProfile = () => {
+    if (userId) {
+      setIsDropdownOpen(false);
+      navigate(`/TrangCaNhan/${userId}`);
+    } else {
+      console.error("UserId is null. Cannot navigate.");
+    }
   };
 
   return (
@@ -98,7 +108,7 @@ export const Header = () => {
                 {user ? (
                   <p style={{ paddingTop: "19px" }}>{user}</p>
                 ) : (
-                  <img alt="" />
+                  <img src="../../../src/assets/img/core-img/user.svg" alt="" />
                 )}
               </a>
               {user && isDropdownOpen && (
@@ -107,7 +117,9 @@ export const Header = () => {
                   {/* Thêm class show */}
                   <ul>
                     <li>
-                      <a href="/profile">Trang cá nhân</a>
+                      <a href="#" onClick={handleNavigateToProfile}>
+                        Trang cá nhân
+                      </a>
                     </li>
                     <li>
                       <a href="#" onClick={handleLogout}>

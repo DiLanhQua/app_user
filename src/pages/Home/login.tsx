@@ -137,8 +137,9 @@ const Login = () => {
         }
       );
 
-      toast.success("Đăng nhập thành công!");
       navigate("/");
+      window.location.reload();
+      toast.success("Đăng nhập thành công!");
       console.log(response.data);
       setErrors({});
       sessionStorage.setItem("user", JSON.stringify(response.data));
@@ -170,10 +171,10 @@ const Login = () => {
           Role: 2,
         }
       );
+      window.location.reload();
+      navigate("/login");
 
       toast.success("Đăng ký thành công!");
-      navigate("/login");
-      window.location.reload();
       console.log(response.data);
       setErrors({});
     } catch (error: unknown) {
