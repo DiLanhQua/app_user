@@ -26,24 +26,32 @@ const Index = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/Products/get-all-product-detail");
-      const products = response.data.data.map((product: any) => ({
+      const [productResponse, detailResponse] = await Promise.all([
+        axios.get("https://localhost:7048/api/Products/get-all-product"), 
+        axios.get("https://localhost:7048/api/DetailProduct/get-all-detailproduct"), 
+      ]);
+      const productsData = productResponse.data.data; // Dữ liệu sản phẩm
+      const detailsData = detailResponse.data.data; 
+      const combinedProducts: ProductDetail[] = productsData.map((product: any) => ({
+        Id: product.id,
         ProductName: product.productName,
         Description: product.description,
         CategoryId: product.categoryId,
         BrandId: product.brandId,
-        details: product.details.map((detail: any) => ({
-          Id: detail.id,
-          Size: detail.size || "N/A",
-          Price: detail.price || 0,
-          Quantity: detail.quantity || 0,
-          Gender: detail.gender || "Unspecified",
-          Status: detail.status || "Unknown",
-          ColorId: detail.colorId || 0,
-        })),
+        details: detailsData
+          .filter((detail: any) => detail.productId === product.id) 
+          .map((detail: any) => ({
+            Id: detail.id,
+            Size: detail.size || "N/A",
+            Price: detail.price || 0,
+            Quantity: detail.quantity || 0,
+            Gender: detail.gender || "Unspecified",
+            Status: detail.status || "Unknown",
+            ColorId: detail.colorId || 0,
+          })),
       }));
-      setProducts(products);
-      console.log(products)
+      setProducts(combinedProducts); 
+      console.log(combinedProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -77,7 +85,7 @@ const Index = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <div
               className="single_catagory_area d-flex align-items-center justify-content-center bg-img"
-              style={{ backgroundImage: "url(../../../src/assets/img/bg-img/bg-3.jpg)" }}
+              style={{ backgroundImage: "url(../../../src/assets/img/product-img/image.png)" }}
             >
               <div className="catagory-content">
                 <a href="#">Giày da</a>
@@ -113,54 +121,78 @@ const Index = () => {
 
 {/* ##### CTA Area Start ##### */}
 <div className="cta-area">
-  <div className="container">
-    <div className="row">
-      <div className="col-12">
+<div className="container">
+  <div className="row">
+    <div className="col-12">
+      <div
+        className="cta-content"
+        style={{
+          display: "flex",
+          height: "100%",
+        }}
+      >
+        {/* Hình ảnh bên trái */}
         <div
-          className="cta-content"
+          className="cta-image"
           style={{
-            display: "flex",
-            height: "100%",
+            width: "50%",
           }}
         >
-          {/* Hình ảnh bên trái */}
-          <div
-            className="cta-image"
+          <img
+            src="../../../src/assets/img/bg-img/1.jpg"
+            alt=""
             style={{
-              width: "50%",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
-          >
-            <img
-              src="../../../src/assets/img/bg-img/1.jpg"
-              alt=""
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
+          />
+        </div>
 
-          {/* Nội dung bên phải */}
-          <div
-            className="cta-text d-flex align-items-center justify-content-end"
-            style={{
-              width: "50%",
-              padding: "20px",
-            }}
-          >
-            <div>
-              <h6>-30%</h6>
-              <h2>Giảm giá sản phẩm</h2>
-              <a href="#" className="btn essence-btn">
-                Mua ngay
-              </a>
-            </div>
-          </div>
+        {/* Nội dung bên phải */}
+        <div
+          className="cta-text d-flex align-items-center"
+          style={{
+            width: "50%",
+            padding: "20px",
+            marginLeft: "15px", 
+          }}
+        >
+       <div>
+  <h2
+    style={{
+      textAlign: "left",
+      marginBottom: "10px",
+      fontSize: "80px",
+    }}
+  >
+    Giảm giá sản phẩm{" "}
+    <span style={{ color: "red", fontWeight: "bold" }}>30%</span>
+  </h2>
+  <a
+    href="#"
+    style={{
+      display: "flex", // Sử dụng flexbox
+      alignItems: "center", // Căn giữa theo chiều dọc
+      justifyContent: "center", // Căn giữa theo chiều ngang
+      width: "70%",
+      height: "70px",
+      textAlign: "center",
+      fontSize: "30px",
+      margin: "0 auto", // Căn giữa toàn bộ nút trong container
+    }}
+    className="btn essence-btn"
+  >
+    Mua ngay
+  </a>
+</div>
+
         </div>
       </div>
     </div>
   </div>
+</div>
+
 </div>
 {/* ##### CTA Area End ##### */}
 

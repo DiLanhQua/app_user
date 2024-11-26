@@ -222,8 +222,8 @@ const GioHang: React.FC = () => {
 
                                     </div>
                                 </div>
-                                <div className="container mt-3 justify-content-center" style={{ marginLeft: 90 }}>
-                                    <button
+                                <div  className="container mt-3 justify-content-center" style={{ marginLeft: 90 }}>
+                                    <button 
                                         type="button" className="btn btn-primary"
                                     >
                                         Thanh Toán

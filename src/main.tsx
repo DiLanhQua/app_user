@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <Blog />,
       },
       {
-        path: "/detail",
+        path: "/detail/:id",
         element: <Chitiet />,
       },
       {

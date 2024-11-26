@@ -1,8 +1,76 @@
-import React from "react";
+
 import img from "./../../image/breadcumb.jpg";
 import "./Products.css";
-const Products: React.FC = () => {
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate ,useParams} from "react-router-dom";
+interface DetailProductDTO {
+  id: number;
+  Size: string;
+  Price: number;
+  Quantity: number;
+  Gender: string;
+  Status: string;
+  ColorId: number;
+}
 
+interface ProductDetail {
+  id: number;
+  ProductName: string;
+  Description: string;
+  CategoryId: number;
+  BrandId: number;
+  details: DetailProductDTO[];
+}
+
+const Products: React.FC = () => {
+  const [products, setProducts] = useState<ProductDetail[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { id } = useParams();
+  const fetchProducts = async () => {
+    try {
+      const [productResponse, detailResponse] = await Promise.all([
+        axios.get("https://localhost:7048/api/Products/get-all-product"),
+        axios.get("https://localhost:7048/api/DetailProduct/get-all-detailproduct"),
+      ]);
+      const productsData = productResponse.data.data; 
+      console.log(productsData)
+      const detailsData = detailResponse.data.data;
+      const combinedProducts: ProductDetail[] = productsData.map((product: any) => ({
+        id: product.id,
+        ProductName: product.productName,
+        Description: product.description,
+        CategoryId: product.categoryId,
+        BrandId: product.brandId,
+        details: detailsData
+          .filter((detail: any) => detail.productId === product.id) // Lọc chi tiết phù hợp với sản phẩm
+          .map((detail: any) => ({
+            id: detail.id,
+            Size: detail.size || "N/A",
+            Price: detail.price || 0,
+            Quantity: detail.quantity || 0,
+            Gender: detail.gender || "Unspecified",
+            Status: detail.status || "Unknown",
+            ColorId: detail.colorId || 0,
+          })),
+      }));
+      setProducts(combinedProducts);
+      console.log(combinedProducts);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading products...</div>;
+  }
   return (
     <>
       <div className="cart-bg-overlay" />
@@ -118,8 +186,8 @@ const Products: React.FC = () => {
             <div className="col-12 col-md-4 col-lg-3">
               <div className="shop_sidebar_area">
                 <div className="widget catagory mb-50 bro">
-                  <h6 className="widget-title mb-30">Danh mục<hr/></h6>
-                  
+                  <h6 className="widget-title mb-30">Danh mục<hr /></h6>
+
                   <div className="catagories-menu">
                     <ul id="menu-content2" className="menu-content collapse show">
                       <li data-toggle="collapse" data-target="#sneakers">
@@ -296,366 +364,46 @@ const Products: React.FC = () => {
 
                 </div>
                 <div className="row">
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-01-800x800.jpg.webp" alt="" />
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-04-800x800.jpg.webp"
-                          alt=""
-                        />
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
+                  {products.map((product) => (
+                    <div className="col-12 col-sm-6 col-lg-4">
+                      <div key={product.id} className="single-product-wrapper">
+                        <div className="product-img">
+                          <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-01-800x800.jpg.webp" alt="" />
+                          <img
+                            className="hover-img"
+                            src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-04-800x800.jpg.webp"
+                            alt=""
+                          />
+                          <div className="product-badge offer-badge">
+                            <span>-30%</span>
+                          </div>
+                          <div className="product-favourite">
+                            <a href="#" className="favme fa fa-heart" />
+                          </div>
                         </div>
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike Court Vision Low Nam - Xanh Dương</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
+                        <div className="product-description">
+                          <span><a href={`/detail/${product.id}`}>{product.ProductName}</a></span>
+                          <a href="">
+                            <h6>{ }</h6>
+                          </a>
+                          <p className="product-price">
+                             {product.details.map((detail)=>(
+                              <p key={detail.id}>{detail.Price.toLocaleString("vi-en")} VND</p>
+                            ))}
+                          </p>
+                          {/* Hover Content */}
+                          <div className="hover-content">
+                            {/* Add to Cart */}
+                            <div className="add-to-cart-btn">
+                              <a href="#" className="btn essence-btn">
+                                Thêm vào giỏ hàng
+                              </a>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  {/* Single Product */}
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2023/nike/nk1/giay-nike-air-max-ap-nam-trang-navy-01-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2023/nike/nk1/giay-nike-air-max-ap-nam-trang-navy-04-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike Air Max AP Nam - Trắng Navy</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Single Product */}
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/puma/pm1/giay-puma-aviate-nam-den-trang-01-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/puma/pm1/giay-puma-aviate-nam-den-trang-04-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge new-badge">
-                          <span>New</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Puma</span>
-                        <a href="/detail">
-                          <h6>Giày Puma Aviate Nam - Đen Trắng</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Single Product */}
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2023/lacoste/086/giay-lacoste-nivolor-0721-nam-xanh-navy-01-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2023/lacoste/086/giay-lacoste-nivolor-0721-nam-xanh-navy-02-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Lacoste</span>
-                        <a href="/detail">
-                          <h6>Giày Lacoste Nivolor 0721 Nam - Xanh Navy</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2023/lacoste/086/giay-lacoste-angular-textile-nam-trang-nau-01-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="
-                      https://myshoes.vn/image/cache/catalog/2023/lacoste/086/giay-lacoste-angular-textile-nam-trang-nau-02-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Lacoste</span>
-                        <a href="/detail">
-                          <h6>Giày Lacoste Angular Textile Nam - Trắng Nâu</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">2.890.000₫</span> 1.800.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-revolution-7-nam-den-cam-04-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-revolution-7-nam-den-cam-01-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike Revolution 7 Nam - Đen Cam</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.690.000₫</span> 1.300.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-dunk-low-nam-trang-camo-04-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-dunk-low-nam-trang-camo-01-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike Dunk Low Retro Nam - Trắng Camo</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">2.890.000₫</span> 2.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk4/giay-nike-air-zoom-vomero-17-nam-trang-xam-do.05-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/nike/nk4/giay-nike-air-zoom-vomero-17-nam-trang-xam-do.01-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike Vomero 17 Nam - Trắng Xám Đỏ</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-lg-4">
-                    <div className="single-product-wrapper">
-                      {/* Product Image */}
-                      <div className="product-img">
-                        <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk4/giay-nike-downshifter-13-nu-tim-01-800x800.jpg.webp" alt="" />
-                        {/* Hover Thumb */}
-                        <img
-                          className="hover-img"
-                          src="https://myshoes.vn/image/cache/catalog/2024/nike/nk4/giay-nike-downshifter-13-nu-tim-05-800x800.jpg.webp"
-                          alt=""
-                        />
-                        {/* Product Badge */}
-                        <div className="product-badge offer-badge">
-                          <span>-30%</span>
-                        </div>
-                        {/* Favourite */}
-                        <div className="product-favourite">
-                          <a href="#" className="favme fa fa-heart" />
-                        </div>
-                      </div>
-                      {/* Product Description */}
-                      <div className="product-description">
-                        <span>Nike</span>
-                        <a href="/detail">
-                          <h6>Giày Nike DownShifter 13 Nữ - Tím</h6>
-                        </a>
-                        <p className="product-price">
-                          <span className="old-price">1.890.000₫</span> 1.500.000₫
-                        </p>
-                        {/* Hover Content */}
-                        <div className="hover-content">
-                          {/* Add to Cart */}
-                          <div className="add-to-cart-btn">
-                            <a href="#" className="btn essence-btn">
-                              Thêm vào giỏ hàng
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
               {/* Pagination */}

@@ -98,7 +98,7 @@ export const Header = () => {
             </div>
             {/* Favourite Area */}
             <div className="favourite-area">
-              <a href="#">
+              <a href="/thanhtoan">
                 <img src="../../../src/assets/img/core-img/heart.svg" alt="" />
               </a>
             </div>
@@ -133,7 +133,7 @@ export const Header = () => {
             {/* Cart Area */}
             <div className="cart-area">
               <a href="#" id="essenceCartBtn">
-                <img src="../../../src/assets/img/core-img/bag.svg" alt="" />
+                <img src="../../../src/assets/img/core-img/bag.svg" alt="" />{" "}
                 <span>3</span>
               </a>
             </div>
