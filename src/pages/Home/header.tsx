@@ -132,7 +132,7 @@ export const Header = () => {
             </div>
             {/* Cart Area */}
             <div className="cart-area">
-              <a href="#" id="essenceCartBtn">
+              <a href="cart" id="essenceCartBtn">
                 <img src="../../../src/assets/img/core-img/bag.svg" alt="" />{" "}
                 <span>3</span>
               </a>
