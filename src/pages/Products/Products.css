@@ -1,5 +1,11 @@
-.bro{
-    border: 2px solid #ccc;
+.bro {
+  border: 2px solid #ccc;
   padding: 15px;
-  border-radius: 5px; 
+  border-radius: 5px;
+}
+
+.btn-name a {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
 }

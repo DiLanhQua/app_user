@@ -27,30 +27,38 @@ interface CategoryDetail {
   CategoryName: string;
 }
 
-const chitiet: React.FC = () => {
+const Chitiet: React.FC = () => {
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [category, setCategory] = useState<CategoryDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [customerInfo, setCustomerInfo] = useState<any | null>(null);
   const { id } = useParams();
+
+  // Lấy thông tin khách hàng từ localStorage
+  useEffect(() => {
+    const storedCustomerInfo = sessionStorage.getItem("user");
+    if (storedCustomerInfo) {
+      setCustomerInfo(JSON.parse(storedCustomerInfo));
+    }
+  }, []);
 
   const fetchProductsAndCategory = async () => {
     try {
       const [productResponse, detailResponse] = await Promise.all([
         axios.get(`https://localhost:7048/api/Products/get-product/${id}`),
-        axios.get(`https://localhost:7048/api/DetailProduct/get-detailproduct/${id}`),
+        axios.get(
+          `https://localhost:7048/api/DetailProduct/get-detailproduct/${id}`
+        ),
       ]);
 
-      // Extracting product data
       const productData = productResponse.data;
       const detailsData = detailResponse.data;
 
-      // Fetching category data
       const categoryResponse = await axios.get(
         `https://localhost:7048/api/Category/get-category-by-id/${productData.categoryId}`
       );
       const categoryData = categoryResponse.data;
 
-      // Constructing combined product object
       const combinedProduct: ProductDetail = {
         id: productData.id,
         ProductName: productData.productName,
@@ -58,7 +66,9 @@ const chitiet: React.FC = () => {
         CategoryId: productData.categoryId,
         BrandId: productData.brandId,
         details: detailsData
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .filter((detail: any) => detail.productId === productData.id)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((detail: any) => ({
             id: detail.id,
             Size: detail.size || "N/A",
@@ -70,7 +80,6 @@ const chitiet: React.FC = () => {
           })),
       };
 
-      // Setting the state
       setProducts([combinedProduct]);
       setCategory({
         id: categoryData.id,
@@ -88,6 +97,48 @@ const chitiet: React.FC = () => {
     fetchProductsAndCategory();
   }, []);
 
+  const handleAddToCart = (
+    product: ProductDetail,
+    size: string,
+    colorId: number
+  ) => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    console.log("====================================");
+    console.log(product, "product");
+    console.log("====================================");
+    console.log(customerInfo, "customerInfo");
+
+    const item = {
+      productId: product.id,
+      productName: product.ProductName,
+      size,
+      colorId,
+      quantity: 1,
+      price: product.details[0]?.Price,
+      maKH: customerInfo.accountId, // Thêm thông tin khách hàng vào sản phẩm,
+      productDetail: product.details[0],
+    };
+    console.log("====================================");
+    console.log(item, "item");
+    console.log("====================================");
+    const existingIndex = cart.findIndex(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (cartItem: any) =>
+        cartItem.productId === item.productId &&
+        cartItem.size === item.size &&
+        cartItem.colorId === item.colorId
+    );
+
+    if (existingIndex >= 0) {
+      cart[existingIndex].quantity += 1;
+    } else {
+      cart.push(item);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Sản phẩm đã được thêm vào giỏ hàng!");
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -97,35 +148,29 @@ const chitiet: React.FC = () => {
   return (
     <>
       <section className="single_product_details_area d-flex align-items-center">
-        {/* Hình Ảnh Sản Phẩm */}
         <div className="single_product_thumb clearfix">
           <div className="product_thumbnail_slides owl-carousel">
-            <img src="../../../src/assets/img/product-img/Anh1.jpg" alt="Product" />
+            <img
+              src="../../../src/assets/img/product-img/Anh1.jpg"
+              alt="Product"
+            />
           </div>
         </div>
-        {/* Mô Tả Sản Phẩm */}
         <div className="single_product_desc clearfix">
           <span>{category?.CategoryName}</span>
           <h3>{product.ProductName}</h3>
-          {product.details.map((detail)=>(
-          <p className="product-price">
-          {detail.Price} VND
-       </p>
-          ))}
-
+          <p className="product-price">{product.details[0]?.Price} VND</p>
           <p className="product-desc">{product.Description}</p>
-          {/* Biểu Mẫu */}
           <form className="cart-form clearfix" method="post">
-            {/* Hộp Chọn */}
             <div className="select-box d-flex mt-50 mb-30">
-              <select name="select" id="productSize" className="mr-5">
+              <select id="productSize" className="mr-5">
                 {product.details.map((detail) => (
                   <option key={detail.id} value={detail.Size}>
                     Kích Thước: {detail.Size}
                   </option>
                 ))}
               </select>
-              <select name="select" id="productColor">
+              <select id="productColor">
                 {product.details.map((detail) => (
                   <option key={detail.id} value={detail.ColorId}>
                     Màu: {detail.ColorId}
@@ -133,18 +178,27 @@ const chitiet: React.FC = () => {
                 ))}
               </select>
             </div>
-            {/* Hộp Giỏ Hàng & Yêu Thích */}
             <div className="cart-fav-box d-flex align-items-center">
-              {/* Giỏ Hàng */}
               <button
-                type="submit"
-                name="addtocart"
-                value={5}
+                type="button"
+                onClick={() => {
+                  const size = (
+                    document.getElementById("productSize") as HTMLSelectElement
+                  ).value;
+                  const colorId = parseInt(
+                    (
+                      document.getElementById(
+                        "productColor"
+                      ) as HTMLSelectElement
+                    ).value,
+                    10
+                  );
+                  handleAddToCart(product, size, colorId);
+                }}
                 className="btn essence-btn"
               >
                 Thêm vào giỏ
               </button>
-              {/* Yêu Thích */}
               <div className="product-favourite ml-4">
                 <a href="#" className="favme fa fa-heart" />
               </div>
@@ -156,4 +210,4 @@ const chitiet: React.FC = () => {
   );
 };
 
-export default chitiet;
+export default Chitiet;

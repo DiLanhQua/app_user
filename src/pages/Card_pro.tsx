@@ -40,7 +40,10 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         textAlign: "center",
       }}
     >
-      <div className="product-img" style={{ height: "65%", overflow: "hidden" }}>
+      <div
+        className="product-img"
+        style={{ height: "65%", overflow: "hidden" }}
+      >
         <img
           src="../../../src/assets/img/product-img/sp1.jpg"
           alt=""
@@ -48,7 +51,7 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            borderRadius: "8px"
+            borderRadius: "8px",
           }}
         />
       </div>
@@ -60,7 +63,10 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         <a href={`/detail/${product.Id}`}>
           <h6 style={{ fontWeight: "bold" }}>{product.ProductName}</h6>
         </a>
-        <p className="product-price" style={{ color: "#ff4500", fontWeight: "bold" }}>
+        <p
+          className="product-price"
+          style={{ color: "#ff4500", fontWeight: "bold" }}
+        >
           {firstDetail?.Price?.toLocaleString("vi-VN")} VND
         </p>
         <div className="hover-content">

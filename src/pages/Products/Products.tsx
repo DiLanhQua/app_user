@@ -1,9 +1,8 @@
-
 import img from "./../../image/breadcumb.jpg";
 import "./Products.css";
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate ,useParams} from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 interface DetailProductDTO {
   id: number;
   Size: string;
@@ -20,6 +19,9 @@ interface ProductDetail {
   Description: string;
   CategoryId: number;
   BrandId: number;
+  imagePrimary: string;
+  categoryName: string;
+  brandName: string;
   details: DetailProductDTO[];
 }
 
@@ -30,39 +32,43 @@ const Products: React.FC = () => {
   const fetchProducts = async () => {
     try {
       const [productResponse, detailResponse] = await Promise.all([
-        axios.get("https://localhost:7048/api/Products/get-all-product"),
-        axios.get("https://localhost:7048/api/DetailProduct/get-all-detailproduct"),
+        axios.get("https://localhost:7048/api/Products/get-user"),
+        axios.get(
+          "https://localhost:7048/api/DetailProduct/get-all-detailproduct"
+        ),
       ]);
-      const productsData = productResponse.data.data; 
-      console.log(productsData)
+      const productsData = productResponse.data.data;
       const detailsData = detailResponse.data.data;
-      const combinedProducts: ProductDetail[] = productsData.map((product: any) => ({
-        id: product.id,
-        ProductName: product.productName,
-        Description: product.description,
-        CategoryId: product.categoryId,
-        BrandId: product.brandId,
-        details: detailsData
-          .filter((detail: any) => detail.productId === product.id) // Lọc chi tiết phù hợp với sản phẩm
-          .map((detail: any) => ({
-            id: detail.id,
-            Size: detail.size || "N/A",
-            Price: detail.price || 0,
-            Quantity: detail.quantity || 0,
-            Gender: detail.gender || "Unspecified",
-            Status: detail.status || "Unknown",
-            ColorId: detail.colorId || 0,
-          })),
-      }));
+      const combinedProducts: ProductDetail[] = productsData.map(
+        (product: any) => ({
+          id: product.id,
+          ProductName: product.productName,
+          Description: product.description,
+          CategoryId: product.categoryId,
+          BrandId: product.brandId,
+          imagePrimary: product.imagePrimary,
+          categoryName: product.categoryName,
+          brandName: product.brandName,
+          details: detailsData
+            .filter((detail: any) => detail.productId === product.id) // Lọc chi tiết phù hợp với sản phẩm
+            .map((detail: any) => ({
+              id: detail.id,
+              Size: detail.size || "N/A",
+              Price: detail.price || 0,
+              Quantity: detail.quantity || 0,
+              Gender: detail.gender || "Unspecified",
+              Status: detail.status || "Unknown",
+              ColorId: detail.colorId || 0,
+            })),
+        })
+      );
       setProducts(combinedProducts);
-      console.log(combinedProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchProducts();
@@ -73,7 +79,6 @@ const Products: React.FC = () => {
   }
   return (
     <>
-      <div className="cart-bg-overlay" />
       <div className="right-side-cart-area">
         <div className="cart-button">
           <a href="#" id="rightSideCart">
@@ -134,7 +139,7 @@ const Products: React.FC = () => {
                   <span className="badge">Puma</span>
                   <h6>Giày Puma Aviate Nam - Đen Trắng</h6>
                   <p className="size">Kích thước: S</p>
-                  <p className="color">Màu sắc:  Đen Trắng</p>
+                  <p className="color">Màu sắc: Đen Trắng</p>
                   <p className="price">1.500.000₫</p>
                 </div>
               </a>
@@ -173,77 +178,148 @@ const Products: React.FC = () => {
           <div className="row h-100 align-items-center">
             <div className="col-12">
               <div className="page-title text-center">
-                <h2>Sản Phẩm
-                </h2>
+                <h2>Sản Phẩm</h2>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <section className="shop_grid_area section-padding-80">
         <div className="container">
           <div className="row">
             <div className="col-12 col-md-4 col-lg-3">
               <div className="shop_sidebar_area">
                 <div className="widget catagory mb-50 bro">
-                  <h6 className="widget-title mb-30">Danh mục<hr /></h6>
+                  <h6 className="widget-title mb-30">
+                    Danh mục
+                    <hr />
+                  </h6>
 
                   <div className="catagories-menu">
-                    <ul id="menu-content2" className="menu-content collapse show">
+                    <ul
+                      id="menu-content2"
+                      className="menu-content collapse show"
+                    >
                       <li data-toggle="collapse" data-target="#sneakers">
                         <a href="#">Giày Sneaker</a>
                         <ul className="sub-menu collapse show" id="sneakers">
-                          <li><a href="#">Tất cả</a></li>
-                          <li><a href="#">Giày Thể Thao</a></li>
-                          <li><a href="#">Giày Chạy Bộ</a></li>
-                          <li><a href="#">Giày Bóng Rổ</a></li>
-                          <li><a href="#">Giày Tennis</a></li>
+                          <li>
+                            <a href="#">Tất cả</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Thể Thao</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Chạy Bộ</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Bóng Rổ</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Tennis</a>
+                          </li>
                         </ul>
                       </li>
-                      <li data-toggle="collapse" data-target="#boots" className="collapsed">
+                      <li
+                        data-toggle="collapse"
+                        data-target="#boots"
+                        className="collapsed"
+                      >
                         <a href="#">Giày Boot</a>
                         <ul className="sub-menu collapse" id="boots">
-                          <li><a href="#">Tất cả</a></li>
-                          <li><a href="#">Boot Cổ Cao</a></li>
-                          <li><a href="#">Boot Cổ Ngắn</a></li>
-                          <li><a href="#">Boot Da</a></li>
-                          <li><a href="#">Boot Lội Nước</a></li>
+                          <li>
+                            <a href="#">Tất cả</a>
+                          </li>
+                          <li>
+                            <a href="#">Boot Cổ Cao</a>
+                          </li>
+                          <li>
+                            <a href="#">Boot Cổ Ngắn</a>
+                          </li>
+                          <li>
+                            <a href="#">Boot Da</a>
+                          </li>
+                          <li>
+                            <a href="#">Boot Lội Nước</a>
+                          </li>
                         </ul>
                       </li>
-                      <li data-toggle="collapse" data-target="#formal" className="collapsed">
+                      <li
+                        data-toggle="collapse"
+                        data-target="#formal"
+                        className="collapsed"
+                      >
                         <a href="#">Giày Tây</a>
                         <ul className="sub-menu collapse" id="formal">
-                          <li><a href="#">Tất cả</a></li>
-                          <li><a href="#">Giày Oxfords</a></li>
-                          <li><a href="#">Giày Derby</a></li>
-                          <li><a href="#">Giày Loafers</a></li>
-                          <li><a href="#">Giày Brogues</a></li>
+                          <li>
+                            <a href="#">Tất cả</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Oxfords</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Derby</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Loafers</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Brogues</a>
+                          </li>
                         </ul>
                       </li>
-                      <li data-toggle="collapse" data-target="#sandals" className="collapsed">
+                      <li
+                        data-toggle="collapse"
+                        data-target="#sandals"
+                        className="collapsed"
+                      >
                         <a href="#">Dép và Sandals</a>
                         <ul className="sub-menu collapse" id="sandals">
-                          <li><a href="#">Tất cả</a></li>
-                          <li><a href="#">Dép Xỏ Ngón</a></li>
-                          <li><a href="#">Dép Quai Hậu</a></li>
-                          <li><a href="#">Sandals Bệt</a></li>
-                          <li><a href="#">Sandals Cao Gót</a></li>
+                          <li>
+                            <a href="#">Tất cả</a>
+                          </li>
+                          <li>
+                            <a href="#">Dép Xỏ Ngón</a>
+                          </li>
+                          <li>
+                            <a href="#">Dép Quai Hậu</a>
+                          </li>
+                          <li>
+                            <a href="#">Sandals Bệt</a>
+                          </li>
+                          <li>
+                            <a href="#">Sandals Cao Gót</a>
+                          </li>
                         </ul>
                       </li>
-                      <li data-toggle="collapse" data-target="#casual" className="collapsed">
+                      <li
+                        data-toggle="collapse"
+                        data-target="#casual"
+                        className="collapsed"
+                      >
                         <a href="#">Giày Thường Ngày</a>
                         <ul className="sub-menu collapse" id="casual">
-                          <li><a href="#">Tất cả</a></li>
-                          <li><a href="#">Giày Slip-On</a></li>
-                          <li><a href="#">Giày Mọi</a></li>
-                          <li><a href="#">Giày Cổ Thấp</a></li>
-                          <li><a href="#">Giày Canvas</a></li>
+                          <li>
+                            <a href="#">Tất cả</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Slip-On</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Mọi</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Cổ Thấp</a>
+                          </li>
+                          <li>
+                            <a href="#">Giày Canvas</a>
+                          </li>
                         </ul>
                       </li>
                     </ul>
                   </div>
                 </div>
-
 
                 <div className="widget price mb-50">
                   <h6 className="widget-title mb-30">Lọc theo</h6>
@@ -269,7 +345,9 @@ const Products: React.FC = () => {
                           tabIndex={0}
                         />
                       </div>
-                      <div className="range-price">Khoảng giá: ₫49.00 - ₫360.00</div>
+                      <div className="range-price">
+                        Khoảng giá: ₫49.00 - ₫360.00
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -334,7 +412,6 @@ const Products: React.FC = () => {
                     </ul>
                   </div>
                 </div>
-
               </div>
             </div>
             <div className="col-12 col-md-8 col-lg-9">
@@ -356,23 +433,41 @@ const Products: React.FC = () => {
                             <option value="value">Giá: $$ - $</option>
                             <option value="value">Giá: $ - $$</option>
                           </select>
-                          <input type="submit" className="d-none" defaultValue="" />
+                          <input
+                            type="submit"
+                            className="d-none"
+                            defaultValue=""
+                          />
                         </form>
                       </div>
                     </div>
                   </div>
-
                 </div>
+
+                {/* Load data */}
                 <div className="row">
                   {products.map((product) => (
                     <div className="col-12 col-sm-6 col-lg-4">
                       <div key={product.id} className="single-product-wrapper">
                         <div className="product-img">
-                          <img src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-01-800x800.jpg.webp" alt="" />
+                          <img
+                            src={`https://localhost:7048/${product.imagePrimary}`}
+                            alt="Hình sản phẩm"
+                            style={{
+                              width: "100%",
+                              height: "20rem",
+                              objectFit: "cover",
+                            }}
+                          />
                           <img
                             className="hover-img"
-                            src="https://myshoes.vn/image/cache/catalog/2024/nike/nk6/giay-nike-court-vision-low-nam-xanh-duong-04-800x800.jpg.webp"
-                            alt=""
+                            src={`https://localhost:7048/${product.imagePrimary}`}
+                            style={{
+                              width: "100%",
+                              height: "20rem",
+                              objectFit: "cover",
+                            }}
+                            alt="Hình ảnh"
                           />
                           <div className="product-badge offer-badge">
                             <span>-30%</span>
@@ -382,13 +477,19 @@ const Products: React.FC = () => {
                           </div>
                         </div>
                         <div className="product-description">
-                          <span><a href={`/detail/${product.id}`}>{product.ProductName}</a></span>
+                          <span className="btn-name">
+                            <a href={`/detail/${product.id}`}>
+                              {product.ProductName}
+                            </a>
+                          </span>
                           <a href="">
-                            <h6>{ }</h6>
+                            <h6>{product.brandName}</h6>
                           </a>
                           <p className="product-price">
-                             {product.details.map((detail)=>(
-                              <p key={detail.id}>{detail.Price.toLocaleString("vi-en")} VND</p>
+                            {product.details.map((detail) => (
+                              <p key={detail.id}>
+                                {detail.Price.toLocaleString("vi-en")} VND
+                              </p>
                             ))}
                           </p>
                           {/* Hover Content */}
@@ -451,7 +552,6 @@ const Products: React.FC = () => {
         </div>
       </section>
     </>
-
   );
 };
 

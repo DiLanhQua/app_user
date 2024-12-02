@@ -12,6 +12,7 @@ import SanPham from "./pages/Products/Products";
 import DonHang from "./pages/Order/Order";
 import ThanhToan from "./pages/ThanhToan/ThanhToan";
 import Information from "./pages/Infomation/UserProfile";
+import Cart from "./pages/Cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "/TrangCaNhan/:id", // Tham số động `id`
         element: <Information />,
+      },
+      {
+        path: "/Cart",
+        element: <Cart />,
       },
     ],
   },
