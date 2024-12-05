@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import "./detail.scss";
 
 interface DetailProductDTO {
   id: number;
@@ -31,6 +32,7 @@ const Chitiet: React.FC = () => {
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [category, setCategory] = useState<CategoryDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
   const { id } = useParams();
 
@@ -103,10 +105,6 @@ const Chitiet: React.FC = () => {
     colorId: number
   ) => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    console.log("====================================");
-    console.log(product, "product");
-    console.log("====================================");
-    console.log(customerInfo, "customerInfo");
 
     const item = {
       productId: product.id,
@@ -115,12 +113,9 @@ const Chitiet: React.FC = () => {
       colorId,
       quantity: 1,
       price: product.details[0]?.Price,
-      maKH: customerInfo.accountId, // Thêm thông tin khách hàng vào sản phẩm,
+      maKH: customerInfo?.accountId, // Thêm thông tin khách hàng vào sản phẩm,
       productDetail: product.details[0],
     };
-    console.log("====================================");
-    console.log(item, "item");
-    console.log("====================================");
     const existingIndex = cart.findIndex(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (cartItem: any) =>
@@ -146,23 +141,38 @@ const Chitiet: React.FC = () => {
   const product = products[0];
 
   return (
-    <>
-      <section className="single_product_details_area d-flex align-items-center">
-        <div className="single_product_thumb clearfix">
-          <div className="product_thumbnail_slides owl-carousel">
-            <img
-              src="../../../src/assets/img/product-img/Anh1.jpg"
-              alt="Product"
-            />
-          </div>
+    <div className="container-detail">
+      <div className="container-detail-image">
+        <div className="container-detail-image-main">
+          <img
+            src="https://i.pinimg.com/736x/a3/95/a8/a395a89ac2ab132f5f05b541d4aa8ca8.jpg"
+            alt=""
+          />
         </div>
-        <div className="single_product_desc clearfix">
-          <span>{category?.CategoryName}</span>
-          <h3>{product.ProductName}</h3>
-          <p className="product-price">{product.details[0]?.Price} VND</p>
-          <p className="product-desc">{product.Description}</p>
-          <form className="cart-form clearfix" method="post">
-            <div className="select-box d-flex mt-50 mb-30">
+        <div className="container-detail-image-other">
+          <img
+            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
+            alt=""
+          />
+          <img
+            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
+            alt=""
+          />
+          <img
+            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="container-detail-info">
+        <div className="">
+          <div className="">
+            <h4>{product.ProductName}</h4>
+            <h5>
+              {product.details[0]?.Price},000 VND <span>700.000VND</span>
+            </h5>
+            <p className="brand">Brand</p>
+            <div className="">
               <select id="productSize" className="mr-5">
                 {product.details.map((detail) => (
                   <option key={detail.id} value={detail.Size}>
@@ -170,7 +180,8 @@ const Chitiet: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <select id="productColor">
+
+              <select id="productColor" className="mr-5">
                 {product.details.map((detail) => (
                   <option key={detail.id} value={detail.ColorId}>
                     Màu: {detail.ColorId}
@@ -178,35 +189,29 @@ const Chitiet: React.FC = () => {
                 ))}
               </select>
             </div>
-            <div className="cart-fav-box d-flex align-items-center">
-              <button
-                type="button"
-                onClick={() => {
-                  const size = (
-                    document.getElementById("productSize") as HTMLSelectElement
-                  ).value;
-                  const colorId = parseInt(
-                    (
-                      document.getElementById(
-                        "productColor"
-                      ) as HTMLSelectElement
-                    ).value,
-                    10
-                  );
-                  handleAddToCart(product, size, colorId);
-                }}
-                className="btn essence-btn"
-              >
-                Thêm vào giỏ
-              </button>
-              <div className="product-favourite ml-4">
-                <a href="#" className="favme fa fa-heart" />
-              </div>
-            </div>
-          </form>
+            <p className="des">{product.Description}</p>
+          </div>
+          <div className="group-btn">
+            <button
+              onClick={() => {
+                const size = (
+                  document.getElementById("productSize") as HTMLSelectElement
+                ).value;
+                const colorId = parseInt(
+                  (document.getElementById("productColor") as HTMLSelectElement)
+                    .value,
+                  10
+                );
+                handleAddToCart(product, size, colorId);
+              }}
+            >
+              Thêm vào giỏ hàng
+            </button>
+            <button>Mua ngay</button>
+          </div>
         </div>
-      </section>
-    </>
+      </div>
+    </div>
   );
 };
 

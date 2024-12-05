@@ -1,9 +1,78 @@
 // src/pages/DonHangUse.tsx
-import React from "react";
-import './Order.css';
+import React, { useEffect, useState } from "react";
+import "./Order.scss";
 import img from "./../../image/breadcumb.jpg";
+import axios from "axios";
+import ConfirmationPopup from "./Cancel-order/Cancel";
+import CancelButton from "./Cancel-order/Cancel";
+import OrderDetail from "./OrderDetail";
 
 const DonHangUse: React.FC = () => {
+  const [order, setOrder] = React.useState<any[]>([]);
+  const [customerInfo, setCustomerInfo] = useState<any | null>(null);
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  useEffect(() => {
+    const storedCustomerInfo = sessionStorage.getItem("user");
+    if (storedCustomerInfo) {
+      const parsedInfo = JSON.parse(storedCustomerInfo);
+      setCustomerInfo(parsedInfo);
+
+      // Chỉ gọi API khi customerInfo đã có giá trị
+      axios
+        .get(
+          "https://localhost:7048/api/Order/get-by-user/" + parsedInfo.accountId
+        )
+        .then((response) => {
+          console.log(response, "response");
+          setOrder(response.data);
+          filterOrdersByStatus();
+        })
+        .catch((error) => {
+          console.error("Error fetching order data:", error);
+        });
+    }
+  }, []);
+  useEffect(() => {
+    filterOrdersByStatus(); // Filter orders right after setting the `order` state
+  }, [order]); // Triggered every time `order` state changes
+  const filterOrdersByStatus = (status?: number) => {
+    if (status === undefined || status === null) {
+      setFilteredOrders(order); // Nếu không truyền vào gì, hiển thị toàn bộ danh sách
+      console.log(filteredOrders, "filteredOrders");
+    } else {
+      const filtered = order.filter((order) => order.status === status);
+      setFilteredOrders(filtered);
+      console.log(filtered, "filtered");
+    }
+  };
+  const getStatus = (status: number): { status: string; color: string } => {
+    switch (status) {
+      case 1:
+        return { status: "Chờ xác nhận", color: "orange" }; // Example color
+      case 2:
+        return { status: "Đang xử lý", color: "blue" }; // Example color
+      case 3:
+        return { status: "Đang giao hàng", color: "#FFD700" }; // Example color
+      case 4:
+        return { status: "Hoàn thành", color: "green" }; // Example color
+      case 5:
+        return { status: "Hủy", color: "red" }; // Example color
+      default:
+        return { status: "Tất cả", color: "black" }; // Example color
+    }
+  };
+  const handleOpenModal = (orderId: number) => {
+    setSelectedOrderId(orderId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedOrderId(null);
+  };
 
   return (
     <>
@@ -15,34 +84,63 @@ const DonHangUse: React.FC = () => {
           <div className="row h-100 align-items-center">
             <div className="col-12">
               <div className="page-title text-center">
-                <h2>Đơn hàng
-                </h2>
+                <h2>Đơn hàng</h2>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <section className="bg0 p-t-104 p-b-116" style={{ textAlign: "center", fontWeight: "bold", marginLeft: "5%" }}>
+      <section
+        className="bg0 p-t-104 p-b-116"
+        style={{ textAlign: "center", fontWeight: "bold", marginLeft: "5%" }}
+      >
         <div className="container-fluid">
           <div className="flex-w flex-tr">
             <div className="condh bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
               <div>
-
-                <div className="pagination">
-                  <button className="btn btn-outline-info "  >Đang xác nhận</button>
-                  <button className="btn btn-outline-info" >Đang giao</button>
+                <div className="main-tabs">
                   <button
-                    className="btn btn-outline-info"
+                    className="btn-tabs-order btn-tabs-order-active"
+                    onClick={() => filterOrdersByStatus()}
+                  >
+                    Tất cả
+                  </button>
+                  <button
+                    className="btn-tabs-order"
+                    onClick={() => filterOrdersByStatus(1)}
+                  >
+                    Chờ xác nhận{" "}
+                  </button>
+                  <button
+                    className="btn-tabs-order"
+                    onClick={() => filterOrdersByStatus(2)}
+                  >
+                    Đang xử lý
+                  </button>
+                  <button
+                    className="btn-tabs-order"
+                    onClick={() => filterOrdersByStatus(3)}
+                  >
+                    Đang giao hàng
+                  </button>
+                  <button
+                    className="btn-tabs-order"
+                    onClick={() => filterOrdersByStatus(4)}
                   >
                     Hoàn thành
                   </button>
+                  <button
+                    className="btn-tabs-order"
+                    onClick={() => filterOrdersByStatus(5)}
+                  >
+                    Đã hủy
+                  </button>
                 </div>
+
                 <table>
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Hình Ảnh</th>
-                      <th>Tên Sản Phẩm</th>
                       <th>Tên Khách Hàng</th>
                       <th>Địa Chỉ</th>
                       <th>Số Điện Thoại</th>
@@ -51,46 +149,42 @@ const DonHangUse: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr >
-                      <td>1</td>
-                      <td>
-                        <img
-                          src="https://myshoes.vn/image/cache/catalog/2023/nike/nk1/giay-nike-air-max-ap-nam-trang-navy-01-800x800.jpg.webp"
-                          className="cart-thumb"
-                          alt=""
+                    {filteredOrders.map((item, index) => (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>{customerInfo.fullName}</td>
+                        <td>{item.address}</td>
+                        <td>{item.numberPhone}</td>
+                        <td style={{ color: getStatus(item.status).color }}>
+                          {getStatus(item.status).status}
+                        </td>
 
-                          style={{ width: "250px", height: "250px" }}
-                        />
-                      </td>
-                      <td>Giày Nike Court Vision Low Nam - Xanh Dương</td>
-                      <td>Nguyen Văn A</td>
-                      <td>
-                        Thôn Đông - Buôn Ma Thuột
-                      </td>
-                      <td>0235898589</td>
-                      <td>Đang xác nhận</td>
-                    </tr>
-                    <tr >
-                      <td>2</td>
-                      <td>
-                        <img
-                          src="https://myshoes.vn/image/cache/catalog/2024/puma/pm1/giay-puma-aviate-nam-den-trang-01-800x800.jpg.webp"
-                          className="cart-thumb"
-                          alt=""
-
-                          style={{ width: "250px", height: "250px" }}
-                        />
-                      </td>
-                      <td>Giày Puma Aviate Nam - Đen Trắng</td>
-                      <td>Nguyen Văn A</td>
-                      <td>
-                        Thôn Đông - Buôn Ma Thuột
-                      </td>
-                      <td>0235898589</td>
-                      <td>Đang xác nhận</td>
-                    </tr>
+                        <td>
+                          <div className="group-btn">
+                            <button
+                              className="btn-detail"
+                              onClick={() => handleOpenModal(item.id)}
+                            >
+                              Chi tiết <i className="fa-regular fa-eye"></i>
+                            </button>
+                            {isModalOpen && selectedOrderId !== null && (
+                              <OrderDetail
+                                orderId={selectedOrderId}
+                                onClose={handleCloseModal}
+                              />
+                            )}
+                            {item.status < 3 && (
+                              <div>
+                                <CancelButton orderId={item.id} />
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
+
                 <nav aria-label="navigation">
                   <ul className="pagination mt-50 mb-70">
                     <li className="page-item">
@@ -130,14 +224,13 @@ const DonHangUse: React.FC = () => {
                     </li>
                   </ul>
                 </nav>
-
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-
-      </section>{" "}
+      {/* <OrderDetail /> */}
     </>
   );
 };

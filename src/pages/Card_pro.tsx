@@ -16,6 +16,8 @@ interface ProductDetail {
   Description: string;
   CategoryId: number;
   BrandId: number;
+  Image: string;
+  BrandName: string;
   details: DetailProductDTO[];
 }
 
@@ -45,7 +47,7 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         style={{ height: "65%", overflow: "hidden" }}
       >
         <img
-          src="../../../src/assets/img/product-img/sp1.jpg"
+          src={`https://localhost:7048/${product.Image}`}
           alt=""
           style={{
             width: "100%",
@@ -59,15 +61,15 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         className="product-description"
         style={{ height: "35%", paddingTop: "10px" }}
       >
-        <span>{product.Description}</span>
         <a href={`/detail/${product.Id}`}>
           <h6 style={{ fontWeight: "bold" }}>{product.ProductName}</h6>
         </a>
+        <span> {product.BrandName} </span>
         <p
           className="product-price"
           style={{ color: "#ff4500", fontWeight: "bold" }}
         >
-          {firstDetail?.Price?.toLocaleString("vi-VN")} VND
+          {firstDetail?.Price?.toLocaleString("vi-VN")},000 VND
         </p>
         <div className="hover-content">
           <div className="add-to-cart-btn">
