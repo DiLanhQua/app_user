@@ -84,17 +84,18 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                 <p style={{ color: getStatus(order.status).color }}>
                   {getStatus(order.status).status}
                 </p>
-                <p>Voucher: {order.voucher ? order.voucher : "Không có"}</p>
-                <strong>
-                  Tổng tiền:{" "}
-                  {formatPrice(
-                    order.detailOrder.reduce(
-                      (total: number, item: any) =>
-                        total + item.detailProduct.price * item.quantity,
-                      0
-                    )
-                  )}
-                </strong>
+                <p>
+                  Voucher:{" "}
+                  {order.voucher
+                    ? `${order.voucher.voucherName} - ${
+                        order.voucher.discountType === "Percentage"
+                          ? `${order.voucher.discount}%`
+                          : `${order.voucher.discount.toLocaleString()} VND`
+                      }`
+                    : "Không có"}
+                </p>
+
+                <strong>Tổng tiền: {formatPrice(order?.totalPrice)}</strong>
               </div>
             </div>
           </div>
