@@ -29,8 +29,10 @@ interface CartItem {
   price: number;
   imageUrl: string; // Image URL
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  productDetail: any; // Product detail with ID
+  productDetail: DetailProductDtos; // Product detail with ID
+  link: string;
 }
+
 const GioHang: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [order, setOrder] = useState<Order | null>(null);
@@ -269,6 +271,8 @@ const GioHang: React.FC = () => {
                     <tr>
                       <th>#</th>
                       <th>Sản Phẩm</th>
+                      <th>Size</th>
+                      <th>Màu</th>
                       <th>Giá</th>
                       <th>Số lượng</th>
                       <th>Tổng</th>
@@ -285,16 +289,28 @@ const GioHang: React.FC = () => {
                           <div className="row">
                             <div className="col-4">
                               <img
-                                src="https://myshoes.vn/image/cache/catalog/2023/nike/nk1/giay-nike-air-max-ap-nam-trang-navy-01-800x800.jpg.webp"
+                                src={`https://localhost:7048/${item.link}`}
                                 className="cart-thumb"
                                 alt=""
-                                style={{ width: "78px", height: "78px" }}
+                                style={{
+                                  width: "78px",
+                                  height: "78px",
+                                  objectFit: "cover",
+                                }}
                               />
                             </div>
                             <div className="col-8" style={{ marginTop: 10 }}>
                               {item.productName}
                             </div>
                           </div>
+                        </td>
+                        <td>
+                          <div style={{ marginTop: 10 }}>
+                            SIZE {item.productDetail.Size}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ marginTop: 10 }}>Xanh</div>
                         </td>
                         <td>
                           <div style={{ marginTop: 10 }}>

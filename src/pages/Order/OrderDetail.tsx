@@ -106,6 +106,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                 <th>#</th>
                 <th>Hình ảnh</th>
                 <th>Tên sản phẩm</th>
+                <th>Size</th>
                 <th>Đơn giá</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
@@ -120,7 +121,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                       <img
                         src={
                           item.product.medias.length > 0
-                            ? item.product.medias[0].url
+                            ? `https://localhost:7048/${item.product.medias[0].link}`
                             : "/default-image.png"
                         }
                         alt={item.product.productName}
@@ -128,6 +129,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                     </div>
                   </td>
                   <td>{item.product.productName}</td>
+                  <td>Size {item.detailProduct.size}</td>
                   <td>{formatPrice(item.detailProduct.price)}</td>
                   <td>x {item.quantity}</td>
                   <td>

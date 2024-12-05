@@ -31,6 +31,8 @@ interface CategoryDetail {
 const Chitiet: React.FC = () => {
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [category, setCategory] = useState<CategoryDetail | null>(null);
+  const [images, setImages] = useState<ImageDtos[]>([]);
+  const [imagePrimary, setImagePrimary] = useState<ImageDtos>({} as ImageDtos);
   const [loading, setLoading] = useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
@@ -46,16 +48,18 @@ const Chitiet: React.FC = () => {
 
   const fetchProductsAndCategory = async () => {
     try {
-      const [productResponse, detailResponse] = await Promise.all([
+      const [productResponse, detailResponse, arrImage] = await Promise.all([
         axios.get(`https://localhost:7048/api/Products/get-product/${id}`),
         axios.get(
           `https://localhost:7048/api/DetailProduct/get-detailproduct/${id}`
         ),
+        axios.get(`https://localhost:7048/api/Medias/get-all-medias/${id}`),
       ]);
 
       const productData = productResponse.data;
       const detailsData = detailResponse.data;
-
+      setImages(arrImage.data);
+      setImagePrimary(arrImage.data.find((a: ImageDtos) => a.isImage === true));
       const categoryResponse = await axios.get(
         `https://localhost:7048/api/Category/get-category-by-id/${productData.categoryId}`
       );
@@ -105,7 +109,9 @@ const Chitiet: React.FC = () => {
     colorId: number
   ) => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
+    const image: ImageDtos = images.find(
+      (a: ImageDtos) => a.isImage === true
+    ) as ImageDtos;
     const item = {
       productId: product.id,
       productName: product.ProductName,
@@ -115,6 +121,7 @@ const Chitiet: React.FC = () => {
       price: product.details[0]?.Price,
       maKH: customerInfo?.accountId, // Thêm thông tin khách hàng vào sản phẩm,
       productDetail: product.details[0],
+      link: image.link,
     };
     const existingIndex = cart.findIndex(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -137,31 +144,27 @@ const Chitiet: React.FC = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+  const changeImagePrimary = (image: ImageDtos) => {
+    setImagePrimary(image);
+  };
   const product = products[0];
-
   return (
     <div className="container-detail">
       <div className="container-detail-image">
         <div className="container-detail-image-main">
-          <img
-            src="https://i.pinimg.com/736x/a3/95/a8/a395a89ac2ab132f5f05b541d4aa8ca8.jpg"
-            alt=""
-          />
+          <img src={`https://localhost:7048/${imagePrimary.link}`} alt="" />
         </div>
         <div className="container-detail-image-other">
-          <img
-            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
-            alt=""
-          />
-          <img
-            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
-            alt=""
-          />
-          <img
-            src="https://i.pinimg.com/736x/13/3e/ec/133eecf66088591cac64413118ff4c4a.jpg"
-            alt=""
-          />
+          {images.map((item) =>
+            item.id === imagePrimary.id ? null : (
+              <img
+                onClick={() => changeImagePrimary(item)}
+                key={item.id} // Đảm bảo `key` duy nhất
+                src={`https://localhost:7048/${item.link}`}
+                alt="hình ảnh"
+              />
+            )
+          )}
         </div>
       </div>
       <div className="container-detail-info">
