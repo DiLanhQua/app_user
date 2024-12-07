@@ -79,33 +79,29 @@ const GioHang: React.FC = () => {
 
   const updateQuantity = (
     productId: number,
-    size: string,
-    colorId: number,
+    productDetailId: number,
     newQuantity: number
   ) => {
     if (newQuantity < 1) return; // Prevent quantity from going below 1
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.productId === productId &&
-        item.size === size &&
-        item.colorId === colorId
+        item.productDetail.id === productDetailId
           ? { ...item, quantity: newQuantity }
           : item
       )
     );
   };
 
-  const removeItem = (productId: number, size: string, colorId: number) => {
-    setCartItems((prevItems) =>
-      prevItems.filter(
-        (item) =>
-          !(
-            item.productId === productId &&
-            item.size === size &&
-            item.colorId === colorId
-          )
-      )
-    );
+  const removeItem = (productIdDetail: number) => {
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.filter(
+        (item) => item.productDetail.id !== productIdDetail
+      );
+      console.log("Updated Items:", updatedItems); // Debug xem có sản phẩm nào còn lại không
+      localStorage.setItem("cart", JSON.stringify(updatedItems));
+      return [...updatedItems];
+    });
   };
 
   const handleSubmit = (idOrder: number) => {
@@ -195,13 +191,10 @@ const GioHang: React.FC = () => {
   };
 
   const caculateItem = (item: any) => {
-    return item.quantity * item.price;
+    return item.quantity * item.productDetail.Price * 1000;
   };
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.quantity * item.price,
-      0
-    );
+    return cartItems.reduce((total, item) => total + caculateItem(item), 0);
   };
 
   //   Hàm lọc các voucher hợp lệ
@@ -217,7 +210,9 @@ const GioHang: React.FC = () => {
     if (!selectedVoucher) return 0; // Nếu không có voucher, không giảm giá
 
     const total = calculateTotal();
-    if (selectedVoucher.IsPercentage) {
+    if (selectedVoucher.discountType == "Percentage") {
+      console.log("giảm theo phần trăm");
+
       // Giảm theo phần trăm
       return (total * selectedVoucher.discount) / 100;
     } else {
@@ -229,7 +224,7 @@ const GioHang: React.FC = () => {
       console.log(selectedVoucher.discount, "selectedVoucher.discount");
 
       // Giảm theo số tiền cố định
-      return selectedVoucher.discount;
+      return selectedVoucher.discount * 1000;
     }
   };
   const handleVoucherChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -310,11 +305,19 @@ const GioHang: React.FC = () => {
                           </div>
                         </td>
                         <td>
-                          <div style={{ marginTop: 10 }}>Xanh</div>
+                          <div style={{ marginTop: 10 }}>
+                            {item.productDetail?.Color.nameColor}
+                          </div>
                         </td>
                         <td>
                           <div style={{ marginTop: 10 }}>
-                            {item.price},000VND
+                            {(item.productDetail.Price * 1000).toLocaleString(
+                              "vi-VN",
+                              {
+                                style: "currency",
+                                currency: "VND",
+                              }
+                            )}
                           </div>
                         </td>
                         <td>
@@ -334,8 +337,7 @@ const GioHang: React.FC = () => {
                               onChange={(e) =>
                                 updateQuantity(
                                   item.productId,
-                                  item.size,
-                                  item.colorId,
+                                  item.productDetail.id,
                                   Number(e.target.value)
                                 )
                               }
@@ -349,19 +351,16 @@ const GioHang: React.FC = () => {
                         </td>
                         <td>
                           <div style={{ marginTop: 10 }}>
-                            {caculateItem(item)},000VND
+                            {caculateItem(item).toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
                           </div>
                         </td>
                         <td>
                           <div
                             style={{ marginTop: 10 }}
-                            onClick={() =>
-                              removeItem(
-                                item.productId,
-                                item.size,
-                                item.colorId
-                              )
-                            }
+                            onClick={() => removeItem(item.productDetail.id)}
                           >
                             <svg
                               style={{ width: 20, height: 20 }}
@@ -452,7 +451,12 @@ const GioHang: React.FC = () => {
                     <p>Tạm tính</p>
                   </div>
                   <div className="col-md-3">
-                    <p style={{ color: "blue" }}>{calculateTotal()},000VND</p>
+                    <p style={{ color: "blue" }}>
+                      {calculateTotal().toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </p>
                   </div>
                 </div>
                 <hr />
@@ -462,7 +466,10 @@ const GioHang: React.FC = () => {
                   </div>
                   <div className="col-md-3">
                     <p style={{ color: "blue" }}>
-                      {calculateTotal() - calculateDiscount()},000VND
+                      {(calculateTotal() - calculateDiscount()).toLocaleString(
+                        "vi-VN",
+                        { style: "currency", currency: "VND" }
+                      )}
                     </p>
                   </div>
                 </div>

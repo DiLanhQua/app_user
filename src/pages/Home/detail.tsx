@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./detail.scss";
+import ProductsTuongTu from "../product-tuong-tu/ProductsTuongTu";
 
 interface DetailProductDTO {
   id: number;
@@ -11,6 +12,7 @@ interface DetailProductDTO {
   Gender: string;
   Status: string;
   ColorId: number;
+  Color: any;
 }
 
 interface ProductDetail {
@@ -34,6 +36,9 @@ const Chitiet: React.FC = () => {
   const [images, setImages] = useState<ImageDtos[]>([]);
   const [imagePrimary, setImagePrimary] = useState<ImageDtos>({} as ImageDtos);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedProductDetail, setSelectedProductDetail] =
+    useState<DetailProductDTO | null>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
   const { id } = useParams();
@@ -45,7 +50,6 @@ const Chitiet: React.FC = () => {
       setCustomerInfo(JSON.parse(storedCustomerInfo));
     }
   }, []);
-
   const fetchProductsAndCategory = async () => {
     try {
       const [productResponse, detailResponse, arrImage] = await Promise.all([
@@ -57,7 +61,11 @@ const Chitiet: React.FC = () => {
       ]);
 
       const productData = productResponse.data;
+      console.log(productData, "productData");
+
       const detailsData = detailResponse.data;
+      console.log(detailsData[0].color, "detailsData");
+
       setImages(arrImage.data);
       setImagePrimary(arrImage.data.find((a: ImageDtos) => a.isImage === true));
       const categoryResponse = await axios.get(
@@ -83,9 +91,10 @@ const Chitiet: React.FC = () => {
             Gender: detail.gender || "Unspecified",
             Status: detail.status || "Unknown",
             ColorId: detail.colorId || 0,
+            Color: detail.color,
           })),
       };
-
+      setSelectedProductDetail(combinedProduct.details[0]);
       setProducts([combinedProduct]);
       setCategory({
         id: categoryData.id,
@@ -103,11 +112,11 @@ const Chitiet: React.FC = () => {
     fetchProductsAndCategory();
   }, []);
 
-  const handleAddToCart = (
-    product: ProductDetail,
-    size: string,
-    colorId: number
-  ) => {
+  const handleAddToCart = (product: ProductDetail) => {
+    if (selectedProductDetail === null) {
+      alert("Vui lớn chọn size!");
+      return;
+    }
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const image: ImageDtos = images.find(
       (a: ImageDtos) => a.isImage === true
@@ -115,20 +124,19 @@ const Chitiet: React.FC = () => {
     const item = {
       productId: product.id,
       productName: product.ProductName,
-      size,
-      colorId,
       quantity: 1,
       price: product.details[0]?.Price,
       maKH: customerInfo?.accountId, // Thêm thông tin khách hàng vào sản phẩm,
-      productDetail: product.details[0],
+      productDetail: selectedProductDetail,
       link: image.link,
     };
+    console.log(item?.productDetail?.id, "item.productDetail id");
+
     const existingIndex = cart.findIndex(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (cartItem: any) =>
         cartItem.productId === item.productId &&
-        cartItem.size === item.size &&
-        cartItem.colorId === item.colorId
+        cartItem.productDetail.id === item.productDetail?.id
     );
 
     if (existingIndex >= 0) {
@@ -149,69 +157,86 @@ const Chitiet: React.FC = () => {
   };
   const product = products[0];
   return (
-    <div className="container-detail">
-      <div className="container-detail-image">
-        <div className="container-detail-image-main">
-          <img src={`https://localhost:7048/${imagePrimary.link}`} alt="" />
+    <div className="">
+      <div className="container-detail">
+        <div className="container-detail-image">
+          <div className="container-detail-image-main">
+            <img src={`https://localhost:7048/${imagePrimary.link}`} alt="" />
+          </div>
+          <div className="container-detail-image-other">
+            {images.map((item) =>
+              item.id === imagePrimary.id ? null : (
+                <img
+                  onClick={() => changeImagePrimary(item)}
+                  key={item.id} // Đảm bảo `key` duy nhất
+                  src={`https://localhost:7048/${item.link}`}
+                  alt="hình ảnh"
+                />
+              )
+            )}
+          </div>
         </div>
-        <div className="container-detail-image-other">
-          {images.map((item) =>
-            item.id === imagePrimary.id ? null : (
-              <img
-                onClick={() => changeImagePrimary(item)}
-                key={item.id} // Đảm bảo `key` duy nhất
-                src={`https://localhost:7048/${item.link}`}
-                alt="hình ảnh"
-              />
-            )
-          )}
-        </div>
-      </div>
-      <div className="container-detail-info">
-        <div className="">
+        <div className="container-detail-info">
           <div className="">
-            <h4>{product.ProductName}</h4>
-            <h5>
-              {product.details[0]?.Price},000 VND <span>700.000VND</span>
-            </h5>
-            <p className="brand">Brand</p>
             <div className="">
-              <select id="productSize" className="mr-5">
-                {product.details.map((detail) => (
-                  <option key={detail.id} value={detail.Size}>
-                    Kích Thước: {detail.Size}
-                  </option>
-                ))}
-              </select>
+              <h4>{product.ProductName}</h4>
+              <h5>
+                {product.details[0]?.Price},000 VND <span>700.000VND</span>
+              </h5>
+              <p className="brand">Brand</p>
+              <div className="">
+                <select
+                  id="productDetail"
+                  className="mr-5"
+                  onChange={(e) => {
+                    const selectedDetailId = parseInt(e.target.value); // Lấy ID từ value
+                    console.log(selectedDetailId, "selectedDetailId");
 
-              <select id="productColor" className="mr-5">
+                    const selectedDetail = product.details.find(
+                      (detail) => detail.id == selectedDetailId // Tìm detail dựa trên ID
+                    );
+                    console.log(selectedDetail);
+
+                    setSelectedProductDetail(selectedDetail || null); // Gán detail vào state
+                    console.log("State Updated:", selectedProductDetail);
+                  }}
+                >
+                  {product.details.map((detail) => (
+                    <option key={detail.id} value={detail.id}>
+                      Kích Thước: {detail.Size} - {detail.Gender} -{" "}
+                      {detail.Color?.nameColor || "N/A"}
+                    </option>
+                  ))}
+                </select>
+
+                {/* <select id="productColor" className="mr-5">
                 {product.details.map((detail) => (
                   <option key={detail.id} value={detail.ColorId}>
-                    Màu: {detail.ColorId}
+                    Màu: {detail.Color?.nameColor}
                   </option>
                 ))}
-              </select>
+              </select> */}
+              </div>
+              <p className="des">{product.Description}</p>
             </div>
-            <p className="des">{product.Description}</p>
+            <div className="group-btn">
+              <button
+                onClick={() => {
+                  handleAddToCart(product);
+                }}
+              >
+                Thêm vào giỏ hàng
+              </button>
+              <button>Mua ngay</button>
+            </div>
           </div>
-          <div className="group-btn">
-            <button
-              onClick={() => {
-                const size = (
-                  document.getElementById("productSize") as HTMLSelectElement
-                ).value;
-                const colorId = parseInt(
-                  (document.getElementById("productColor") as HTMLSelectElement)
-                    .value,
-                  10
-                );
-                handleAddToCart(product, size, colorId);
-              }}
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button>Mua ngay</button>
-          </div>
+        </div>
+      </div>
+
+      <div className="tuong-tu">
+        <h4>Sản phẩm tương tự</h4>
+        <div className="">
+          <ProductsTuongTu idCategory={product.CategoryId} />
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ const Index = () => {
       const [productResponse, detailResponse] = await Promise.all([
         axios.get(`https://localhost:7048/api/Products/get-user?Pagesize=12`),
         axios.get(
-          "https://localhost:7048/api/DetailProduct/get-all-detailproduct"
+          "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
         ),
       ]);
       const productsData = productResponse.data.data; // Dữ liệu sản phẩm
@@ -288,7 +288,13 @@ const Index = () => {
           </div>
         </div>
         <div className="container">
-          <div className="row">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "20px",
+            }}
+          >
             {products.length > 0 ? (
               products
                 .slice(0, 8)
@@ -313,7 +319,13 @@ const Index = () => {
         </div>
       </div>
       <div className="container">
-        <div className="row">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "20px",
+          }}
+        >
           {products.length > 0 ? (
             products
               .slice(0, 8)
@@ -326,7 +338,7 @@ const Index = () => {
       {/* ##### New Arrivals Area End ##### */}
       {/* ##### Brands Area Start ##### */}
       <div
-        style={{ height: "80px" }}
+        style={{ height: "80px", marginTop: "50px" }}
         className="brands-area d-flex align-items-center justify-content-between"
       >
         {/* Brand Logo */}

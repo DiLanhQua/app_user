@@ -6,4 +6,5 @@ interface DetailProductDtos {
   Size: string;
   Status: string;
   id: number;
+  Color: ?any;
 }

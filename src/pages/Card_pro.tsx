@@ -1,4 +1,5 @@
 import React from "react";
+import "./card-products.scss";
 
 interface DetailProductDTO {
   Id: number;
@@ -29,22 +30,19 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
   const firstDetail = product.details[0];
   return (
     <div
-      className="single-product-wrapper"
       style={{
-        width: "260px",
-        height: "350px",
-        padding: "15px",
-        boxSizing: "border-box",
+        width: "100%",
         border: "1px solid #ddd",
-        borderRadius: "10px",
+        borderRadius: "4px",
         overflow: "hidden",
-        margin: "10px",
         textAlign: "center",
+        marginBottom: "0px",
+        height: "auto",
       }}
     >
       <div
         className="product-img"
-        style={{ height: "65%", overflow: "hidden" }}
+        style={{ height: "20rem", overflow: "hidden" }}
       >
         <img
           src={`https://localhost:7048/${product.Image}`}
@@ -53,28 +51,22 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            borderRadius: "8px",
+            borderRadius: "4px 4px 0px 0px",
           }}
         />
       </div>
-      <div
-        className="product-description"
-        style={{ height: "35%", paddingTop: "10px" }}
-      >
+      <div className="product-description">
         <a href={`/detail/${product.Id}`}>
-          <h6 style={{ fontWeight: "bold" }}>{product.ProductName}</h6>
+          <h6>{product.ProductName}</h6>
         </a>
         <span> {product.BrandName} </span>
-        <p
-          className="product-price"
-          style={{ color: "#ff4500", fontWeight: "bold" }}
-        >
+        <p className="product-price">
           {firstDetail?.Price?.toLocaleString("vi-VN")},000 VND
         </p>
-        <div className="hover-content">
-          <div className="add-to-cart-btn">
-            <button className="btn essence-btn">Thêm giỏ hàng</button>
-          </div>
+        <div className="btn-add">
+          <a href={`/detail/${product.Id}`} className="btn essence-btn">
+            Thêm giỏ hàng
+          </a>
         </div>
       </div>
     </div>
