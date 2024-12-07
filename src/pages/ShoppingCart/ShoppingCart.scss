@@ -1,3 +1,6 @@
+$border-gray: #d8d8d8;
+$color-primary: #1b64d8;
+
 .table {
   --bs-table-color-type: initial;
   --bs-table-bg-type: initial;
@@ -84,17 +87,54 @@ tbody {
 }
 .form-infor-delivery {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   padding-left: 15px;
-  margin-bottom: 16px;
+  margin-bottom: 30px;
+  & .a {
+    width: 100%;
+    & p {
+      margin-top: 10px;
+      padding: 0px 2px;
+      font-size: 17px;
+      & span {
+        font-weight: 500;
+      }
+    }
+  }
   & strong {
     width: 220px;
     font-size: 17px;
     font-weight: 500;
   }
-  & input {
+  & input,
+  select {
     text-align: left;
     color: black;
+    background: white;
+    width: 100%;
+    border: 1px solid $border-gray;
+    padding: 5px 10px;
+    border-radius: 4px;
   }
+}
+
+.btn-order {
+  background: $color-primary;
+  color: white !important;
+  width: 100%;
+  border-radius: 4px !important;
+  padding: 20px 0px !important;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background: #02255d;
+  }
+}
+
+.title-money {
+  font-size: 18px;
+  font-weight: 600;
 }

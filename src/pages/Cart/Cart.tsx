@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Cart.css";
+import "./Cart.scss";
 import axios from "axios";
 
 interface Order {

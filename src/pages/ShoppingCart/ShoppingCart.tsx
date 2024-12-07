@@ -3,6 +3,7 @@ import img from "./../../image/breadcumb.jpg";
 import "./ShoppingCart.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getDistrict, getProvince, getShipping, getWard } from "./addressApi";
 interface Order {
   id: number;
   total: number;
@@ -56,7 +57,7 @@ const GioHang: React.FC = () => {
         const response = await axios.get(
           "https://localhost:7048/api/Voucher/get-all-vouchers"
         );
-        console.log(response.data.data, "vouchers");
+        // console.log(response.data.data, "vouchers");
 
         setVouchers(response.data.data);
       } catch (error) {
@@ -67,7 +68,123 @@ const GioHang: React.FC = () => {
     fetchVouchers();
   }, []);
 
+  //#region Tính phí giao hàng
+  // GET TỈNH
+  const [pronvinces, setProvinces] = useState<ProvinceDtos[]>([]);
+  const [district, setDistrict] = useState<DistrictDtos[]>([]);
+  const [ward, setWard] = useState<WardDtos[]>([]);
+
+  const [selectedValues] = useState({
+    province: "",
+    district: "",
+    ward: "",
+    provinceName: "",
+    districtName: "",
+    wardName: "",
+  });
+  const getPronvincesApi = async () => {
+    try {
+      const res = await getProvince();
+      setProvinces(res);
+    } catch (error) {
+      {
+        console.log(error);
+      }
+    }
+  };
+  // GET QUẬN HUYỆN
+  const getDistrictApi = async (provinceId: number) => {
+    try {
+      const res = await getDistrict(provinceId);
+      setDistrict(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // GET XÃ PHƯỜNG
+  const getWardsApi = async (districtId: number) => {
+    try {
+      const res = await getWard(districtId);
+      setWard(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    field: string
+  ) => {
+    if (field === "province") {
+      getDistrictApi(parseInt(e.target.value));
+      selectedValues.province = e.target.value;
+      selectedValues.district = "";
+      selectedValues.ward = "";
+      setWard([]);
+      const selectedProvince = pronvinces.find(
+        (province) => province.ProvinceID === parseInt(e.target.value)
+      ) as ProvinceDtos;
+      selectedValues.provinceName = selectedProvince.NameExtension[1];
+    } else if (field === "district") {
+      getWardsApi(parseInt(e.target.value));
+      selectedValues.district = e.target.value;
+      selectedValues.ward = "";
+      const selectedDistrict = district.find(
+        (province) => province.DistrictID === parseInt(e.target.value)
+      ) as DistrictDtos;
+      selectedValues.districtName = selectedDistrict.NameExtension[1];
+    } else {
+      selectedValues.ward = e.target.value;
+      const selectedDistrict = ward.find(
+        (province) => province.WardCode === e.target.value
+      ) as WardDtos;
+      selectedValues.wardName = selectedDistrict.NameExtension[1];
+
+      getFeeShippng();
+    }
+    setAddress(
+      ` , ${selectedValues.wardName}, ${selectedValues.districtName}, ${selectedValues.provinceName}`
+    );
+  };
+
+  const [feeShipping, setFeeShipping] = useState(0);
+  const getFeeShippng = async () => {
+    const item: items[] = cartItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      name: item.productName,
+      height: 2,
+      weight: 2,
+      length: 2,
+      width: 2,
+    }));
+
+    // 1552
+    // '400101'
+    const data: ShippingOrderDtos = {
+      items: item,
+      service_type_id: 5,
+      from_district_id: 1552,
+      from_ward_code: "400101",
+      to_district_id: Number(selectedValues.district),
+      to_ward_code: selectedValues.ward,
+      height: 20,
+      length: 30,
+      weight: 10,
+      width: 40,
+      insurance_value: 0,
+      coupon: null,
+    };
+
+    const response = await getShipping(data);
+    setFeeShipping(response.total);
+  };
+  //#endregion
+
   useEffect(() => {
+    getPronvincesApi();
+
     if (cartItems.length > 0) {
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
@@ -200,9 +317,9 @@ const GioHang: React.FC = () => {
   //   Hàm lọc các voucher hợp lệ
   const getFilteredVouchers = () => {
     const total = calculateTotal();
-    console.log(total, "total");
+    // console.log(total, "total");
 
-    console.log(vouchers.filter((voucher) => voucher.min_Order_Value <= total));
+    // console.log(vouchers.filter((voucher) => voucher.min_Order_Value <= total));
 
     return vouchers.filter((voucher) => voucher.min_Order_Value <= total);
   };
@@ -425,15 +542,6 @@ const GioHang: React.FC = () => {
                     />
                   </div>
                   <div className="form-infor-delivery">
-                    <strong>Địa chỉ:</strong>
-                    <input
-                      type="text"
-                      placeholder="Nhập địa chỉ"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)} // Cập nhật state
-                    />
-                  </div>
-                  <div className="form-infor-delivery">
                     <strong>Ghi chú:</strong>
                     <input
                       type="text"
@@ -442,17 +550,81 @@ const GioHang: React.FC = () => {
                       onChange={(e) => setNote(e.target.value)} // Cập nhật state
                     />
                   </div>
+                  <div className="form-infor-delivery">
+                    <strong>Tỉnh/thành phố:</strong>
+                    <select onChange={(e) => handleChange(e, "province")}>
+                      {pronvinces.map((province, index) => (
+                        <option key={index} value={province.ProvinceID}>
+                          {province.NameExtension[1]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {district.length > 0 && (
+                    <div className="form-infor-delivery">
+                      <strong>Quận/huyện:</strong>
+                      <select onChange={(e) => handleChange(e, "district")}>
+                        {district.map((distrct, index) => (
+                          <option key={index} value={distrct.DistrictID}>
+                            {distrct.NameExtension[1]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {ward.length > 0 && (
+                    <div className="form-infor-delivery">
+                      <strong>Phường/xã:</strong>
+                      <select onChange={(e) => handleChange(e, "ward")}>
+                        {ward.map((ward, index) => (
+                          <option key={index} value={ward.WardCode}>
+                            {ward.NameExtension[1]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {ward.length > 0 && (
+                    <div className="form-infor-delivery">
+                      <strong>Địa chỉ cụ thể:</strong>
+                      <div className="a">
+                        <input
+                          type="text"
+                          placeholder="Nhập địa chỉ"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)} // Cập nhật state
+                        />
+                        <p>
+                          <span>Địa chỉ nhận hàng:</span> {address}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <hr />
                 <h4 style={{ marginTop: 20 }}>Tổng giỏ hàng</h4>
                 <hr />
                 <div className="row">
                   <div className="col-md-9">
-                    <p>Tạm tính</p>
+                    <p className="title-money">Tạm tính</p>
                   </div>
                   <div className="col-md-3">
-                    <p style={{ color: "blue" }}>
+                    <p style={{ color: "blue" }} className="title-money">
                       {calculateTotal().toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-9">
+                    <p className="title-money">Phí giao hàng</p>
+                  </div>
+                  <div className="col-md-3">
+                    <p style={{ color: "blue" }} className="title-money">
+                      {feeShipping.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -461,30 +633,29 @@ const GioHang: React.FC = () => {
                 </div>
                 <hr />
                 <div className="row">
-                  <div className="col-md-9">
-                    <p>Tổng</p>
+                  <div className="col-md-9 title-money">
+                    <p className="title-money">Tổng</p>
                   </div>
                   <div className="col-md-3">
-                    <p style={{ color: "blue" }}>
-                      {(calculateTotal() - calculateDiscount()).toLocaleString(
-                        "vi-VN",
-                        { style: "currency", currency: "VND" }
-                      )}
+                    <p style={{ color: "blue" }} className="title-money">
+                      {(
+                        calculateTotal() -
+                        calculateDiscount() +
+                        feeShipping
+                      ).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                     </p>
                   </div>
                 </div>
-                <div
-                  className="container mt-3 justify-content-center"
-                  style={{ marginLeft: 90 }}
+                <button
+                  type="button"
+                  className="btn-order"
+                  onClick={createOrder}
                 >
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={createOrder}
-                  >
-                    Thanh Toán
-                  </button>
-                </div>
+                  Thanh Toán
+                </button>
               </div>
             </div>
           </div>
