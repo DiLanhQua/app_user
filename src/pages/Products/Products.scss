@@ -118,3 +118,21 @@ $color-border: #ababab;
     }
   }
 }
+
+.btn-see-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & button {
+    background: $color-primary;
+    color: white;
+    width: auto;
+    border-radius: 4px;
+    padding: 10px 50px;
+    margin-top: 5rem;
+    font-size: 15px;
+    &:hover {
+      background: #02255d;
+    }
+  }
+}

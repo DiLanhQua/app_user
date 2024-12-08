@@ -20,7 +20,7 @@
 
     z-index: 1000;
     transition: all 0.3s ease;
-   
+
 }
 
 .user-login-info .dropdown-menu.show {
@@ -46,17 +46,17 @@
 
 .user-login-info .dropdown-menu ul li a {
     color: #333;
-        text-decoration: none;
-        font-size: 14px;
-        /* Giữ kích thước chữ vừa phải */
-        display: block;
-        width: 100%;
-        padding: 0px 45px;
-        /* Giảm padding để chiều cao nút nhỏ hơn */
-        text-align: left;
-        transition: background-color 0.3s ease;
-        white-space: nowrap;
-        box-sizing: border-box;
+    text-decoration: none;
+    font-size: 14px;
+    /* Giữ kích thước chữ vừa phải */
+    display: block;
+    width: 100%;
+    padding: 0px 45px;
+    /* Giảm padding để chiều cao nút nhỏ hơn */
+    text-align: left;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 
 .user-login-info .dropdown-menu ul li a:hover {
@@ -66,4 +66,9 @@
     /* Tăng độ tương phản */
     border-radius: 4px;
     /* Bo góc khi hover */
+}
+
+.btn-see-more a {
+    margin-top: 5rem;
+    font-size: 20px;
 }

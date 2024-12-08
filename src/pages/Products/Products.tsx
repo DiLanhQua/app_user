@@ -2,6 +2,7 @@ import img from "./../../image/breadcumb.jpg";
 import "./Products.scss";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 interface DetailProductDTO {
   id: number;
   Size: string;
@@ -25,6 +26,9 @@ interface ProductDetail {
 }
 
 const Products: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [brands, setBrands] = useState<BrandDtos[]>([]);
@@ -32,6 +36,9 @@ const Products: React.FC = () => {
   const [actionPrice, setActionPrice] = useState<number>(0);
   const [actionBrand, setActionBrand] = useState<number>(0);
   const [actionCategory, setActionCategory] = useState<number>(0);
+
+  const [isBtnSeeMore, setIsBtnSeeMore] = useState<boolean>(true);
+  const [numberPage, setNumberPage] = useState<number>(1);
 
   const addData = (productsData: any, detailsData: any) => {
     const combinedProducts: ProductDetail[] = productsData.map(
@@ -59,17 +66,40 @@ const Products: React.FC = () => {
     );
     setProducts(combinedProducts);
   };
-  const fetchProducts = async () => {
+  const fetchProducts = async (action: number) => {
+    let a = 1;
+    if (action === 1) {
+      a = numberPage + 1;
+      setNumberPage(a);
+    }
     try {
       const [productResponse, detailResponse] = await Promise.all([
-        axios.get("https://localhost:7048/api/Products/get-user?Pagesize=16"),
+        axios.get(
+          `https://localhost:7048/api/Products/get-user?maxPageSize=${
+            a * 16
+          }&Pagesize=${a * 16}&PageNumber=1`
+        ),
         axios.get(
           "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
         ),
       ]);
-      const productsData = productResponse.data.data;
-      const detailsData = detailResponse.data.data;
+      let productsData = productResponse.data.data;
+      if (action === 1) {
+        if (productResponse.data.pageCount < productResponse.data.pageSize) {
+          setIsBtnSeeMore(false);
+        }
+      } else {
+        setIsBtnSeeMore(true);
+      }
 
+      const detailsData = detailResponse.data.data;
+      const idCate = searchParams.get("id"); // Lấy giá trị của 'id'
+      if (idCate) {
+        let data: any[] = productResponse.data.data;
+        productsData = data.filter(
+          (item: any) => item.categoryId === Number(idCate)
+        );
+      }
       addData(productsData, detailsData);
       setActionBrand(0);
       setActionCategory(0);
@@ -99,7 +129,11 @@ const Products: React.FC = () => {
   const sortByBrand = async (brandId: number) => {
     try {
       const [productResponse, detailResponse] = await Promise.all([
-        axios.get("https://localhost:7048/api/Products/get-user?Pagesize=16"),
+        axios.get(
+          `https://localhost:7048/api/Products/get-user?Pagesize=${
+            numberPage * 16
+          }`
+        ),
         axios.get(
           "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
         ),
@@ -112,6 +146,7 @@ const Products: React.FC = () => {
       );
       addData(filteredProducts, detailsData);
       setActionBrand(brandId);
+      navigate("/sanpham");
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -122,7 +157,11 @@ const Products: React.FC = () => {
   const sortByCategory = async (categoryId: number) => {
     try {
       const [productResponse, detailResponse] = await Promise.all([
-        axios.get("https://localhost:7048/api/Products/get-user?Pagesize=16"),
+        axios.get(
+          `https://localhost:7048/api/Products/get-user?Pagesize=${
+            numberPage * 16
+          }`
+        ),
         axios.get(
           "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
         ),
@@ -135,6 +174,7 @@ const Products: React.FC = () => {
       );
       addData(filteredProducts, detailsData);
       setActionCategory(categoryId);
+      navigate("/sanpham");
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -172,7 +212,9 @@ const Products: React.FC = () => {
       const value = event.target.value;
       try {
         const [productResponse, detailResponse] = await Promise.all([
-          axios.get("https://localhost:7048/api/Products/get-user?Pagesize=16"),
+          axios.get(
+            "https://localhost:7048/api/Products/get-user?maxPageSize=16&Pagesize=16"
+          ),
           axios.get(
             "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
           ),
@@ -200,7 +242,7 @@ const Products: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts(0);
     loadDataFilter();
   }, []);
 
@@ -230,7 +272,7 @@ const Products: React.FC = () => {
             <div className="col-12 col-md-4 col-lg-2">
               <div className="container-filter">
                 <button
-                  onClick={fetchProducts}
+                  onClick={() => fetchProducts(0)}
                   className={
                     actionPrice === 0 &&
                     actionCategory === 0 &&
@@ -360,11 +402,16 @@ const Products: React.FC = () => {
                               <a className="product-brad">
                                 {product.brandName}
                               </a>
-                              {product.details.map((detail) => (
-                                <p key={detail.id} className="product-price">
-                                  {detail.Price.toLocaleString("vi-en")},000VND
-                                </p>
-                              ))}
+
+                              <p
+                                key={product.details[0].id}
+                                className="product-price"
+                              >
+                                {product.details[0].Price.toLocaleString(
+                                  "vi-en"
+                                )}
+                                ,000VND
+                              </p>
                               {/* Hover Content */}
                               <div className="add-to-cart-btn">
                                 <a
@@ -380,45 +427,13 @@ const Products: React.FC = () => {
                       ))}
                     </div>
                     {/* Pagination */}
-                    <nav aria-label="navigation">
-                      <ul className="pagination mt-50 mb-70">
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            <i className="fa fa-angle-left" />
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            ...
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            21
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            <i className="fa fa-angle-right" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
+                    {isBtnSeeMore && (
+                      <div className="btn-see-more">
+                        <button onClick={() => fetchProducts(1)}>
+                          Xem thêm
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,6 +1,8 @@
 import Card_pro from "../Card_pro.tsx";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 interface DetailProductDTO {
   Id: number;
   Size: string;
@@ -23,8 +25,15 @@ interface ProductDetail {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  const changeRouter = (id: number) => {
+    navigate(`/sanpham?id=${id}`);
+  };
+
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [categorys, setCategorys] = useState<CategoryDtos[]>([]);
 
   const fetchProducts = async () => {
     try {
@@ -67,8 +76,36 @@ const Index = () => {
     }
   };
 
+  const getCategorys = async () => {
+    try {
+      const response = await axios.get(
+        "https://localhost:7048/api/Category/get-all-category?Pagesize=3"
+      );
+      setCategorys(response.data.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  //#region Get products hot sale
+  const [hotSaleProducts, setHotSaleProducts] = useState<ProductsHotSale[]>([]);
+  const getProductsHotSale = async () => {
+    try {
+      const response = await axios.get(
+        "https://localhost:7048/api/Products/hot-sale-product"
+      );
+      setHotSaleProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  //#endregion
+
   useEffect(() => {
     fetchProducts();
+    getCategorys();
+    getProductsHotSale();
   }, []);
 
   if (loading) {
@@ -154,46 +191,25 @@ const Index = () => {
         <div className="container">
           <div className="row justify-content-center">
             {/* Single Catagory */}
-            <div className="col-12 col-sm-6 col-md-4">
+            {categorys.map((item) => (
               <div
-                className="single_catagory_area d-flex align-items-center justify-content-center bg-img"
-                style={{
-                  backgroundImage:
-                    "url(../../../src/assets/img/product-img/image.png)",
-                }}
+                className="col-12 col-sm-6 col-md-4"
+                style={{ cursor: "pointer" }}
+                key={item.id}
+                onClick={() => changeRouter(item.id)}
               >
-                <div className="catagory-content">
-                  <a href="#">Giày da</a>
+                <div
+                  className="single_catagory_area d-flex align-items-center justify-content-center bg-img"
+                  style={{
+                    backgroundImage: `url(${item.image})`,
+                  }}
+                >
+                  <div className="catagory-content">
+                    <a>{item.categoryName}</a>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* Single Catagory */}
-            <div className="col-12 col-sm-6 col-md-4">
-              <div
-                className="single_catagory_area d-flex align-items-center justify-content-center bg-img"
-                style={{
-                  backgroundImage:
-                    "url(../../../src/assets/img/bg-img/anh2.png)",
-                }}
-              >
-                <div className="catagory-content">
-                  <a href="#">SNEAKER</a>
-                </div>
-              </div>
-            </div>
-            {/* Single Catagory */}
-            <div className="col-12 col-sm-6 col-md-4">
-              <div
-                className="single_catagory_area d-flex align-items-center justify-content-center bg-img"
-                style={{
-                  backgroundImage: "url(../../../src/assets/img/bg-img/b1.png)",
-                }}
-              >
-                <div className="catagory-content">
-                  <a href="#">Giày SanDal</a>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -295,12 +311,53 @@ const Index = () => {
               gap: "20px",
             }}
           >
-            {products.length > 0 ? (
-              products
-                .slice(0, 8)
-                .map((product) => (
-                  <Card_pro key={product.Id} product={product} />
-                ))
+            {hotSaleProducts.length > 0 ? (
+              hotSaleProducts.slice(0, 8).map((product) => (
+                <div
+                  style={{
+                    width: "100%",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    overflow: "hidden",
+                    textAlign: "center",
+                    marginBottom: "0px",
+                    height: "auto",
+                  }}
+                >
+                  <div
+                    className="product-img"
+                    style={{ height: "20rem", overflow: "hidden" }}
+                  >
+                    <img
+                      src={`https://localhost:7048/${product.imagePrimary}`}
+                      alt=""
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "4px 4px 0px 0px",
+                      }}
+                    />
+                  </div>
+                  <div className="product-description">
+                    <a href={`/detail/${product.id}`}>
+                      <h6>{product.productName}</h6>
+                    </a>
+                    <span> {product.brandName} </span>
+                    <p className="product-price">
+                      {product.price.toLocaleString("vi-VN")},000 VND
+                    </p>
+                    <div className="btn-add">
+                      <a
+                        href={`/detail/${product.id}`}
+                        className="btn essence-btn"
+                      >
+                        Thêm giỏ hàng
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))
             ) : (
               <div>Không có sản phẩm nào để hiển thị.</div>
             )}
@@ -334,6 +391,9 @@ const Index = () => {
             <div>Không có sản phẩm nào để hiển thị.</div>
           )}
         </div>
+      </div>
+      <div className="btn-see-more">
+        <a href="/sanpham">Xem thêm</a>
       </div>
       {/* ##### New Arrivals Area End ##### */}
       {/* ##### Brands Area Start ##### */}

@@ -138,3 +138,15 @@ tbody {
   font-size: 18px;
   font-weight: 600;
 }
+.not-products {
+  text-align: center;
+  padding: 50px 0px;
+  & a {
+    display: block;
+    font-size: 20px;
+    margin-top: 20px;
+    & :hover {
+      font-weight: 300 !important;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 interface CreateDeliveryAddress {
-    address: string,
-    phone: string,
-    note: string
+  address: string;
+  phone: string;
+  note: string;
 }

@@ -22,6 +22,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
           `https://localhost:7048/api/Order/${orderId}`
         );
         setOrder(response.data);
+        caculateFeeShip(response.data);
       } catch (err: any) {
         setError("Đã có lỗi xảy ra khi tải dữ liệu.");
       } finally {
@@ -46,9 +47,18 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
         return { status: "Tất cả", color: "black" }; // Example color
     }
   };
+
+  const [feeShip, setFeeShip] = useState(0);
+  const caculateFeeShip = (data: any) => {
+    let totalPrice = 0;
+    data.detailOrder.forEach((item: any) => {
+      totalPrice += item.detailProduct.price * item.quantity;
+    });
+    setFeeShip(data.totalPrice - totalPrice * 1000);
+  };
   const formatPrice = (price: number) => {
     // Nhân giá trị với 100 và định dạng với ký hiệu "đ"
-    return price.toLocaleString("vi-VN") + " đ";
+    return price.toLocaleString("vi-VN");
   };
   if (loading) {
     return <div>Loading...</div>; // Hiển thị khi đang tải dữ liệu
@@ -84,18 +94,21 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                 <p style={{ color: getStatus(order.status).color }}>
                   {getStatus(order.status).status}
                 </p>
-                <p>
-                  Voucher:{" "}
-                  {order.voucher
-                    ? `${order.voucher.voucherName} - ${
-                        order.voucher.discountType === "Percentage"
-                          ? `${order.voucher.discount}%`
-                          : `${order.voucher.discount.toLocaleString()} VND`
-                      }`
-                    : "Không có"}
-                </p>
+                <div className="">
+                  <p>
+                    Voucher:{" "}
+                    {order.voucher
+                      ? `${order.voucher.voucherName} - ${
+                          order.voucher.discountType === "Percentage"
+                            ? `${order.voucher.discount}%`
+                            : `${order.voucher.discount.toLocaleString()} VND`
+                        }`
+                      : "Không có"}
+                  </p>
+                  <p>Phí giao hàng: {formatPrice(feeShip)} VND</p>
+                </div>
 
-                <strong>Tổng tiền: {formatPrice(order?.totalPrice)}</strong>
+                <strong>Tổng tiền: {formatPrice(order?.totalPrice)} VND</strong>
               </div>
             </div>
           </div>
@@ -130,10 +143,11 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                   </td>
                   <td>{item.product.productName}</td>
                   <td>Size {item.detailProduct.size}</td>
-                  <td>{formatPrice(item.detailProduct.price)}</td>
+                  <td>{formatPrice(item.detailProduct.price)},000 VND</td>
                   <td>x {item.quantity}</td>
                   <td>
-                    {formatPrice(item.detailProduct.price * item.quantity)}
+                    {formatPrice(item.detailProduct.price * item.quantity)},000
+                    VND
                   </td>
                 </tr>
               ))}

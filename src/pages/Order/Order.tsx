@@ -119,14 +119,6 @@ const DonHangUse: React.FC = () => {
                   </button>
                   <button
                     className={`btn-tabs-order ${
-                      isActive === 2 ? "btn-tabs-order-active" : ""
-                    }`}
-                    onClick={() => filterOrdersByStatus(2)}
-                  >
-                    Đang xử lý
-                  </button>
-                  <button
-                    className={`btn-tabs-order ${
                       isActive === 3 ? "btn-tabs-order-active" : ""
                     }`}
                     onClick={() => filterOrdersByStatus(3)}
@@ -169,7 +161,18 @@ const DonHangUse: React.FC = () => {
                         <td>{index + 1}</td>
                         <td>{customerInfo.fullName}</td>
                         <td>{item.address}</td>
-                        <td>{item.paymend}</td>
+                        <td>
+                          <span
+                            className={
+                              item.paymend == "Online" ||
+                              item.paymend == "Online - Đã thanh toán"
+                                ? "paymend"
+                                : ""
+                            }
+                          >
+                            {item.paymend}
+                          </span>
+                        </td>
                         <td>{item.numberPhone}</td>
                         <td style={{ color: getStatus(item.status).color }}>
                           {getStatus(item.status).status}
@@ -183,12 +186,6 @@ const DonHangUse: React.FC = () => {
                             >
                               Chi tiết <i className="ri-eye-line"></i>
                             </button>
-                            {isModalOpen && selectedOrderId !== null && (
-                              <OrderDetail
-                                orderId={selectedOrderId}
-                                onClose={handleCloseModal}
-                              />
-                            )}
                             {item.status < 3 && (
                               <div>
                                 <CancelButton orderId={item.id} />
@@ -245,8 +242,9 @@ const DonHangUse: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* <OrderDetail /> */}
+      {isModalOpen && selectedOrderId !== null && (
+        <OrderDetail orderId={selectedOrderId} onClose={handleCloseModal} />
+      )}
     </>
   );
 };

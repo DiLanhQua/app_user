@@ -392,318 +392,355 @@ const GioHang: React.FC = () => {
   };
   return (
     <>
-      <div
-        className="breadcumb_area bg-img"
-        style={{ backgroundImage: `url(${img})` }}
-      >
-        <div className="container h-100">
-          <div className="row h-100 align-items-center">
-            <div className="col-12">
-              <div className="page-title text-center">
-                <h2>Giỏ hàng</h2>
+      {cartItems.length > 0 ? (
+        <div className="">
+          <div
+            className="breadcumb_area bg-img"
+            style={{ backgroundImage: `url(${img})` }}
+          >
+            <div className="container h-100">
+              <div className="row h-100 align-items-center">
+                <div className="col-12">
+                  <div className="page-title text-center">
+                    <h2>Giỏ hàng</h2>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <section className="bg0 p-t-104 p-b-116" style={{ fontWeight: "bold" }}>
-        <div className="flex-w flex-tr">
-          <div className="cond bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-            <div
-              className="row"
-              style={{ marginLeft: 20, marginTop: 20, marginBottom: 20 }}
-            >
-              <div className="col-md-8">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Sản Phẩm</th>
-                      <th>Size</th>
-                      <th>Màu</th>
-                      <th>Giá</th>
-                      <th>Số lượng</th>
-                      <th>Tổng</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item, index) => (
-                      <tr>
-                        <td>
-                          <div style={{ marginTop: 35 }}>{index + 1}</div>
-                        </td>
-                        <td style={{ width: 400 }}>
-                          <div className="row">
-                            <div className="col-4">
-                              <img
-                                src={`https://localhost:7048/${item.link}`}
-                                className="cart-thumb"
-                                alt=""
-                                style={{
-                                  width: "78px",
-                                  height: "78px",
-                                  objectFit: "cover",
-                                }}
-                              />
-                            </div>
-                            <div className="col-8" style={{ marginTop: 10 }}>
-                              {item.productName}
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ marginTop: 10 }}>
-                            SIZE {item.productDetail.Size}
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ marginTop: 10 }}>
-                            {item.productDetail?.Color.nameColor}
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ marginTop: 10 }}>
-                            {(item.productDetail.Price * 1000).toLocaleString(
-                              "vi-VN",
-                              {
-                                style: "currency",
-                                currency: "VND",
-                              }
-                            )}
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            className="wrap-num-product flex-w m-l-auto m-r-0"
-                            style={{ marginTop: 10 }}
-                          >
-                            <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                              <div className="fs-16 zmdi zmdi-minus" />
-                            </div>
-                            <input
-                              className="mtext-104 cl3 txt-center num-product"
-                              type="number"
-                              min="1"
-                              max="10"
-                              value={item.quantity}
-                              onChange={(e) =>
-                                updateQuantity(
-                                  item.productId,
-                                  item.productDetail.id,
-                                  Number(e.target.value)
-                                )
-                              }
-                              style={{ color: "black" }}
-                            />
-
-                            <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                              <div className="fs-16 zmdi zmdi-plus" />
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ marginTop: 10 }}>
-                            {caculateItem(item).toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })}
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            style={{ marginTop: 10 }}
-                            onClick={() => removeItem(item.productDetail.id)}
-                          >
-                            <svg
-                              style={{ width: 20, height: 20 }}
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                            >
-                              <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z" />
-                            </svg>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="co-4 bro">
-                <h4>Mã giảm giá</h4>
-                <div className="row">
+          <section
+            className="bg0 p-t-104 p-b-116"
+            style={{ fontWeight: "bold" }}
+          >
+            <div className="flex-w flex-tr">
+              <div className="cond bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                <div
+                  className="row"
+                  style={{ marginLeft: 20, marginTop: 20, marginBottom: 20 }}
+                >
                   <div className="col-md-8">
-                    <select
-                      className="form-control"
-                      onChange={handleVoucherChange}
-                    >
-                      <option value="">Chọn voucher</option>
-                      {getFilteredVouchers().map((voucher, index) => (
-                        <option key={index} value={voucher.id}>
-                          {voucher.voucherName} - Giảm {voucher.discount}%
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <button
-                      type="button"
-                      style={{ width: 100, marginTop: 5 }}
-                      className="btn btn-primary "
-                    >
-                      Áp dụng
-                    </button>
-                  </div>
-                </div>
-                <h4 style={{ marginTop: 20 }}>Thông tin đơn hàng</h4>
-                <hr />
-                <div className="container-form-delivery">
-                  <div className="form-infor-delivery">
-                    <strong>Tên người nhận:</strong>
-                    <input
-                      type="text"
-                      placeholder="Nhập tên người nhận"
-                      value={recipientName}
-                      onChange={(e) => setRecipientName(e.target.value)} // Cập nhật state
-                    />
-                  </div>
-                  <div className="form-infor-delivery">
-                    <strong>Số điện thoại:</strong>
-                    <input
-                      type="text"
-                      placeholder="Nhập số điện thoại"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)} // Cập nhật state
-                    />
-                  </div>
-                  <div className="form-infor-delivery">
-                    <strong>Ghi chú:</strong>
-                    <input
-                      type="text"
-                      placeholder="Nhập ghi chú"
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)} // Cập nhật state
-                    />
-                  </div>
-                  <div className="form-infor-delivery">
-                    <strong>Phương thức thanh toán:</strong>
-                    <select onChange={(e) => setPaymentMethod(e.target.value)}>
-                      <option value="Offline">Thanh toán khi nhận hàng</option>
-                      <option value="Online">Thanh toán Vnpay</option>
-                    </select>
-                  </div>
-                  <div className="form-infor-delivery">
-                    <strong>Tỉnh/thành phố:</strong>
-                    <select onChange={(e) => handleChange(e, "province")}>
-                      {pronvinces.map((province, index) => (
-                        <option key={index} value={province.ProvinceID}>
-                          {province.NameExtension[1]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {district.length > 0 && (
-                    <div className="form-infor-delivery">
-                      <strong>Quận/huyện:</strong>
-                      <select onChange={(e) => handleChange(e, "district")}>
-                        {district.map((distrct, index) => (
-                          <option key={index} value={distrct.DistrictID}>
-                            {distrct.NameExtension[1]}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                  {ward.length > 0 && (
-                    <div className="form-infor-delivery">
-                      <strong>Phường/xã:</strong>
-                      <select onChange={(e) => handleChange(e, "ward")}>
-                        {ward.map((ward, index) => (
-                          <option key={index} value={ward.WardCode}>
-                            {ward.NameExtension[1]}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Sản Phẩm</th>
+                          <th>Size</th>
+                          <th>Màu</th>
+                          <th>Giá</th>
+                          <th>Số lượng</th>
+                          <th>Tổng</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {cartItems.map((item, index) => (
+                          <tr>
+                            <td>
+                              <div style={{ marginTop: 35 }}>{index + 1}</div>
+                            </td>
+                            <td style={{ width: 400 }}>
+                              <div className="row">
+                                <div className="col-4">
+                                  <img
+                                    src={`https://localhost:7048/${item.link}`}
+                                    className="cart-thumb"
+                                    alt=""
+                                    style={{
+                                      width: "78px",
+                                      height: "78px",
+                                      objectFit: "cover",
+                                    }}
+                                  />
+                                </div>
+                                <div
+                                  className="col-8"
+                                  style={{ marginTop: 10 }}
+                                >
+                                  {item.productName}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ marginTop: 10 }}>
+                                SIZE {item.productDetail.Size}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ marginTop: 10 }}>
+                                {item.productDetail?.Color.nameColor}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ marginTop: 10 }}>
+                                {(
+                                  item.productDetail.Price * 1000
+                                ).toLocaleString("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                })}
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                className="wrap-num-product flex-w m-l-auto m-r-0"
+                                style={{ marginTop: 10 }}
+                              >
+                                <div className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                  <div className="fs-16 zmdi zmdi-minus" />
+                                </div>
+                                <input
+                                  className="mtext-104 cl3 txt-center num-product"
+                                  type="number"
+                                  min="1"
+                                  max="10"
+                                  value={item.quantity}
+                                  onChange={(e) =>
+                                    updateQuantity(
+                                      item.productId,
+                                      item.productDetail.id,
+                                      Number(e.target.value)
+                                    )
+                                  }
+                                  style={{ color: "black" }}
+                                />
 
-                  {ward.length > 0 && (
-                    <div className="form-infor-delivery">
-                      <strong>Địa chỉ cụ thể:</strong>
-                      <div className="a">
+                                <div className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                  <div className="fs-16 zmdi zmdi-plus" />
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ marginTop: 10 }}>
+                                {caculateItem(item).toLocaleString("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                })}
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                style={{ marginTop: 10 }}
+                                onClick={() =>
+                                  removeItem(item.productDetail.id)
+                                }
+                              >
+                                <svg
+                                  style={{ width: 20, height: 20 }}
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 448 512"
+                                >
+                                  <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z" />
+                                </svg>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="co-4 bro">
+                    <h4>Mã giảm giá</h4>
+                    <div className="row">
+                      <div className="col-md-8">
+                        <select
+                          className="form-control"
+                          onChange={handleVoucherChange}
+                        >
+                          <option value="">Chọn voucher</option>
+                          {getFilteredVouchers().map((voucher, index) => (
+                            <option key={index} value={voucher.id}>
+                              {voucher.voucherName} - Giảm{" "}
+                              {voucher.discountType === "Percentage"
+                                ? `${voucher.discount}%`
+                                : `${voucher.discount}k`}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-4">
+                        <button
+                          type="button"
+                          style={{ width: 100, marginTop: 5 }}
+                          className="btn btn-primary "
+                        >
+                          Áp dụng
+                        </button>
+                      </div>
+                    </div>
+                    <h4 style={{ marginTop: 20 }}>Thông tin đơn hàng</h4>
+                    <hr />
+                    <div className="container-form-delivery">
+                      <div className="form-infor-delivery">
+                        <strong>Tên người nhận:</strong>
                         <input
                           type="text"
-                          placeholder="Nhập địa chỉ"
-                          value={address}
-                          onChange={(e) => setAddress(e.target.value)} // Cập nhật state
+                          placeholder="Nhập tên người nhận"
+                          value={recipientName}
+                          onChange={(e) => setRecipientName(e.target.value)} // Cập nhật state
                         />
-                        <p>
-                          <span>Địa chỉ nhận hàng:</span> {address}
+                      </div>
+                      <div className="form-infor-delivery">
+                        <strong>Số điện thoại:</strong>
+                        <input
+                          type="text"
+                          placeholder="Nhập số điện thoại"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)} // Cập nhật state
+                        />
+                      </div>
+                      <div className="form-infor-delivery">
+                        <strong>Ghi chú:</strong>
+                        <input
+                          type="text"
+                          placeholder="Nhập ghi chú"
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)} // Cập nhật state
+                        />
+                      </div>
+                      <div className="form-infor-delivery">
+                        <strong>Phương thức thanh toán:</strong>
+                        <select
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                        >
+                          <option value="Offline">
+                            Thanh toán khi nhận hàng
+                          </option>
+                          <option value="Online">Thanh toán Vnpay</option>
+                        </select>
+                      </div>
+                      <div className="form-infor-delivery">
+                        <strong>Tỉnh/thành phố:</strong>
+                        <select onChange={(e) => handleChange(e, "province")}>
+                          {pronvinces.map((province, index) => (
+                            <option key={index} value={province.ProvinceID}>
+                              {province.NameExtension[1]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {district.length > 0 && (
+                        <div className="form-infor-delivery">
+                          <strong>Quận/huyện:</strong>
+                          <select onChange={(e) => handleChange(e, "district")}>
+                            {district.map((distrct, index) => (
+                              <option key={index} value={distrct.DistrictID}>
+                                {distrct.NameExtension[1]}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      {ward.length > 0 && (
+                        <div className="form-infor-delivery">
+                          <strong>Phường/xã:</strong>
+                          <select onChange={(e) => handleChange(e, "ward")}>
+                            {ward.map((ward, index) => (
+                              <option key={index} value={ward.WardCode}>
+                                {ward.NameExtension[1]}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      {ward.length > 0 && (
+                        <div className="form-infor-delivery">
+                          <strong>Địa chỉ cụ thể:</strong>
+                          <div className="a">
+                            <input
+                              type="text"
+                              placeholder="Nhập địa chỉ"
+                              value={address}
+                              onChange={(e) => setAddress(e.target.value)} // Cập nhật state
+                            />
+                            <p>
+                              <span>Địa chỉ nhận hàng:</span> {address}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <hr />
+                    <h4 style={{ marginTop: 20 }}>Tổng giỏ hàng</h4>
+                    <hr />
+                    <div className="row">
+                      <div className="col-md-9">
+                        <p className="title-money">Tạm tính</p>
+                      </div>
+                      <div className="col-md-3">
+                        <p style={{ color: "blue" }} className="title-money">
+                          {calculateTotal().toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                         </p>
                       </div>
                     </div>
-                  )}
+                    <div className="row">
+                      <div className="col-md-9">
+                        <p className="title-money">Giảm giá</p>
+                      </div>
+                      <div className="col-md-3">
+                        <p style={{ color: "blue" }} className="title-money">
+                          -
+                          {calculateDiscount().toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-9">
+                        <p className="title-money">Phí giao hàng</p>
+                      </div>
+                      <div className="col-md-3">
+                        <p style={{ color: "blue" }} className="title-money">
+                          {feeShipping.toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div className="row">
+                      <div className="col-md-9 title-money">
+                        <p className="title-money">Tổng</p>
+                      </div>
+                      <div className="col-md-3">
+                        <p style={{ color: "blue" }} className="title-money">
+                          {(
+                            calculateTotal() -
+                            calculateDiscount() +
+                            feeShipping
+                          ).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn-order"
+                      onClick={createOrder}
+                    >
+                      Thanh Toán
+                    </button>
+                  </div>
                 </div>
-                <hr />
-                <h4 style={{ marginTop: 20 }}>Tổng giỏ hàng</h4>
-                <hr />
-                <div className="row">
-                  <div className="col-md-9">
-                    <p className="title-money">Tạm tính</p>
-                  </div>
-                  <div className="col-md-3">
-                    <p style={{ color: "blue" }} className="title-money">
-                      {calculateTotal().toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </p>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-9">
-                    <p className="title-money">Phí giao hàng</p>
-                  </div>
-                  <div className="col-md-3">
-                    <p style={{ color: "blue" }} className="title-money">
-                      {feeShipping.toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-md-9 title-money">
-                    <p className="title-money">Tổng</p>
-                  </div>
-                  <div className="col-md-3">
-                    <p style={{ color: "blue" }} className="title-money">
-                      {(
-                        calculateTotal() -
-                        calculateDiscount() +
-                        feeShipping
-                      ).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="btn-order"
-                  onClick={createOrder}
-                >
-                  Thanh Toán
-                </button>
               </div>
             </div>
-          </div>
+          </section>
         </div>
-      </section>
+      ) : (
+        <div className="not-products">
+          <h3>Không có sản phẩm trong giỏ hàng</h3>
+          <a href="/sanpham">Tiếp tục mua sắm</a>
+        </div>
+      )}
     </>
   );
 };
