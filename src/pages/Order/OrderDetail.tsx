@@ -48,7 +48,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
   };
   const formatPrice = (price: number) => {
     // Nhân giá trị với 100 và định dạng với ký hiệu "đ"
-    return (price * 1000).toLocaleString("vi-VN") + " đ";
+    return price.toLocaleString("vi-VN") + " đ";
   };
   if (loading) {
     return <div>Loading...</div>; // Hiển thị khi đang tải dữ liệu
@@ -143,10 +143,10 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
 
         <div className="order-detail-footer">
           <button onClick={() => alert("Hủy đơn hàng")}>
-            Hủy đơn hàng <i className="fa-solid fa-xmark"></i>
+            Hủy đơn hàng <i className="ri-close-line"></i>
           </button>
           <button onClick={onClose}>
-            Đóng <i className="fa-solid fa-right-to-bracket"></i>
+            Đóng <i className="ri-shut-down-line"></i>
           </button>
         </div>
       </div>

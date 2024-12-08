@@ -182,6 +182,28 @@ const GioHang: React.FC = () => {
   };
   //#endregion
 
+  //#region Thanh toán
+
+  const [paymentMethod, setPaymentMethod] = useState("Offline");
+
+  //#endregion
+
+  const validateForm = () => {
+    if (!recipientName.trim()) {
+      alert("Tên người nhận không được để trống");
+      return false;
+    }
+    if (!/^\d{9,11}$/.test(phoneNumber)) {
+      alert("Số điện thoại phải có 9-11 chữ số và bắt đầu bằng 0");
+      return false;
+    }
+    if (!address.trim()) {
+      alert("Địa chỉ không được để trống");
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
     getPronvincesApi();
 
@@ -221,7 +243,7 @@ const GioHang: React.FC = () => {
     });
   };
 
-  const handleSubmit = (idOrder: number) => {
+  const handleSubmit = async (idOrder: number) => {
     // Dữ liệu từ các ô input
     const model: CreateDeliveryAddress = {
       address: address,
@@ -230,7 +252,7 @@ const GioHang: React.FC = () => {
     };
 
     try {
-      const response = axios.post(
+      const response = await axios.post(
         `https://localhost:7048/api/DeliveryAddress/${idOrder}`,
         model
       );
@@ -248,13 +270,14 @@ const GioHang: React.FC = () => {
       navigate("/login");
       return;
     }
+    if (!validateForm()) return;
     try {
       const newOrder: Order = {
         id: 0,
-        total: calculateTotal() - calculateDiscount(),
+        total: calculateTotal() - calculateDiscount() + feeShipping,
         timeOrder: new Date().toISOString(),
         statusOrder: 1,
-        paymentMethod: "string", // Replace with actual payment method
+        paymentMethod: paymentMethod, // Replace with actual payment method
         voucherId: selectedVoucher?.id || null,
         accountId: customerInfo.accountId, // Use real account ID
       };
@@ -263,23 +286,39 @@ const GioHang: React.FC = () => {
         "https://localhost:7048/api/Order/add-order",
         newOrder
       );
-      console.log(response, "response");
-
       const createdOrder = response.data;
-      console.log(createdOrder.orderId, "createdOrder");
-
+      console.log(createdOrder);
+      if (paymentMethod === "Online") {
+        await thanhToanVnpay({
+          id: createdOrder.orderId,
+          amount: calculateTotal() - calculateDiscount() + feeShipping,
+        });
+      }
       setOrder(createdOrder);
-      addOrderDetails(createdOrder.orderId);
-      handleSubmit(createdOrder.orderId);
+      await addOrderDetails(createdOrder.orderId);
+      await handleSubmit(createdOrder.orderId);
+
+      alert("Đơn đặt mua hàng thành công!");
+      location.reload();
     } catch (error) {
+      alert("Đơn đặt mua hàng thất bại!");
       console.error("Error creating order:", error);
     }
   };
 
-  const addOrderDetails = async (orderId: number) => {
-    console.log(cartItems, "cartItems");
-    console.log(orderId, "orderId");
+  const thanhToanVnpay = async (data: { id: number; amount: number }) => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7048/api/Order/vnpay-payment-url",
+        data
+      );
+      window.location.href = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const addOrderDetails = async (orderId: number) => {
     try {
       const promises = cartItems.map((item) => {
         const orderDetail: OrderDetail = {
@@ -299,9 +338,6 @@ const GioHang: React.FC = () => {
 
       // Xóa giỏ hàng khỏi localStorage
       localStorage.removeItem("cart");
-      console.log("Order details added and cart cleared from localStorage.");
-      alert("Đơn đat mua hàng thành công!");
-      location.reload();
     } catch (error) {
       console.error("Error adding order details:", error);
     }
@@ -520,7 +556,7 @@ const GioHang: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                <h4 style={{ marginTop: 20 }}>Thông tin nhận hàng</h4>
+                <h4 style={{ marginTop: 20 }}>Thông tin đơn hàng</h4>
                 <hr />
                 <div className="container-form-delivery">
                   <div className="form-infor-delivery">
@@ -549,6 +585,13 @@ const GioHang: React.FC = () => {
                       value={note}
                       onChange={(e) => setNote(e.target.value)} // Cập nhật state
                     />
+                  </div>
+                  <div className="form-infor-delivery">
+                    <strong>Phương thức thanh toán:</strong>
+                    <select onChange={(e) => setPaymentMethod(e.target.value)}>
+                      <option value="Offline">Thanh toán khi nhận hàng</option>
+                      <option value="Online">Thanh toán Vnpay</option>
+                    </select>
                   </div>
                   <div className="form-infor-delivery">
                     <strong>Tỉnh/thành phố:</strong>

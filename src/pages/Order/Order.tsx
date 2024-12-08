@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import "./Order.scss";
 import img from "./../../image/breadcumb.jpg";
 import axios from "axios";
-import ConfirmationPopup from "./Cancel-order/Cancel";
 import CancelButton from "./Cancel-order/Cancel";
 import OrderDetail from "./OrderDetail";
 
@@ -38,7 +37,10 @@ const DonHangUse: React.FC = () => {
   useEffect(() => {
     filterOrdersByStatus(); // Filter orders right after setting the `order` state
   }, [order]); // Triggered every time `order` state changes
+
+  const [isActive, setIsActive] = useState(0);
   const filterOrdersByStatus = (status?: number) => {
+    setIsActive(status || 0);
     if (status === undefined || status === null) {
       setFilteredOrders(order); // Nếu không truyền vào gì, hiển thị toàn bộ danh sách
       console.log(filteredOrders, "filteredOrders");
@@ -100,37 +102,49 @@ const DonHangUse: React.FC = () => {
               <div>
                 <div className="main-tabs">
                   <button
-                    className="btn-tabs-order btn-tabs-order-active"
+                    className={`btn-tabs-order ${
+                      isActive === 0 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus()}
                   >
                     Tất cả
                   </button>
                   <button
-                    className="btn-tabs-order"
+                    className={`btn-tabs-order ${
+                      isActive === 1 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus(1)}
                   >
                     Chờ xác nhận{" "}
                   </button>
                   <button
-                    className="btn-tabs-order"
+                    className={`btn-tabs-order ${
+                      isActive === 2 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus(2)}
                   >
                     Đang xử lý
                   </button>
                   <button
-                    className="btn-tabs-order"
+                    className={`btn-tabs-order ${
+                      isActive === 3 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus(3)}
                   >
                     Đang giao hàng
                   </button>
                   <button
-                    className="btn-tabs-order"
+                    className={`btn-tabs-order ${
+                      isActive === 4 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus(4)}
                   >
                     Hoàn thành
                   </button>
                   <button
-                    className="btn-tabs-order"
+                    className={`btn-tabs-order ${
+                      isActive === 5 ? "btn-tabs-order-active" : ""
+                    }`}
                     onClick={() => filterOrdersByStatus(5)}
                   >
                     Đã hủy
@@ -143,6 +157,7 @@ const DonHangUse: React.FC = () => {
                       <th>ID</th>
                       <th>Tên Khách Hàng</th>
                       <th>Địa Chỉ</th>
+                      <th>Phương thức thanh toán</th>
                       <th>Số Điện Thoại</th>
                       <th>Tình Trạng</th>
                       <th>Hành Động</th>
@@ -154,6 +169,7 @@ const DonHangUse: React.FC = () => {
                         <td>{index + 1}</td>
                         <td>{customerInfo.fullName}</td>
                         <td>{item.address}</td>
+                        <td>{item.paymend}</td>
                         <td>{item.numberPhone}</td>
                         <td style={{ color: getStatus(item.status).color }}>
                           {getStatus(item.status).status}
@@ -165,7 +181,7 @@ const DonHangUse: React.FC = () => {
                               className="btn-detail"
                               onClick={() => handleOpenModal(item.id)}
                             >
-                              Chi tiết <i className="fa-regular fa-eye"></i>
+                              Chi tiết <i className="ri-eye-line"></i>
                             </button>
                             {isModalOpen && selectedOrderId !== null && (
                               <OrderDetail
