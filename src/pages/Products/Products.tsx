@@ -3,33 +3,12 @@ import "./Products.scss";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-interface DetailProductDTO {
-  id: number;
-  Size: string;
-  Price: number;
-  Quantity: number;
-  Gender: string;
-  Status: string;
-  ColorId: number;
-}
-
-interface ProductDetail {
-  id: number;
-  ProductName: string;
-  Description: string;
-  CategoryId: number;
-  BrandId: number;
-  imagePrimary: string;
-  categoryName: string;
-  brandName: string;
-  details: DetailProductDTO[];
-}
 
 const Products: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [products, setProducts] = useState<ProductDetail[]>([]);
+  const [products, setProducts] = useState<ProductsUserDtos[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [brands, setBrands] = useState<BrandDtos[]>([]);
   const [categorys, setCategorys] = useState<CategoryDtos[]>([]);
@@ -40,32 +19,6 @@ const Products: React.FC = () => {
   const [isBtnSeeMore, setIsBtnSeeMore] = useState<boolean>(true);
   const [numberPage, setNumberPage] = useState<number>(1);
 
-  const addData = (productsData: any, detailsData: any) => {
-    const combinedProducts: ProductDetail[] = productsData.map(
-      (product: any) => ({
-        id: product.id,
-        ProductName: product.productName,
-        Description: product.description,
-        CategoryId: product.categoryId,
-        BrandId: product.brandId,
-        imagePrimary: product.imagePrimary,
-        categoryName: product.categoryName,
-        brandName: product.brandName,
-        details: detailsData
-          .filter((detail: any) => detail.productId === product.id) // Lọc chi tiết phù hợp với sản phẩm
-          .map((detail: any) => ({
-            id: detail.id,
-            Size: detail.size || "N/A",
-            Price: detail.price || 0,
-            Quantity: detail.quantity || 0,
-            Gender: detail.gender || "Unspecified",
-            Status: detail.status || "Unknown",
-            ColorId: detail.colorId || 0,
-          })),
-      })
-    );
-    setProducts(combinedProducts);
-  };
   const fetchProducts = async (action: number) => {
     let a = 1;
     if (action === 1) {
@@ -73,34 +26,29 @@ const Products: React.FC = () => {
       setNumberPage(a);
     }
     try {
-      const [productResponse, detailResponse] = await Promise.all([
-        axios.get(
-          `https://localhost:7048/api/Products/get-user?maxPageSize=${
-            a * 16
-          }&Pagesize=${a * 16}&PageNumber=1`
-        ),
-        axios.get(
-          "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
-        ),
-      ]);
-      let productsData = productResponse.data.data;
+      const response = await axios.get(
+        `https://localhost:7048/api/Products/get-user?maxPageSize=${
+          a * 16
+        }&Pagesize=${a * 16}&PageNumber=1`
+      );
+      let productsData = response.data.data;
+
       if (action === 1) {
-        if (productResponse.data.pageCount < productResponse.data.pageSize) {
+        if (response.data.pageCount < response.data.pageSize) {
           setIsBtnSeeMore(false);
         }
       } else {
         setIsBtnSeeMore(true);
       }
 
-      const detailsData = detailResponse.data.data;
       const idCate = searchParams.get("id"); // Lấy giá trị của 'id'
       if (idCate) {
-        let data: any[] = productResponse.data.data;
+        let data: any[] = response.data.data;
         productsData = data.filter(
           (item: any) => item.categoryId === Number(idCate)
         );
       }
-      addData(productsData, detailsData);
+      setProducts(productsData);
       setActionBrand(0);
       setActionCategory(0);
       setActionPrice(0);
@@ -114,37 +62,26 @@ const Products: React.FC = () => {
   const sapXepSanPham = (action: number) => {
     setActionPrice(action);
     if (action === 1) {
-      const sortedProducts = [...products].sort(
-        (a, b) => a.details[0].Price - b.details[0].Price
-      );
+      const sortedProducts = [...products].sort((a, b) => a.price - b.price);
       setProducts(sortedProducts);
     } else if (action === 2) {
-      const sortedProducts = [...products].sort(
-        (a, b) => b.details[0].Price - a.details[0].Price
-      );
+      const sortedProducts = [...products].sort((a, b) => b.price - a.price);
       setProducts(sortedProducts);
     }
   };
 
   const sortByBrand = async (brandId: number) => {
     try {
-      const [productResponse, detailResponse] = await Promise.all([
-        axios.get(
-          `https://localhost:7048/api/Products/get-user?Pagesize=${
-            numberPage * 16
-          }`
-        ),
-        axios.get(
-          "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
-        ),
-      ]);
-      const productsData: any[] = productResponse.data.data;
-      const detailsData = detailResponse.data.data;
-
+      const response = await axios.get(
+        `https://localhost:7048/api/Products/get-user?maxPageSize=${
+          numberPage * 16
+        }&Pagesize=${numberPage * 16}&PageNumber=1`
+      );
+      const productsData: any[] = response.data.data;
       const filteredProducts = productsData.filter(
         (a) => a.brandId === brandId
       );
-      addData(filteredProducts, detailsData);
+      setProducts(filteredProducts);
       setActionBrand(brandId);
       navigate("/sanpham");
     } catch (error) {
@@ -156,23 +93,17 @@ const Products: React.FC = () => {
 
   const sortByCategory = async (categoryId: number) => {
     try {
-      const [productResponse, detailResponse] = await Promise.all([
-        axios.get(
-          `https://localhost:7048/api/Products/get-user?Pagesize=${
-            numberPage * 16
-          }`
-        ),
-        axios.get(
-          "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
-        ),
-      ]);
-      const productsData: any[] = productResponse.data.data;
-      const detailsData = detailResponse.data.data;
-
+      const response = await axios.get(
+        `https://localhost:7048/api/Products/get-user?maxPageSize=${
+          numberPage * 16
+        }&Pagesize=${numberPage * 16}&PageNumber=1`
+      );
+      const productsData: any[] = response.data.data;
       const filteredProducts = productsData.filter(
         (a) => a.categoryId === categoryId
       );
-      addData(filteredProducts, detailsData);
+
+      setProducts(filteredProducts);
       setActionCategory(categoryId);
       navigate("/sanpham");
     } catch (error) {
@@ -211,28 +142,22 @@ const Products: React.FC = () => {
     setTimeout(async () => {
       const value = event.target.value;
       try {
-        const [productResponse, detailResponse] = await Promise.all([
-          axios.get(
-            "https://localhost:7048/api/Products/get-user?maxPageSize=16&Pagesize=16"
-          ),
-          axios.get(
-            "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
-          ),
-        ]);
-        const productsData: any[] = productResponse.data.data;
-        const detailsData = detailResponse.data.data;
-
+        const response = await axios.get(
+          `https://localhost:7048/api/Products/get-user?maxPageSize=${
+            numberPage * 16
+          }&Pagesize=${numberPage * 16}&PageNumber=1`
+        );
+        const productsData: any[] = response.data.data;
         const filteredProducts = productsData.filter((a) => {
           const normalizedValue = removeVietnameseTones(
             value.toLowerCase().trim()
           );
-
           const productName = removeVietnameseTones(
             a.productName.toLowerCase().trim()
           );
           return productName.includes(normalizedValue);
         });
-        addData(filteredProducts, detailsData);
+        setProducts(filteredProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -396,20 +321,15 @@ const Products: React.FC = () => {
                             <div className="product-description">
                               <span className="btn-name">
                                 <a href={`/detail/${product.id}`}>
-                                  {product.ProductName}
+                                  {product.productName}
                                 </a>
                               </span>
                               <a className="product-brad">
                                 {product.brandName}
                               </a>
 
-                              <p
-                                key={product.details[0].id}
-                                className="product-price"
-                              >
-                                {product.details[0].Price.toLocaleString(
-                                  "vi-en"
-                                )}
+                              <p className="product-price">
+                                {product.price}
                                 ,000VND
                               </p>
                               {/* Hover Content */}

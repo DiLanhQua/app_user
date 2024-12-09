@@ -8,3 +8,14 @@ interface ProductsHotSale {
   price: number;
   productName: string;
 }
+interface ProductsUserDtos {
+  id: number;
+  productName: string;
+  description: string;
+  categoryName: string;
+  brandName: string;
+  categoryId: number;
+  brandId: number;
+  imagePrimary: string;
+  price: number;
+}

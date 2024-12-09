@@ -1,33 +1,11 @@
 import React from "react";
 import "./card-products.scss";
 
-interface DetailProductDTO {
-  Id: number;
-  Size: string;
-  Price: number;
-  Quantity: number;
-  Gender: string;
-  Status: string;
-  ColorId: number;
-}
-
-interface ProductDetail {
-  Id: number;
-  ProductName: string;
-  Description: string;
-  CategoryId: number;
-  BrandId: number;
-  Image: string;
-  BrandName: string;
-  details: DetailProductDTO[];
-}
-
 interface CardProProps {
-  product: ProductDetail;
+  product: ProductsUserDtos;
 }
 
 const Card_pro: React.FC<CardProProps> = ({ product }) => {
-  const firstDetail = product.details[0];
   return (
     <div
       style={{
@@ -45,7 +23,7 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         style={{ height: "20rem", overflow: "hidden" }}
       >
         <img
-          src={`https://localhost:7048/${product.Image}`}
+          src={`https://localhost:7048/${product.imagePrimary}`}
           alt=""
           style={{
             width: "100%",
@@ -56,15 +34,15 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         />
       </div>
       <div className="product-description">
-        <a href={`/detail/${product.Id}`}>
-          <h6>{product.ProductName}</h6>
+        <a href={`/detail/${product.id}`}>
+          <h6>{product.productName}</h6>
         </a>
-        <span> {product.BrandName} </span>
+        <span> {product.brandName} </span>
         <p className="product-price">
-          {firstDetail?.Price?.toLocaleString("vi-VN")},000 VND
+          {product.price.toLocaleString("vi-VN")},000 VND
         </p>
         <div className="btn-add">
-          <a href={`/detail/${product.Id}`} className="btn essence-btn">
+          <a href={`/detail/${product.id}`} className="btn essence-btn">
             Thêm giỏ hàng
           </a>
         </div>

@@ -31,44 +31,18 @@ const Index = () => {
     navigate(`/sanpham?id=${id}`);
   };
 
-  const [products, setProducts] = useState<ProductDetail[]>([]);
+  const [products, setProducts] = useState<ProductsUserDtos[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [categorys, setCategorys] = useState<CategoryDtos[]>([]);
 
   const fetchProducts = async () => {
     try {
-      const [productResponse, detailResponse] = await Promise.all([
-        axios.get(`https://localhost:7048/api/Products/get-user?Pagesize=12`),
-        axios.get(
-          "https://localhost:7048/api/DetailProduct/get-all-detailproduct?Pagesize=1000"
-        ),
-      ]);
-      const productsData = productResponse.data.data; // Dữ liệu sản phẩm
-      const detailsData = detailResponse.data.data;
-      const combinedProducts: ProductDetail[] = productsData.map(
-        (product: any) => ({
-          Id: product.id,
-          ProductName: product.productName,
-          Description: product.description,
-          CategoryId: product.categoryId,
-          BrandId: product.brandId,
-          Image: product.imagePrimary,
-          BrandName: product.brandName,
-          details: detailsData
-            .filter((detail: any) => detail.productId === product.id)
-            .map((detail: any) => ({
-              Id: detail.id,
-              Size: detail.size || "N/A",
-              Price: detail.price || 0,
-              Quantity: detail.quantity || 0,
-              Gender: detail.gender || "Unspecified",
-              Status: detail.status || "Unknown",
-              ColorId: detail.colorId || 0,
-            })),
-        })
+      const response = await axios.get(
+        `https://localhost:7048/api/Products/get-user?maxPageSize=8&Pagesize=8`
       );
-      setProducts(combinedProducts);
-      console.log(combinedProducts);
+
+      const productsData = response.data.data; // Dữ liệu sản phẩm
+      setProducts(productsData);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -386,7 +360,7 @@ const Index = () => {
           {products.length > 0 ? (
             products
               .slice(0, 8)
-              .map((product) => <Card_pro key={product.Id} product={product} />)
+              .map((product) => <Card_pro key={product.id} product={product} />)
           ) : (
             <div>Không có sản phẩm nào để hiển thị.</div>
           )}
