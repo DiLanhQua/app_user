@@ -14,6 +14,7 @@ import ThanhToan from "./pages/ThanhToan/ThanhToan";
 import Information from "./pages/Infomation/UserProfile";
 import CartPro from "./pages/ShoppingCart/ShoppingCart";
 import Cart from "./pages/Cart/Cart";
+import DetalBlog from "./pages/Blog/detail-blog/DetalBlog";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog />,
+      },
+      {
+        path: "/detail-blog/:id",
+        element: <DetalBlog />,
       },
       {
         path: "/detail/:id",
