@@ -19,7 +19,10 @@ interface OrderDetail {
   quantity: number;
   orderId: number;
 }
-
+interface EmailRequest {
+  accountId: any;
+  idOrder: any;
+}
 interface CartItem {
   productId: number;
   productName: string;
@@ -297,7 +300,7 @@ const GioHang: React.FC = () => {
       setOrder(createdOrder);
       await addOrderDetails(createdOrder.orderId);
       await handleSubmit(createdOrder.orderId);
-
+      await sendEmail(createdOrder.orderId, customerInfo.accountId);
       alert("Đơn đặt mua hàng thành công!");
       location.reload();
     } catch (error) {
@@ -315,6 +318,26 @@ const GioHang: React.FC = () => {
       window.location.href = response.data;
     } catch (error) {
       console.log(error);
+    }
+  };
+  const sendEmail = async (orderId: number, accountId: number) => {
+    try {
+      const EmailRequest: EmailRequest = {
+        idOrder: orderId,
+        accountId: accountId,
+      };
+
+      console.log("EmailRequest", EmailRequest);
+
+      const response = await axios.post(
+        "https://localhost:7048/api/Email/send-email",
+        EmailRequest
+      );
+
+      console.log("Server Response:", response.data);
+      return response;
+    } catch (error) {
+      console.error("Error adding order details:", error);
     }
   };
 
