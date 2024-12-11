@@ -34,9 +34,9 @@ const ProductsTuongTu: React.FC<{ idCategory: number }> = ({ idCategory }) => {
         `https://localhost:7048/api/Products/get-user?maxPageSize=8&Pagesize=8`
       );
       const productsData: any[] = response.data.data; // Dữ liệu sản phẩm
-      const filteredProducts = productsData.filter(
-        (product: any) => product.categoryId === idCategory
-      );
+      const filteredProducts = productsData
+        .filter((product: any) => product.categoryId === idCategory)
+        .slice(0, 4);
       setProducts(filteredProducts);
     } catch (error) {
       console.error("Error fetching products:", error);

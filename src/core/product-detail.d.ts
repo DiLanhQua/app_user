@@ -8,3 +8,14 @@ interface DetailProductDtos {
   id: number;
   Color: ?any;
 }
+
+interface Detail {
+  id: number;
+  size: string;
+  price: number;
+  quantity: number;
+  colorId: number;
+  gender: string;
+  status: string;
+  productId: number;
+}

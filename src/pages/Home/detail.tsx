@@ -204,7 +204,8 @@ const Chitiet: React.FC = () => {
                   {product.details.map((detail) => (
                     <option key={detail.id} value={detail.id}>
                       Kích Thước: {detail.Size} - {detail.Gender} -{" "}
-                      {detail.Color?.nameColor || "N/A"} - {detail.Quantity}
+                      {detail.Color?.nameColor || "N/A"} - Số lượng:
+                      {detail.Quantity}
                     </option>
                   ))}
                 </select>

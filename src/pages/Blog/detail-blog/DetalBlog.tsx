@@ -20,7 +20,7 @@ const DetalBlog: React.FC = () => {
     try {
       const response = await getAllBlog();
 
-      setBlogs(response.filter((item) => item.id !== Number(id)).slice(0, 5));
+      setBlogs(response.filter((item) => item.id !== Number(id)).slice(0, 3));
     } catch (error) {
       console.error(error);
       throw new Error("Failed to fetch blogs");

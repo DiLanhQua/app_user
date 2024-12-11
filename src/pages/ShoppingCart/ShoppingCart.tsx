@@ -267,10 +267,40 @@ const GioHang: React.FC = () => {
 
     // Xử lý logic tiếp theo tại đây (gửi API, kiểm tra dữ liệu, v.v.)
   };
+
+  const checkQuantityProducts = async () => {
+    try {
+      let product = undefined;
+      const response: any = await axios.get(
+        "https://localhost:7048/api/DetailProduct/get-all-detailproduct?maxPageSize=10000&Pagesize=10000"
+      );
+      const products: Detail[] = response.data.data;
+      for (let i = 0; i < cartItems.length; i++) {
+        const detail: Detail = products.find(
+          (a) => a.id == cartItems[i].productDetail.id
+        ) as Detail;
+        if (cartItems[i].quantity > detail.quantity) {
+          product = cartItems[i];
+          break;
+        }
+      }
+      return product;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const createOrder = async () => {
     if (!customerInfo) {
       alert("Vui lòng đăng nhập trước khi đặt hàng!");
       navigate("/login");
+      return;
+    }
+    const product: CartItem | undefined = await checkQuantityProducts();
+
+    if (product) {
+      alert(
+        `Số lượng sản phẩm ${product.productName.toUpperCase()} lớn hơn số lượng trong kho`
+      );
       return;
     }
     if (!validateForm()) return;
