@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./login.scss";
+import "./login.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -121,6 +121,7 @@ const Login = () => {
     if (!signupData.address) {
       newErrors.address = "Địa chỉ không được để trống.";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -178,7 +179,17 @@ const Login = () => {
       console.log(response.data);
       setErrors({});
     } catch (error: unknown) {
-      toast.error("Đăng ký thất bại");
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const errorMessage = error.response?.data;
+        console.log(errorMessage);
+        if (errorMessage) {
+          toast.error("Tên tài khoản đã tồn tại.");
+        } else {
+          toast.error("Đăng ký thất bại");
+        }
+      } else {
+        toast.error("Đã xảy ra lỗi.");
+      }
       console.log(error);
     } finally {
       setIsLoading(false);
