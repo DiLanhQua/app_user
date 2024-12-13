@@ -43,7 +43,7 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         </p>
         <div className="btn-add">
           <a href={`/detail/${product.id}`} className="btn essence-btn">
-            Thêm giỏ hàng
+            Xem chi tiết
           </a>
         </div>
       </div>

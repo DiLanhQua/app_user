@@ -338,7 +338,7 @@ const Products: React.FC = () => {
                                   href={`/detail/${product.id}`}
                                   className="btn essence-btn"
                                 >
-                                  Thêm vào giỏ hàng
+                                  Xem chi tiết
                                 </a>
                               </div>
                             </div>

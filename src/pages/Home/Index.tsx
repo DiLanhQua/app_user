@@ -326,7 +326,7 @@ const Index = () => {
                         href={`/detail/${product.id}`}
                         className="btn essence-btn"
                       >
-                        Thêm giỏ hàng
+                        Xem chi tiết
                       </a>
                     </div>
                   </div>
