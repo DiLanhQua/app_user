@@ -85,23 +85,9 @@ export const Header = () => {
           {/* Header Meta Data */}
           <div className="d-flex clearfix justify-content-end">
             {/* Search Area */}
-            <div className="search-area">
-              <form action="#" method="post">
-                <input
-                  style={{ marginRight: "35px" }}
-                  type="search"
-                  name="search"
-                  id="headerSearch"
-                  placeholder="   Tìm kiếm"
-                />
-              </form>
-            </div>
+            <div className="search-area"></div>
             {/* Favourite Area */}
-            <div className="favourite-area">
-              <a href="/thanhtoan">
-                <img src="../../../src/assets/img/core-img/heart.svg" alt="" />
-              </a>
-            </div>
+            <div className="favourite-area"></div>
             {/* User Login Info */}
             <div className="user-login-info">
               <a href="#" onClick={handleLoginClick}>
