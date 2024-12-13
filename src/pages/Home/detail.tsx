@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./detail.scss";
 import ProductsTuongTu from "../product-tuong-tu/ProductsTuongTu";
+import Comment from "../Comment/Comment";
 
 interface DetailProductDTO {
   id: number;
@@ -61,7 +62,6 @@ const Chitiet: React.FC = () => {
       ]);
 
       const productData = productResponse.data;
-      console.log(productData, "productData");
 
       const detailsData = detailResponse.data;
       console.log(detailsData[0].color, "detailsData");
@@ -228,7 +228,6 @@ const Chitiet: React.FC = () => {
               >
                 Thêm vào giỏ hàng
               </button>
-              <button>Mua ngay</button>
             </div>
           </div>
         </div>
@@ -238,6 +237,9 @@ const Chitiet: React.FC = () => {
         <h4>Sản phẩm tương tự</h4>
         <div className="">
           <ProductsTuongTu idCategory={product.CategoryId} />
+        </div>
+        <div>
+          <Comment productId={product.id} productDetailId={selectedProductDetail?.id} />
         </div>
       </div>
     </div>
