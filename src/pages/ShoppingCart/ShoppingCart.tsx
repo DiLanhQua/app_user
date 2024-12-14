@@ -379,7 +379,6 @@ const GioHang: React.FC = () => {
           quantity: item.quantity,
           orderId,
         };
-
         return axios.post(
           "https://localhost:7048/api/DetailOrder/add-detailorder",
           orderDetail
