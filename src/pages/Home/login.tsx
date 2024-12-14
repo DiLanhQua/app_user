@@ -138,7 +138,7 @@ const Login = () => {
         }
       );
 
-      navigate("/");
+      navigate("/"); // Di chuyển sang trang chính sau khi đăng nhập thành công
       window.location.reload();
       toast.success("Đăng nhập thành công!");
       console.log(response.data);
@@ -146,9 +146,16 @@ const Login = () => {
       sessionStorage.setItem("user", JSON.stringify(response.data));
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.data) {
-        setErrors({ general: error.response.data.Message });
+        const errorMessage = error.response?.data;
+        console.log(errorMessage);
+        if (!errorMessage) {
+          toast.error("Tên tài khoản hoặc mật khẩu không đúng");
+        } else {
+          toast.error("Tên tài khoản hoặc mật khẩu không đúng");
+        }
       } else {
         setErrors({ general: "Đã xảy ra lỗi." });
+        toast.error("Đã xảy ra lỗi."); // Hiển thị thông báo lỗi mặc định
       }
     } finally {
       setIsLoading(false);
