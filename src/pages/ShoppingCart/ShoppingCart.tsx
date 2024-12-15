@@ -409,7 +409,19 @@ const GioHang: React.FC = () => {
 
     // console.log(vouchers.filter((voucher) => voucher.min_Order_Value <= total));
 
-    return vouchers.filter((voucher) => voucher.min_Order_Value <= total);
+    return vouchers.filter((voucher) => {
+      if (voucher.max_Discount === 0) {
+        console.log(1);
+
+        return voucher.min_Order_Value * 1000 <= total;
+      }
+      // Kiểm tra cả min_Order_Value và max_Discount_Value
+      return (
+        console.log(2),
+        voucher.min_Order_Value * 1000 <= total &&
+          voucher.max_Discount * 1000 >= total
+      );
+    });
   };
   const calculateDiscount = () => {
     if (!selectedVoucher) return 0; // Nếu không có voucher, không giảm giá

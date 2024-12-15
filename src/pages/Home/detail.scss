@@ -62,6 +62,15 @@ $color-primary: #1b64d8;
       font-size: 17px;
       font-weight: 500;
     }
+    & .quantily {
+      border: 1px solid #ccc; /* Đặt khung màu xám nhạt */
+      border-radius: 4px; /* Bo góc nhẹ */
+      padding: 5px; /* Thêm khoảng cách bên trong */
+      width: 80px; /* Đặt chiều rộng */
+      font-size: 16px; /* Kích thước chữ */
+      color: black;
+      margin: 0;
+    }
     & .des {
       margin-top: 20px;
       padding-right: 20px;
@@ -110,4 +119,8 @@ $color-primary: #1b64d8;
 
 .tuong-tu {
   padding: 0px 20px 90px 95px;
+}
+.price-quantily {
+  display: flex;
+  gap: 20px;
 }

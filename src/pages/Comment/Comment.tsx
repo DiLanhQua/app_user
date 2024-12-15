@@ -37,6 +37,7 @@ const Comment = (props: {
   productId: number;
   productDetailId: number | undefined;
 }) => {
+  console.log(props.productDetailId, "props.productDetailId");
   const [rating, setRating] = useState(0); // Lưu số sao được chọn
   const [isComment, setIsComment] = useState(false);
 
@@ -107,9 +108,17 @@ const Comment = (props: {
   };
 
   const handleSubmit = async () => {
+    const data : sendCommentDTO = {
+      rating: sendComment.rating,
+      content: sendComment.content,
+      productId: props.productId,
+      detailProductId: props.productDetailId as number,
+      accountId: accountId,
+    }
+    console.log(data);
     const response = await axios.post(
       `https://localhost:7048/api/Comment/add-comment-inproduct`,
-      sendComment
+      data
     );
     if (response) {
       setIsComment(false);

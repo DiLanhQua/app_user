@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import "./detail.scss";
 import ProductsTuongTu from "../product-tuong-tu/ProductsTuongTu";
 import Comment from "../Comment/Comment";
+import Rating from "../Comment/Rating/Rating";
 
 interface DetailProductDTO {
   id: number;
@@ -42,11 +43,31 @@ const Chitiet: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
+  const [quantily, setQuantily] = useState<number>(1);
   const { id } = useParams();
+
+  const [rating , setRating] = useState(0);
+
+  useEffect(() => {
+    loadRating();
+  }, []);
+
+  const loadRating = async () => {
+    console.log(id);
+
+    const repo = await axios.get(
+      `https://localhost:7048/api/Comment/get-rating-by-product-id/${id}`
+    );
+
+    if (repo) {
+      setRating(repo.data);
+    }
+  }
 
   // Lấy thông tin khách hàng từ localStorage
   useEffect(() => {
     const storedCustomerInfo = sessionStorage.getItem("user");
+    loadRating();
     if (storedCustomerInfo) {
       setCustomerInfo(JSON.parse(storedCustomerInfo));
     }
@@ -110,7 +131,10 @@ const Chitiet: React.FC = () => {
 
   useEffect(() => {
     fetchProductsAndCategory();
+    
   }, []);
+
+  
 
   const handleAddToCart = (product: ProductDetail) => {
     if (selectedProductDetail === null) {
@@ -124,7 +148,7 @@ const Chitiet: React.FC = () => {
     const item = {
       productId: product.id,
       productName: product.ProductName,
-      quantity: 1,
+      quantity: quantily,
       price: product.details[0]?.Price,
       maKH: customerInfo?.accountId, // Thêm thông tin khách hàng vào sản phẩm,
       productDetail: selectedProductDetail,
@@ -155,6 +179,14 @@ const Chitiet: React.FC = () => {
   const changeImagePrimary = (image: ImageDtos) => {
     setImagePrimary(image);
   };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value >= 1) {
+      // Chỉ chấp nhận giá trị >= 1
+      setQuantily(value);
+    }
+  };
+
   const product = products[0];
   return (
     <div className="">
@@ -181,13 +213,17 @@ const Chitiet: React.FC = () => {
             <div className="">
               <h4>{product.ProductName}</h4>
               <h5>
-                {product.details[0]?.Price},000 VND <span>700.000VND</span>
+                {selectedProductDetail?.Price},000 VND <span>700.000VND</span>
               </h5>
+              <div>
+              <div>
+                <Rating rating={rating as number} />
+              </div>
+              </div>
               <p className="brand">Brand</p>
-              <div className="">
+              <div className="price-quantily">
                 <select
                   id="productDetail"
-                  className="mr-5"
                   onChange={(e) => {
                     const selectedDetailId = parseInt(e.target.value); // Lấy ID từ value
                     console.log(selectedDetailId, "selectedDetailId");
@@ -210,13 +246,13 @@ const Chitiet: React.FC = () => {
                   ))}
                 </select>
 
-                {/* <select id="productColor" className="mr-5">
-                {product.details.map((detail) => (
-                  <option key={detail.id} value={detail.ColorId}>
-                    Màu: {detail.Color?.nameColor}
-                  </option>
-                ))}
-              </select> */}
+                <input
+                  type="number"
+                  className="quantily"
+                  min={1}
+                  value={quantily}
+                  onChange={handleChange}
+                />
               </div>
               <p className="des">{product.Description}</p>
             </div>
@@ -239,7 +275,10 @@ const Chitiet: React.FC = () => {
           <ProductsTuongTu idCategory={product.CategoryId} />
         </div>
         <div>
-          <Comment productId={product.id} productDetailId={selectedProductDetail?.id} />
+          <Comment
+            productId={product.id}
+            productDetailId={selectedProductDetail?.id}
+          />
         </div>
       </div>
     </div>

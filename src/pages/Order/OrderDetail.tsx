@@ -23,6 +23,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
         );
         setOrder(response.data);
         caculateFeeShip(response.data);
+        console.log(response.data);
       } catch (err: any) {
         setError("Đã có lỗi xảy ra khi tải dữ liệu.");
       } finally {
