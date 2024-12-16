@@ -16,6 +16,7 @@ import CartPro from "./pages/ShoppingCart/ShoppingCart";
 import Cart from "./pages/Cart/Cart";
 import DetalBlog from "./pages/Blog/detail-blog/DetalBlog";
 
+import QrQr from "./pages/ShoppingCart/qr";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "/Cart",
         element: <Cart />,
+      },
+      {
+        path: "/QrQr",
+        element: <QrQr />,
       },
     ],
   },
