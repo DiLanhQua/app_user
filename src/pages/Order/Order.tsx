@@ -242,7 +242,7 @@ const DonHangUse: React.FC = () => {
           </div>
         </div>
       </section>
-      {isModalOpen && selectedOrderId !== null && (
+      {isModalOpen && selectedOrderId && (
         <OrderDetail orderId={selectedOrderId} onClose={handleCloseModal} />
       )}
     </>

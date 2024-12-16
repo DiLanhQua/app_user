@@ -53,8 +53,7 @@ const Chitiet: React.FC = () => {
     setIsExpanded(!isExpanded);
   };
 
-
-  const [rating , setRating] = useState(0);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     loadRating();
@@ -70,7 +69,7 @@ const Chitiet: React.FC = () => {
     if (repo) {
       setRating(repo.data);
     }
-  }
+  };
 
   // Lấy thông tin khách hàng từ localStorage
   useEffect(() => {
@@ -139,10 +138,7 @@ const Chitiet: React.FC = () => {
 
   useEffect(() => {
     fetchProductsAndCategory();
-    
   }, []);
-
-  
 
   const handleAddToCart = (product: ProductDetail) => {
     if (selectedProductDetail === null) {
@@ -224,9 +220,9 @@ const Chitiet: React.FC = () => {
                 {selectedProductDetail?.Price.toLocaleString("vi-VN")}.000 VND
               </h5>
               <div>
-              <div>
-                <Rating rating={rating as number} />
-              </div>
+                <div>
+                  <Rating rating={rating as number} />
+                </div>
               </div>
               <p className="brand">Brand</p>
               <div className="price-quantily">
@@ -277,54 +273,53 @@ const Chitiet: React.FC = () => {
       </div>
 
       <div className="tuong-tu">
-  <div style={{ marginBottom: "20px" }}>
-    <Comment
-      productId={product.id}
-      productDetailId={selectedProductDetail?.id}
-    />
-  </div>
-  <h4>Sản phẩm tương tự của {product.ProductName}</h4>
-  <div style={{ marginBottom: "20px" }} className="">
-    <ProductsTuongTu idCategory={product.CategoryId} />
-  </div>
-  <div
-    style={{
-      textAlign: "center", // Căn giữa nội dung văn bản
-      display: "flex",     // Để hỗ trợ căn giữa dọc (nếu cần)
-      justifyContent: "center", // Căn giữa theo chiều ngang
-      alignItems: "center", // Căn giữa theo chiều dọc (nếu cần)
-    }}
-  >
-                <div className="product-description">
-  <p
-    dangerouslySetInnerHTML={{
-      __html: isExpanded
-        ? product.Description
-        : product.Description.slice(0, MAX_LENGTH) + (product.Description.length > MAX_LENGTH ? "..." : ""),
-    }}
-  ></p>
-  {product.Description.length > MAX_LENGTH && (
-    <div style={{ textAlign: "center", marginTop: "10px" }}>
-      <button
-        onClick={toggleExpand}
-        style={{
-          border: "none",
-          backgroundColor: "transparent",
-          color: "blue",
-          textDecoration: "underline",
-          cursor: "pointer",
-          fontSize: "16px",
-        }}
-      >
-        {isExpanded ? "Thu gọn" : "Xem thêm"}
-      </button>
-    </div>
-  )}
-</div>
-
-  </div>
-</div>
-
+        <div style={{ marginBottom: "20px" }}>
+          <Comment
+            productId={product.id}
+            productDetailId={selectedProductDetail?.id}
+          />
+        </div>
+        <h4>Sản phẩm tương tự của {product.ProductName}</h4>
+        <div style={{ marginBottom: "20px" }} className="">
+          <ProductsTuongTu idCategory={product.CategoryId} />
+        </div>
+        <div
+          style={{
+            textAlign: "center", // Căn giữa nội dung văn bản
+            display: "flex", // Để hỗ trợ căn giữa dọc (nếu cần)
+            justifyContent: "center", // Căn giữa theo chiều ngang
+            alignItems: "center", // Căn giữa theo chiều dọc (nếu cần)
+          }}
+        >
+          <div className="product-description">
+            <p
+              dangerouslySetInnerHTML={{
+                __html: isExpanded
+                  ? product.Description
+                  : product.Description.slice(0, MAX_LENGTH) +
+                    (product.Description.length > MAX_LENGTH ? "..." : ""),
+              }}
+            ></p>
+            {product.Description.length > MAX_LENGTH && (
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <button
+                  onClick={toggleExpand}
+                  style={{
+                    border: "none",
+                    backgroundColor: "transparent",
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                  }}
+                >
+                  {isExpanded ? "Thu gọn" : "Xem thêm"}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

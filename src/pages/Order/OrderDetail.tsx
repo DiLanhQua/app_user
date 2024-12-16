@@ -8,7 +8,7 @@ interface OrderDetailProps {
 }
 
 const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderDTO>({} as OrderDTO);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -23,9 +23,9 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
         );
         setOrder(response.data);
         caculateFeeShip(response.data);
-        console.log(response.data);
       } catch (err: any) {
         setError("Đã có lỗi xảy ra khi tải dữ liệu.");
+        console.log(err);
       } finally {
         setLoading(false);
       }
@@ -50,12 +50,22 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
   };
 
   const [feeShip, setFeeShip] = useState(0);
-  const caculateFeeShip = (data: any) => {
+  const caculateFeeShip = (data: OrderDTO) => {
     let totalPrice = 0;
     data.detailOrder.forEach((item: any) => {
       totalPrice += item.detailProduct.price * item.quantity;
     });
-    setFeeShip(data.totalPrice - totalPrice * 1000);
+    if (!data.voucher) {
+      console.log(2);
+      setFeeShip(data.totalPrice - (totalPrice * 1000 - 0));
+      return;
+    }
+    setFeeShip(
+      data.totalPrice - (totalPrice * 1000 - data.voucher.discount * 1000)
+    );
+    console.log(
+      data.totalPrice - (totalPrice * 1000 - data.voucher.discount * 1000)
+    );
   };
   const formatPrice = (price: number) => {
     // Nhân giá trị với 100 và định dạng với ký hiệu "đ"
@@ -68,11 +78,9 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
   if (error) {
     return <div>{error}</div>; // Hiển thị lỗi nếu có
   }
-
   if (!order) {
     return <div>Không tìm thấy thông tin đơn hàng.</div>; // Hiển thị nếu không có dữ liệu
   }
-
   return (
     <div className="container-order">
       <div className="container-order-detail">
@@ -102,7 +110,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                       ? `${order.voucher.voucherName} - ${
                           order.voucher.discountType === "Percentage"
                             ? `${order.voucher.discount}%`
-                            : `${order.voucher.discount.toLocaleString()} VND`
+                            : `${order.voucher.discount.toLocaleString()},000 VND`
                         }`
                       : "Không có"}
                   </p>
