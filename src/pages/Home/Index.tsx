@@ -278,65 +278,81 @@ const Index = () => {
           </div>
         </div>
         <div className="container">
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gap: "20px",
+    }}
+  >
+    {hotSaleProducts.length > 0 ? (
+      hotSaleProducts.slice(0, 8).map((product) => (
+        <div
+          style={{
+            width: "100%",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            overflow: "hidden",
+            textAlign: "center",
+            marginBottom: "0px",
+            height: "auto",
+            position: "relative", // Thêm position relative để banner HOT hiển thị đúng vị trí
+          }}
+        >
+          {/* Banner HOT góc trái */}
           <div
+            className="hot-banner"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "20px",
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              backgroundColor: "#CC0000",
+              color: "white",
+              padding: "5px 10px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              borderRadius: "5px",
+              zIndex: 10,
             }}
           >
-            {hotSaleProducts.length > 0 ? (
-              hotSaleProducts.slice(0, 8).map((product) => (
-                <div
-                  style={{
-                    width: "100%",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    textAlign: "center",
-                    marginBottom: "0px",
-                    height: "auto",
-                  }}
-                >
-                  <div
-                    className="product-img"
-                    style={{ height: "20rem", overflow: "hidden" }}
-                  >
-                    <img
-                      src={`https://localhost:7048/${product.imagePrimary}`}
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "4px 4px 0px 0px",
-                      }}
-                    />
-                  </div>
-                  <div className="product-description">
-                    <a href={`/detail/${product.id}`}>
-                      <h6>{product.productName}</h6>
-                    </a>
-                    <span> {product.brandName} </span>
-                    <p className="product-price">
-                      {product.price.toLocaleString("vi-VN")},000 VND
-                    </p>
-                    <div className="btn-add">
-                      <a
-                        href={`/detail/${product.id}`}
-                        className="btn essence-btn"
-                      >
-                        Xem chi tiết
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div>Không có sản phẩm nào để hiển thị.</div>
-            )}
+            HOT
+          </div>
+
+          <div className="product-img" style={{ height: "20rem", overflow: "hidden" }}>
+            <img
+              src={`https://localhost:7048/${product.imagePrimary}`}
+              alt=""
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "4px 4px 0px 0px",
+              }}
+            />
+          </div>
+
+          <div className="product-description">
+            <a href={`/detail/${product.id}`}>
+              <h6>{product.productName}</h6>
+            </a>
+            <span>{product.brandName}</span>
+            <p className="product-price">
+              {product.price.toLocaleString("vi-VN")},000 VND
+            </p>
+            <div className="btn-add">
+              <a href={`/detail/${product.id}`} className="btn essence-btn">
+                Xem chi tiết
+              </a>
+            </div>
           </div>
         </div>
+      ))
+    ) : (
+      <div>Không có sản phẩm nào để hiển thị.</div>
+    )}
+  </div>
+</div>
+
       </section>
       {/* ##### New Arrivals Area End ##### */}
       {/* ##### New Arrivals Area Start ##### */}
@@ -344,12 +360,12 @@ const Index = () => {
         <div className="row">
           <div className="col-12">
             <div className="section-heading text-center">
-              <h2>Sản phẩm Hot</h2>
+              <h2>Sản phẩm mới</h2>
             </div>
           </div>
         </div>
       </div>
-      <div className="container">
+<div className="container">
         <div
           style={{
             display: "grid",
@@ -357,6 +373,7 @@ const Index = () => {
             gap: "20px",
           }}
         >
+          
           {products.length > 0 ? (
             products
               .slice(0, 8)
@@ -407,3 +424,4 @@ const Index = () => {
 };
 
 export default Index;
+      

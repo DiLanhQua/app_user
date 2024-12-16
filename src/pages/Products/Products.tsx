@@ -285,66 +285,64 @@ const Products: React.FC = () => {
                   <div className="">
                     {/* Load data */}
                     <div className="row">
-                      {products.map((product) => (
-                        <div className="col-12 col-sm-6 col-lg-3">
-                          <div
-                            key={product.id}
-                            className="single-product-wrapper list-products"
-                          >
-                            <div className="product-img">
-                              <img
-                                src={`https://localhost:7048/${product.imagePrimary}`}
-                                alt="Hình sản phẩm"
-                                style={{
-                                  width: "100%",
-                                  height: "20rem",
-                                  objectFit: "cover",
-                                }}
-                              />
-                              <img
-                                className="hover-img"
-                                src={`https://localhost:7048/${product.imagePrimary}`}
-                                style={{
-                                  width: "100%",
-                                  height: "20rem",
-                                  objectFit: "cover",
-                                }}
-                                alt="Hình ảnh"
-                              />
-                              <div className="product-badge offer-badge">
-                                <span>-30%</span>
-                              </div>
-                              <div className="product-favourite">
-                                <a href="#" className="favme fa fa-heart" />
-                              </div>
-                            </div>
-                            <div className="product-description">
-                              <span className="btn-name">
-                                <a href={`/detail/${product.id}`}>
-                                  {product.productName}
-                                </a>
-                              </span>
-                              <a className="product-brad">
-                                {product.brandName}
-                              </a>
+                    {products.map((product) => (
+  <div className="col-12 col-sm-6 col-lg-3" key={product.id}>
+    <div className="single-product-wrapper list-products">
+      <div className="product-img" style={{ position: 'relative' }}>
+        {/* New Banner */}
+        <div
+          className="new-banner"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            backgroundColor: '#ffd700',
+            color: 'black',
+            padding: '5px 10px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            borderRadius: '4px',
+          }}
+        >
+          New
+        </div>
+        
+        <img
+          src={`https://localhost:7048/${product.imagePrimary}`}
+          alt="Hình sản phẩm"
+          style={{
+            width: '100%',
+            height: '20rem',
+            objectFit: 'cover',
+          }}
+        />
+        <img
+          className="hover-img"
+          src={`https://localhost:7048/${product.imagePrimary}`}
+          style={{
+            width: '100%',
+            height: '20rem',
+            objectFit: 'cover',
+          }}
+          alt="Hình ảnh"
+        />
+      </div>
+      <div className="product-description">
+        <span className="btn-name">
+          <a href={`/detail/${product.id}`}>{product.productName}</a>
+        </span>
+        <a className="product-brad">{product.brandName}</a>
+        <p className="product-price">{product.price},000VND</p>
+        <div className="add-to-cart-btn">
+          <a href={`/detail/${product.id}`} className="btn essence-btn">
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+))}
 
-                              <p className="product-price">
-                                {product.price}
-                                ,000VND
-                              </p>
-                              {/* Hover Content */}
-                              <div className="add-to-cart-btn">
-                                <a
-                                  href={`/detail/${product.id}`}
-                                  className="btn essence-btn"
-                                >
-                                  Xem chi tiết
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
                     </div>
                     {/* Pagination */}
                     {isBtnSeeMore && (

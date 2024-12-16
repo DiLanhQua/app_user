@@ -45,6 +45,14 @@ const Chitiet: React.FC = () => {
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
   const [quantily, setQuantily] = useState<number>(1);
   const { id } = useParams();
+  const MAX_LENGTH = 500;
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
 
   const [rating , setRating] = useState(0);
 
@@ -254,7 +262,6 @@ const Chitiet: React.FC = () => {
                   onChange={handleChange}
                 />
               </div>
-              <p className="des">{product.Description}</p>
             </div>
             <div className="group-btn">
               <button
@@ -270,17 +277,54 @@ const Chitiet: React.FC = () => {
       </div>
 
       <div className="tuong-tu">
-        <h4>Sản phẩm tương tự</h4>
-        <div className="">
-          <ProductsTuongTu idCategory={product.CategoryId} />
-        </div>
-        <div>
-          <Comment
-            productId={product.id}
-            productDetailId={selectedProductDetail?.id}
-          />
-        </div>
-      </div>
+  <div style={{ marginBottom: "20px" }}>
+    <Comment
+      productId={product.id}
+      productDetailId={selectedProductDetail?.id}
+    />
+  </div>
+  <h4>Sản phẩm tương tự của {product.ProductName}</h4>
+  <div style={{ marginBottom: "20px" }} className="">
+    <ProductsTuongTu idCategory={product.CategoryId} />
+  </div>
+  <div
+    style={{
+      textAlign: "center", // Căn giữa nội dung văn bản
+      display: "flex",     // Để hỗ trợ căn giữa dọc (nếu cần)
+      justifyContent: "center", // Căn giữa theo chiều ngang
+      alignItems: "center", // Căn giữa theo chiều dọc (nếu cần)
+    }}
+  >
+                <div className="product-description">
+  <p
+    dangerouslySetInnerHTML={{
+      __html: isExpanded
+        ? product.Description
+        : product.Description.slice(0, MAX_LENGTH) + (product.Description.length > MAX_LENGTH ? "..." : ""),
+    }}
+  ></p>
+  {product.Description.length > MAX_LENGTH && (
+    <div style={{ textAlign: "center", marginTop: "10px" }}>
+      <button
+        onClick={toggleExpand}
+        style={{
+          border: "none",
+          backgroundColor: "transparent",
+          color: "blue",
+          textDecoration: "underline",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      >
+        {isExpanded ? "Thu gọn" : "Xem thêm"}
+      </button>
+    </div>
+  )}
+</div>
+
+  </div>
+</div>
+
     </div>
   );
 };

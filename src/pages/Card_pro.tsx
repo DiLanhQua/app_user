@@ -16,12 +16,29 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
         textAlign: "center",
         marginBottom: "0px",
         height: "auto",
+        position: "relative", // Thêm position relative để banner NEW hiển thị đúng vị trí
       }}
     >
+      {/* Banner NEW góc trái */}
       <div
-        className="product-img"
-        style={{ height: "20rem", overflow: "hidden" }}
+        className="new-banner"
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          backgroundColor: "#ffd700",
+          color: "black",
+          padding: "5px 10px",
+          fontSize: "14px",
+          fontWeight: "bold",
+          borderRadius: "5px",
+          zIndex: 10,
+        }}
       >
+        NEW
+      </div>
+
+      <div className="product-img" style={{ height: "20rem", overflow: "hidden" }}>
         <img
           src={`https://localhost:7048/${product.imagePrimary}`}
           alt=""
