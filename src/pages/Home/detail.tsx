@@ -221,7 +221,7 @@ const Chitiet: React.FC = () => {
             <div className="">
               <h4>{product.ProductName}</h4>
               <h5>
-                {selectedProductDetail?.Price},000 VND <span>700.000VND</span>
+                {selectedProductDetail?.Price.toLocaleString("vi-VN")}.000 VND
               </h5>
               <div>
               <div>

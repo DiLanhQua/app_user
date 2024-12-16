@@ -337,7 +337,7 @@ const Index = () => {
             </a>
             <span>{product.brandName}</span>
             <p className="product-price">
-              {product.price.toLocaleString("vi-VN")},000 VND
+              {product.price.toLocaleString("vi-VN")}.000 VND
             </p>
             <div className="btn-add">
               <a href={`/detail/${product.id}`} className="btn essence-btn">

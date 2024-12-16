@@ -332,7 +332,7 @@ const Products: React.FC = () => {
           <a href={`/detail/${product.id}`}>{product.productName}</a>
         </span>
         <a className="product-brad">{product.brandName}</a>
-        <p className="product-price">{product.price},000VND</p>
+        <p className="product-price">{product.price.toLocaleString("vi-VN")}.000 VND</p>
         <div className="add-to-cart-btn">
           <a href={`/detail/${product.id}`} className="btn essence-btn">
             Xem chi tiết

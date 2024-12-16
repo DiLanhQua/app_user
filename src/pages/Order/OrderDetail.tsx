@@ -144,10 +144,10 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
                   </td>
                   <td>{item.product.productName}</td>
                   <td>Size {item.detailProduct.size}</td>
-                  <td>{formatPrice(item.detailProduct.price)},000 VND</td>
+                  <td>{formatPrice(item.detailProduct.price)}.000 VND</td>
                   <td>x {item.quantity}</td>
                   <td>
-                    {formatPrice(item.detailProduct.price * item.quantity)},000
+                    {formatPrice(item.detailProduct.price * item.quantity)}.000
                     VND
                   </td>
                 </tr>
