@@ -85,7 +85,30 @@ export const Header = () => {
           {/* Header Meta Data */}
           <div className="d-flex clearfix justify-content-end">
             {/* Search Area */}
-            <div className="search-area"></div>
+            <div className="search-area">
+              <a
+                href="/QrQr"
+                className="outlined"
+                style={{
+                  // position: "absolute",
+                  marginTop: "25px",
+                  marginRight: "4o0px",
+                  // right: "20px",
+                  borderRadius: "10%",
+                  minWidth: "40px",
+                  minHeight: "40px",
+                  padding: 0,
+                }}
+                // onClick={OpenClick}
+              >
+                <img
+                  src="https://img.icons8.com/ios-filled/50/000000/qr-code.png"
+                  alt="QR Code"
+                  width="30"
+                  height="30"
+                />
+              </a>
+            </div>
             {/* Favourite Area */}
             <div className="favourite-area"></div>
             {/* User Login Info */}
@@ -120,7 +143,6 @@ export const Header = () => {
             <div className="cart-area">
               <a href="/cart" id="essenceCartBtn">
                 <img src="../../../src/assets/img/core-img/bag.svg" alt="" />{" "}
-                <span>3</span>
               </a>
             </div>
           </div>
