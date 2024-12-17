@@ -203,7 +203,9 @@ const QRCodeScanner: React.FC = () => {
                 <b>Email:</b> {qrData.EmailKhachHangThanhToan}
               </p>
               <p>
-                <b>Tổng Tiền:</b> {qrData.TongTienThanhToan}
+              <b>Tổng Tiền:</b> {qrData.TongTienThanhToan.replace(/,00$/, '')}VND
+
+
               </p>
             </div>
 
@@ -282,13 +284,13 @@ const QRCodeScanner: React.FC = () => {
                         {product.Size}
                       </td>
                       <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                        {product.DonGia}
+                        {product.DonGia}.000 VND
                       </td>
                       <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                         {product.soLuong}
                       </td>
                       <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                        {product.TongTien}
+                        {product.TongTien}.000 VND
                       </td>
                     </tr>
                   ))}
