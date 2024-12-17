@@ -39,7 +39,7 @@ const ProductsTuongTu: React.FC<{ idCategory: number }> = ({ idCategory }) => {
         .slice(0, 4);
       setProducts(filteredProducts);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     } finally {
       setLoading(false);
     }

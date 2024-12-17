@@ -141,7 +141,7 @@ const Login = () => {
       navigate("/"); // Di chuyển sang trang chính sau khi đăng nhập thành công
       window.location.reload();
       toast.success("Đăng nhập thành công!");
-      console.log(response.data);
+      
       setErrors({});
       sessionStorage.setItem("user", JSON.stringify(response.data));
     } catch (error: unknown) {
@@ -185,12 +185,12 @@ const Login = () => {
       navigate("/login");
 
       toast.success("Đăng ký thành công!");
-      console.log(response.data);
+      
       setErrors({});
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorMessage = error.response?.data;
-        console.log(errorMessage);
+        
         if (errorMessage) {
           toast.error("Tên tài khoản đã tồn tại.");
         } else {
@@ -199,7 +199,7 @@ const Login = () => {
       } else {
         toast.error("Đã xảy ra lỗi.");
       }
-      console.log(error);
+      
     } finally {
       setIsLoading(false);
     }
@@ -219,7 +219,7 @@ const Login = () => {
       setErrors({});
     } catch (error: unknown) {
       setErrors({ email: "Email không hợp lệ hoặc không tồn tại!" });
-      console.log(error);
+      
     } finally {
       setIsLoading(false);
     }

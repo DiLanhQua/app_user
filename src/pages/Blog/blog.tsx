@@ -9,7 +9,7 @@ export const Blog = () => {
       const response = await getAllBlog();
       setBlog(response);
     } catch (error) {
-      console.error(error);
+      
       throw new Error("Failed to fetch blogs");
     }
   };

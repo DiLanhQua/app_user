@@ -53,7 +53,7 @@ const Products: React.FC = () => {
       setActionCategory(0);
       setActionPrice(0);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ const Products: React.FC = () => {
       setActionBrand(brandId);
       navigate("/sanpham");
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -107,7 +107,7 @@ const Products: React.FC = () => {
       setActionCategory(categoryId);
       navigate("/sanpham");
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -126,7 +126,7 @@ const Products: React.FC = () => {
       setBrands(brand.data.data);
       setCategorys(category.data.data);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -159,7 +159,7 @@ const Products: React.FC = () => {
         });
         setProducts(filteredProducts);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        
       } finally {
         setLoading(false);
       }

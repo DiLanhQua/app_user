@@ -60,7 +60,7 @@ const Chitiet: React.FC = () => {
   }, []);
 
   const loadRating = async () => {
-    console.log(id);
+    
 
     const repo = await axios.get(
       `https://localhost:7048/api/Comment/get-rating-by-product-id/${id}`
@@ -92,7 +92,7 @@ const Chitiet: React.FC = () => {
       const productData = productResponse.data;
 
       const detailsData = detailResponse.data;
-      console.log(detailsData[0].color, "detailsData");
+      
 
       setImages(arrImage.data);
       setImagePrimary(arrImage.data.find((a: ImageDtos) => a.isImage === true));
@@ -130,7 +130,7 @@ const Chitiet: React.FC = () => {
         CategoryName: categoryData.categoryName,
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -158,7 +158,7 @@ const Chitiet: React.FC = () => {
       productDetail: selectedProductDetail,
       link: image.link,
     };
-    console.log(item?.productDetail?.id, "item.productDetail id");
+    
 
     const existingIndex = cart.findIndex(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -230,15 +230,15 @@ const Chitiet: React.FC = () => {
                   id="productDetail"
                   onChange={(e) => {
                     const selectedDetailId = parseInt(e.target.value); // Lấy ID từ value
-                    console.log(selectedDetailId, "selectedDetailId");
+                    
 
                     const selectedDetail = product.details.find(
                       (detail) => detail.id == selectedDetailId // Tìm detail dựa trên ID
                     );
-                    console.log(selectedDetail);
+                    
 
                     setSelectedProductDetail(selectedDetail || null); // Gán detail vào state
-                    console.log("State Updated:", selectedProductDetail);
+                    
                   }}
                 >
                   {product.details.map((detail) => (

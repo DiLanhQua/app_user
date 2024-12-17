@@ -79,7 +79,7 @@ const UserProfile: React.FC = () => {
       }
     } catch (error) {
       toast.error("Có lỗi xảy ra khi cập nhật thông tin.");
-      console.error(error);
+      
     }
   };
 

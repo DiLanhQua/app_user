@@ -28,7 +28,7 @@ export const getUserById = async (id: number): Promise<AccountDto | null> => {
     const response = await axios.get<AccountDto>(`https://localhost:7048/api/Login/get-login-by-id/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Lỗi khi lấy thông tin người dùng:', error);
+    
     return null; 
   }
 };
@@ -42,7 +42,7 @@ export const UpProfile = async (id: number, data: FormData): Promise<upprofile |
     );
     return response.data;
   } catch (error) {
-    console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+    
     return null; 
   }
 };

@@ -37,7 +37,7 @@ export const Header = () => {
       setIsDropdownOpen(false);
       navigate(`/TrangCaNhan/${userId}`);
     } else {
-      console.error("UserId is null. Cannot navigate.");
+      
     }
   };
 

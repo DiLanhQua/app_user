@@ -9,7 +9,7 @@ export const getAllBlog = async (): Promise<BlogDtos[]> => {
     );
     return response.data.data;
   } catch (error) {
-    console.error(error);
+    
     throw new Error("Failed to fetch blogs");
   }
 };
@@ -19,7 +19,7 @@ export const getBlogById = async (id: number): Promise<BlogDtos> => {
     const response = await axios.get<any>(`${URL}/blog-id/${id}`);
     return response.data;
   } catch (error) {
-    console.error(error);
+    
     throw new Error("Failed to fetch blogs");
   }
 };
