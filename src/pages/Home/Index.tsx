@@ -44,7 +44,7 @@ const Index = () => {
       const productsData = response.data.data; // Dữ liệu sản phẩm
       setProducts(productsData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ const Index = () => {
       );
       setCategorys(response.data.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     }
   };
 
@@ -70,7 +70,7 @@ const Index = () => {
       );
       setHotSaleProducts(response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      
     }
   };
 

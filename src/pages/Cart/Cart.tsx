@@ -95,21 +95,21 @@ const Cart: React.FC = () => {
         "https://localhost:7048/api/Order/add-order",
         newOrder
       );
-      console.log(response, "response");
+      
 
       const createdOrder = response.data;
-      console.log(createdOrder.orderId, "createdOrder");
+      
 
       setOrder(createdOrder);
       addOrderDetails(createdOrder.orderId);
     } catch (error) {
-      console.error("Error creating order:", error);
+      
     }
   };
 
   const addOrderDetails = async (orderId: number) => {
-    console.log(cartItems, "cartItems");
-    console.log(orderId, "orderId");
+    
+    
 
     try {
       const promises = cartItems.map((item) => {
@@ -130,11 +130,11 @@ const Cart: React.FC = () => {
 
       // Xóa giỏ hàng khỏi localStorage
       localStorage.removeItem("cart");
-      console.log("Order details added and cart cleared from localStorage.");
+      
       alert("Đơn đat mua hàng thành công!");
       location.reload();
     } catch (error) {
-      console.error("Error adding order details:", error);
+      
     }
   };
 

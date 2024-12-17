@@ -25,7 +25,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
         caculateFeeShip(response.data);
       } catch (err: any) {
         setError("Đã có lỗi xảy ra khi tải dữ liệu.");
-        console.log(err);
+        
       } finally {
         setLoading(false);
       }
@@ -56,7 +56,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({ orderId, onClose }) => {
       totalPrice += item.detailProduct.price * item.quantity;
     });
     if (!data.voucher) {
-      console.log(2);
+      
       setFeeShip(data.totalPrice - (totalPrice * 1000 - 0));
       return;
     }

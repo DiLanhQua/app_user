@@ -28,7 +28,7 @@ const CancelButton = ({ orderId }: { orderId: string }) => {
       reason: reason,
     };
 
-    console.log("Update data being sent:", updateData); // Debugging step
+    // Debugging step
 
     try {
       const response = await axios.put(
@@ -41,23 +41,23 @@ const CancelButton = ({ orderId }: { orderId: string }) => {
         }
       );
 
-      console.log("API Response:", response.data); // Log the API response
+      // Log the API response
 
       if (response.status === 200) {
-        console.log(`Order ${orderId} canceled for reason: ${reason}`);
+        
         alert("Hủy đơn hàng thành công");
         location.reload();
         handleCloseModal();
       } else {
-        console.error("Failed to cancel the order", response);
+        
       }
     } catch (error: any) {
       if (error.response) {
-        console.error("API Error Response:", error.response);
+        
       } else if (error.request) {
-        console.error("API Error Request:", error.request);
+        
       } else {
-        console.error("Error:", error.message);
+        
       }
     }
   };

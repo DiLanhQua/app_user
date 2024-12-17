@@ -12,7 +12,7 @@ const DetalBlog: React.FC = () => {
       const response = await getBlogById(Number(id));
       setBlog(response);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -22,7 +22,7 @@ const DetalBlog: React.FC = () => {
 
       setBlogs(response.filter((item) => item.id !== Number(id)).slice(0, 3));
     } catch (error) {
-      console.error(error);
+      
       throw new Error("Failed to fetch blogs");
     }
   };

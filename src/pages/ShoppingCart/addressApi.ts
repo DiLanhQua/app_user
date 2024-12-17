@@ -13,7 +13,7 @@ export const getProvince: () => Promise<ProvinceDtos[]> = async () => {
     );
     return response.data.data; // Trả về `data` từ response
   } catch (error) {
-    console.error(error);
+    
     return []; // Trả về mảng rỗng trong trường hợp lỗi
   }
 };
@@ -31,7 +31,7 @@ export const getDistrict: (
 
     return response.data.data; // Trả về `data` từ response
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -45,7 +45,7 @@ export const getWard: (districtId: number) => Promise<WardDtos[]> = async (
     );
     return response.data.data; // Trả về `data` từ response
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -60,6 +60,6 @@ export const getShipping: (
     );
     return response.data.data; // Trả về `data` từ response
   } catch (error) {
-    console.log(error);
+    
   }
 };

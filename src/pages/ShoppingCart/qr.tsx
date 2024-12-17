@@ -30,7 +30,7 @@ const QRCodeScanner: React.FC = () => {
   useEffect(() => {
     if (scannerVisible) {
       const scanner = new Html5QrcodeScanner("reader", {
-        qrbox: { width: 1000, height: 800 },
+        qrbox: { width: 1200, height: 1200 },
         fps: 5,
         verbose: true,
       });
@@ -42,8 +42,8 @@ const QRCodeScanner: React.FC = () => {
               .split("\n")
               .filter((line) => line.trim() !== "");
             const data: Partial<QRData> = {};
-            console.log(lines),
-              console.log(data),
+            
+              
               lines.forEach((line, index) => {
                 const [key, ...valueParts] = line.split(":");
                 const value = valueParts.join(":").trim();
@@ -135,14 +135,14 @@ const QRCodeScanner: React.FC = () => {
             openModal();
             setQrData(data as QRData);
           } catch (error) {
-            console.error("Failed to parse QR data:", error);
+            
             alert("QR code không hợp lệ!");
           }
         }
       };
 
       const error = (err: any) => {
-        console.warn("Lỗi quét mã QR:", err);
+        
       };
 
       scanner.render(success, error);

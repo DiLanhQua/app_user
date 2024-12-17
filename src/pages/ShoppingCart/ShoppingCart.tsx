@@ -60,11 +60,11 @@ const GioHang: React.FC = () => {
         const response = await axios.get(
           "https://localhost:7048/api/Voucher/get-all-vouchers"
         );
-        // console.log(response.data.data, "vouchers");
+        // 
 
         setVouchers(response.data.data);
       } catch (error) {
-        console.error("Error fetching vouchers:", error);
+        
       }
     };
 
@@ -91,7 +91,7 @@ const GioHang: React.FC = () => {
       setProvinces(res);
     } catch (error) {
       {
-        console.log(error);
+        
       }
     }
   };
@@ -101,7 +101,7 @@ const GioHang: React.FC = () => {
       const res = await getDistrict(provinceId);
       setDistrict(res);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -111,7 +111,7 @@ const GioHang: React.FC = () => {
       const res = await getWard(districtId);
       setWard(res);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -240,7 +240,7 @@ const GioHang: React.FC = () => {
       const updatedItems = prevItems.filter(
         (item) => item.productDetail.id !== productIdDetail
       );
-      console.log("Updated Items:", updatedItems); // Debug xem có sản phẩm nào còn lại không
+      // Debug xem có sản phẩm nào còn lại không
       localStorage.setItem("cart", JSON.stringify(updatedItems));
       return [...updatedItems];
     });
@@ -260,9 +260,9 @@ const GioHang: React.FC = () => {
         model
       );
 
-      console.log(response);
+      
     } catch (error) {
-      console.error("Error creating delivery address:", error);
+      
     }
 
     // Xử lý logic tiếp theo tại đây (gửi API, kiểm tra dữ liệu, v.v.)
@@ -286,7 +286,7 @@ const GioHang: React.FC = () => {
       }
       return product;
     } catch (error) {
-      console.log(error);
+      
     }
   };
   const createOrder = async () => {
@@ -320,7 +320,7 @@ const GioHang: React.FC = () => {
         newOrder
       );
       const createdOrder = response.data;
-      console.log(createdOrder);
+      
       if (paymentMethod === "Online") {
         await thanhToanVnpay({
           id: createdOrder.orderId,
@@ -335,7 +335,7 @@ const GioHang: React.FC = () => {
       location.reload();
     } catch (error) {
       alert("Đơn đặt mua hàng thất bại!");
-      console.error("Error creating order:", error);
+      
     }
   };
 
@@ -347,7 +347,7 @@ const GioHang: React.FC = () => {
       );
       window.location.href = response.data;
     } catch (error) {
-      console.log(error);
+      
     }
   };
   const sendEmail = async (orderId: number, accountId: number) => {
@@ -357,17 +357,17 @@ const GioHang: React.FC = () => {
         accountId: accountId,
       };
 
-      console.log("EmailRequest", EmailRequest);
+      
 
       const response = await axios.post(
         "https://localhost:7048/api/Email/send-email",
         EmailRequest
       );
 
-      console.log("Server Response:", response.data);
+      
       return response;
     } catch (error) {
-      console.error("Error adding order details:", error);
+      
     }
   };
 
@@ -391,7 +391,7 @@ const GioHang: React.FC = () => {
       // Xóa giỏ hàng khỏi localStorage
       localStorage.removeItem("cart");
     } catch (error) {
-      console.error("Error adding order details:", error);
+      
     }
   };
 
@@ -405,19 +405,19 @@ const GioHang: React.FC = () => {
   //   Hàm lọc các voucher hợp lệ
   const getFilteredVouchers = () => {
     const total = calculateTotal();
-    // console.log(total, "total");
+    // 
 
-    // console.log(vouchers.filter((voucher) => voucher.min_Order_Value <= total));
+    // => voucher.min_Order_Value <= total));
 
     return vouchers.filter((voucher) => {
       if (voucher.max_Discount === 0) {
-        console.log(1);
+        
 
         return voucher.min_Order_Value * 1000 <= total;
       }
       // Kiểm tra cả min_Order_Value và max_Discount_Value
       return (
-        console.log(2),
+        
         voucher.min_Order_Value * 1000 <= total &&
           voucher.max_Discount * 1000 >= total
       );
@@ -428,7 +428,7 @@ const GioHang: React.FC = () => {
 
     const total = calculateTotal();
     if (selectedVoucher.discountType == "Percentage") {
-      console.log("giảm theo phần trăm");
+      
 
       // Giảm theo phần trăm
       return (total * selectedVoucher.discount) / 100;
@@ -437,8 +437,8 @@ const GioHang: React.FC = () => {
         calculateTotal() - selectedVoucher.discount,
         "calculateTotal() - selectedVoucher.discount"
       );
-      console.log(calculateTotal(), "calculateTotal()");
-      console.log(selectedVoucher.discount, "selectedVoucher.discount");
+       "calculateTotal()";
+      
 
       // Giảm theo số tiền cố định
       return selectedVoucher.discount * 1000;
@@ -446,13 +446,13 @@ const GioHang: React.FC = () => {
   };
   const handleVoucherChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const voucherId = event.target.value;
-    console.log(voucherId, "voucherId");
+    
 
     const voucher = vouchers.find(
       (v) => v.id.toString() === voucherId.toString()
     );
     setSelectedVoucher(voucher || null);
-    console.log(voucher, "voucher selected");
+    
   };
   return (
     <>
