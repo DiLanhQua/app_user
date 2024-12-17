@@ -183,7 +183,7 @@ const Comment = (props: {
                 <div className="d-flex-item-danhgia">
                   <div className="d-flex-flex-col-img">
                     <img
-                      src={"https://localhost:7048/" + item?.account?.image}
+                      src="/src/image/av.jpg"
                       className="img-flex-avata-user-danhgia"
                     ></img>
                   </div>

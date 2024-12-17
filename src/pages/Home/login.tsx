@@ -147,11 +147,13 @@ const Login = () => {
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorMessage = error.response?.data;
-        console.log(errorMessage);
+
         if (!errorMessage) {
           toast.error("Tên tài khoản hoặc mật khẩu không đúng");
         } else {
-          toast.error("Tên tài khoản hoặc mật khẩu không đúng");
+          toast.error(
+            "Tài khoản đã bị khóa vui lòng liên hệ email (champhan625@gmail.com)"
+          );
         }
       } else {
         setErrors({ general: "Đã xảy ra lỗi." });
