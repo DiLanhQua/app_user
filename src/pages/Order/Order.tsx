@@ -1,4 +1,3 @@
-// src/pages/DonHangUse.tsx
 import React, { useEffect, useState } from "react";
 import "./Order.scss";
 import img from "./../../image/breadcumb.jpg";
@@ -13,19 +12,21 @@ const DonHangUse: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const itemsPerPage = 4; // Số đơn hàng mỗi trang
+
   useEffect(() => {
     const storedCustomerInfo = sessionStorage.getItem("user");
     if (storedCustomerInfo) {
       const parsedInfo = JSON.parse(storedCustomerInfo);
       setCustomerInfo(parsedInfo);
 
-      // Chỉ gọi API khi customerInfo đã có giá trị
       axios
         .get(
           "https://localhost:7048/api/Order/get-by-user/" + parsedInfo.accountId
         )
         .then((response) => {
-          console.log(response, "response");
           setOrder(response.data);
           filterOrdersByStatus();
         })
@@ -34,38 +35,40 @@ const DonHangUse: React.FC = () => {
         });
     }
   }, []);
+
   useEffect(() => {
-    filterOrdersByStatus(); // Filter orders right after setting the `order` state
-  }, [order]); // Triggered every time `order` state changes
+    filterOrdersByStatus();
+  }, [order]);
 
   const [isActive, setIsActive] = useState(0);
   const filterOrdersByStatus = (status?: number) => {
     setIsActive(status || 0);
     if (status === undefined || status === null) {
-      setFilteredOrders(order); // Nếu không truyền vào gì, hiển thị toàn bộ danh sách
-      console.log(filteredOrders, "filteredOrders");
+      setFilteredOrders(order);
     } else {
       const filtered = order.filter((order) => order.status === status);
       setFilteredOrders(filtered);
-      console.log(filtered, "filtered");
     }
+    setCurrentPage(1); // Reset về trang đầu tiên khi lọc
   };
+
   const getStatus = (status: number): { status: string; color: string } => {
     switch (status) {
       case 1:
-        return { status: "Chờ xác nhận", color: "orange" }; // Example color
+        return { status: "Chờ xác nhận", color: "orange" };
       case 2:
-        return { status: "Đang xử lý", color: "blue" }; // Example color
+        return { status: "Đang xử lý", color: "blue" };
       case 3:
-        return { status: "Đang giao hàng", color: "#FFD700" }; // Example color
+        return { status: "Đang giao hàng", color: "#FFD700" };
       case 4:
-        return { status: "Hoàn thành", color: "green" }; // Example color
+        return { status: "Hoàn thành", color: "green" };
       case 5:
-        return { status: "Hủy", color: "red" }; // Example color
+        return { status: "Hủy", color: "red" };
       default:
-        return { status: "Tất cả", color: "black" }; // Example color
+        return { status: "Tất cả", color: "black" };
     }
   };
+
   const handleOpenModal = (orderId: number) => {
     setSelectedOrderId(orderId);
     setIsModalOpen(true);
@@ -74,6 +77,17 @@ const DonHangUse: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrderId(null);
+  };
+
+  // Phân trang
+  const totalItems = filteredOrders.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentOrders = filteredOrders.slice(startIndex, endIndex);
+
+  const changePage = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -115,7 +129,7 @@ const DonHangUse: React.FC = () => {
                     }`}
                     onClick={() => filterOrdersByStatus(1)}
                   >
-                    Chờ xác nhận{" "}
+                    Chờ xác nhận
                   </button>
                   <button
                     className={`btn-tabs-order ${
@@ -156,16 +170,16 @@ const DonHangUse: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredOrders.map((item, index) => (
-                      <tr>
+                    {currentOrders.map((item, index) => (
+                      <tr key={item.id}>
                         <td>{index + 1}</td>
-                        <td>{customerInfo.fullName}</td>
+                        <td>{customerInfo?.fullName}</td>
                         <td>{item.address}</td>
                         <td>
                           <span
                             className={
-                              item.paymend == "Online" ||
-                              item.paymend == "Online - Đã thanh toán"
+                              item.paymend === "Online" ||
+                              item.paymend === "Online - Đã thanh toán"
                                 ? "paymend"
                                 : ""
                             }
@@ -177,7 +191,6 @@ const DonHangUse: React.FC = () => {
                         <td style={{ color: getStatus(item.status).color }}>
                           {getStatus(item.status).status}
                         </td>
-
                         <td>
                           <div className="group-btn">
                             <button
@@ -187,9 +200,7 @@ const DonHangUse: React.FC = () => {
                               Chi tiết <i className="ri-eye-line"></i>
                             </button>
                             {item.status < 3 && (
-                              <div>
-                                <CancelButton orderId={item.id} />
-                              </div>
+                              <CancelButton orderId={item.id} />
                             )}
                           </div>
                         </td>
@@ -198,42 +209,47 @@ const DonHangUse: React.FC = () => {
                   </tbody>
                 </table>
 
-                <nav aria-label="navigation">
+                <nav aria-label="navigation" style={{ marginLeft: "1%" }}>
                   <ul className="pagination mt-50 mb-70">
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        <i className="fa fa-angle-left" />
-                      </a>
+                    {/* Nút chuyển về trang trước */}
+                    <li
+                      className={`page-item ${
+                        currentPage === 1 ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        currentPage > 1 && changePage(currentPage - 1)
+                      }
+                    >
+                      <a className="page-link">{"<"}</a>
                     </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        ...
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        21
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        <i className="fa fa-angle-right" />
-                      </a>
+
+                    {/* Các số trang */}
+                    {[...Array(totalPages)].map((_, i) => (
+                      <li
+                        key={i}
+                        className={`page-item ${
+                          currentPage === i + 1 ? "active" : ""
+                        }`}
+                      >
+                        <a
+                          className="page-link"
+                          onClick={() => changePage(i + 1)}
+                        >
+                          {i + 1}
+                        </a>
+                      </li>
+                    ))}
+
+                    {/* Nút chuyển đến trang sau */}
+                    <li
+                      className={`page-item ${
+                        currentPage === totalPages ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        currentPage < totalPages && changePage(currentPage + 1)
+                      }
+                    >
+                      <a className="page-link">{">"}</a>
                     </li>
                   </ul>
                 </nav>
@@ -242,7 +258,7 @@ const DonHangUse: React.FC = () => {
           </div>
         </div>
       </section>
-      {isModalOpen && selectedOrderId !== null && (
+      {isModalOpen && selectedOrderId && (
         <OrderDetail orderId={selectedOrderId} onClose={handleCloseModal} />
       )}
     </>
@@ -250,3 +266,4 @@ const DonHangUse: React.FC = () => {
 };
 
 export default DonHangUse;
+

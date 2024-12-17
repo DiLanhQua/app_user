@@ -96,15 +96,9 @@ const UserProfile: React.FC = () => {
     <div className="information-container">
       <h2>Thông Tin Cá Nhân</h2>
       <form onSubmit={handleSubmit}>
-        {imageUrl && (
           <div className="avatar-preview">
-            <img src={imageUrl} alt="Avatar Preview" />
+            <img src="/src/image/av.jpg" alt="" />
           </div>
-        )}
-        <div className="form-group">
-          <label>Ảnh đại diện</label>
-          <input type="file" onChange={handleFileChange} />
-        </div>
 
         <div className="form-group">
           <label>Họ và tên</label>

@@ -30,7 +30,7 @@ const QRCodeScanner: React.FC = () => {
   useEffect(() => {
     if (scannerVisible) {
       const scanner = new Html5QrcodeScanner("reader", {
-        qrbox: { width: 250, height: 250 },
+        qrbox: { width: 1000, height: 800 },
         fps: 5,
         verbose: true,
       });
