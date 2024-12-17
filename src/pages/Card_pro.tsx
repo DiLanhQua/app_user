@@ -33,6 +33,7 @@ const Card_pro: React.FC<CardProProps> = ({ product }) => {
           fontWeight: "bold",
           borderRadius: "5px",
           zIndex: 10,
+          
         }}
       >
         NEW

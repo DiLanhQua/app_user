@@ -28,6 +28,9 @@ $color-border: #ababab;
   display: block;
   font-size: 17px;
   font-weight: 700;
+  white-space: nowrap; /* Không xuống dòng */
+  overflow: hidden; /* Ẩn phần nội dung vượt quá */
+  text-overflow: ellipsis;
 }
 .list-products {
   border: 1px solid #acacac91;

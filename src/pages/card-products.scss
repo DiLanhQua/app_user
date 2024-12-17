@@ -3,6 +3,9 @@ $color-border: #ababab;
 .product-description {
   padding: 15px 10px 20px 10px !important;
   & h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #1951ac;
     font-size: 20px;
     text-transform: uppercase;
