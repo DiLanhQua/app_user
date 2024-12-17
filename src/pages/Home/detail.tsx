@@ -273,17 +273,7 @@ const Chitiet: React.FC = () => {
       </div>
 
       <div className="tuong-tu">
-        <div style={{ marginBottom: "20px" }}>
-          <Comment
-            productId={product.id}
-            productDetailId={selectedProductDetail?.id}
-          />
-        </div>
-        <h4>Sản phẩm tương tự của {product.ProductName}</h4>
-        <div style={{ marginBottom: "20px" }} className="">
-          <ProductsTuongTu idCategory={product.CategoryId} />
-        </div>
-        <div
+      <div
           style={{
             textAlign: "center", // Căn giữa nội dung văn bản
             display: "flex", // Để hỗ trợ căn giữa dọc (nếu cần)
@@ -318,6 +308,16 @@ const Chitiet: React.FC = () => {
               </div>
             )}
           </div>
+        </div>
+        <div style={{ marginBottom: "20px" }}>
+          <Comment
+            productId={product.id}
+            productDetailId={selectedProductDetail?.id}
+          />
+        </div>
+        <h4>Sản phẩm tương tự của {product.ProductName}</h4>
+        <div style={{ marginBottom: "20px" }} className="">
+          <ProductsTuongTu idCategory={product.CategoryId} />
         </div>
       </div>
     </div>
